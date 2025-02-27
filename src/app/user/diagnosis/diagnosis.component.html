@@ -1,0 +1,25 @@
+<div class="diagnosis-container">
+  <h1>Chuẩn đoán bệnh với AI</h1>
+  <form [formGroup]="diagnosisForm" (ngSubmit)="onSubmit()" class="diagnosis-form">
+    <div class="form-group">
+      <label for="symptoms">Nhập các triệu chứng của bạn:</label>
+      <textarea
+        id="symptoms"
+        formControlName="symptoms"
+        rows="5"
+        placeholder="Ví dụ: Đau đầu, sốt, ho..."
+      ></textarea>
+      <div *ngIf="diagnosisForm.get('symptoms')?.invalid && diagnosisForm.get('symptoms')?.touched" class="error-message">
+        Vui lòng nhập ít nhất 10 ký tự.
+      </div>
+    </div>
+    <button type="submit" [disabled]="diagnosisForm.invalid || isLoading" class="diagnose-button">
+      {{ isLoading ? 'Đang chuẩn đoán...' : 'Chuẩn đoán' }}
+    </button>
+  </form>
+
+  <div *ngIf="diagnosisResult" class="diagnosis-result">
+    <h2>Kết quả chuẩn đoán:</h2>
+    <p>{{ diagnosisResult }}</p>
+  </div>
+</div>

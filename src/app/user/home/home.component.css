@@ -1,0 +1,187 @@
+/* Header */
+.home {
+  background-color: #cfdae6;
+}
+/* Banner */
+.banner {
+  background-image: url('https://drbao-clinic.com/wp-content/uploads/2023/01/gioi-thieu-8-scaled.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 4rem 1rem;
+  text-align: center;
+  color: rgb(252, 252, 252);
+}
+
+.banner-content h2 {
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.banner-content p {
+  font-size: 1.2rem;
+}
+
+.cta-button {
+  text-decoration: none;
+  background-color: #ff5722;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Giới thiệu */
+.intro {
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Dịch vụ nổi bật */
+.services {
+  padding: 2rem;
+  text-align: center;
+}
+
+.service-list {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.service-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden; /* Đảm bảo hình ảnh không tràn ra ngoài */
+  width: 300px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng hover */
+}
+
+.service-card:hover {
+  transform: translateY(-5px); /* Hiệu ứng nổi lên khi hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
+}
+
+.service-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+}
+
+.service-content {
+  padding: 1rem;
+}
+
+.service-content i {
+  font-size: 2rem;
+  color: #007bff;
+  margin-bottom: 1rem;
+}
+
+.service-content h3 {
+  margin: 0.5rem 0;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.service-content p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* Đội ngũ bác sĩ */
+.doctors {
+  padding: 2rem;
+  text-align: center;
+}
+
+.doctor-list {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.doctor-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  width: 200px;
+  text-align: center;
+}
+
+.doctor-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Đặt lịch khám nhanh */
+.quick-booking {
+  padding: 2rem;
+  text-align: center;
+  background-color: #e9f5ff;
+}
+
+.quick-booking form {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.quick-booking input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.quick-booking a {
+  text-decoration: none;
+  background-color: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Đánh giá từ khách hàng */
+.testimonials {
+  padding: 2rem;
+  text-align: center;
+}
+
+.testimonial-list {
+  max-height: 200px; /* Giới hạn chiều cao để tạo thanh cuộn */
+  overflow-y: auto; /* Thêm thanh cuộn dọc */
+  border: 1px solid #ddd; /* Viền cho phần danh sách */
+  border-radius: 8px; /* Bo góc */
+  padding: 1rem;
+  background-color: #f9f9f9; /* Màu nền */
+  margin: 0 auto; /* Căn giữa */
+  width: 80%; /* Độ rộng của danh sách */
+}
+
+.testimonial-item {
+  padding: 0.5rem 0; /* Khoảng cách giữa các mục */
+  border-bottom: 1px solid #eee; /* Đường kẻ ngăn cách giữa các đánh giá */
+}
+
+.testimonial-item:last-child {
+  border-bottom: none; /* Loại bỏ đường kẻ ở mục cuối cùng */
+}
+
+.testimonial-item p {
+  margin: 0; /* Loại bỏ margin mặc định */
+  font-size: 1rem;
+  color: #333;
+}
+
+.testimonial-item strong {
+  color: #007bff; /* Màu cho tên khách hàng */
+}

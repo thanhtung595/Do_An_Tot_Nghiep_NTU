@@ -1,0 +1,70 @@
+<div class="home">
+  <!-- Banner -->
+  <section class="banner">
+    <div class="banner-content">
+      <h2>Chăm sóc sức khỏe toàn diện</h2>
+      <p>Phòng khám XYZ - Nơi bạn tin tưởng gửi gắm sức khỏe.</p>
+      <a href="doctor" class="cta-button">Đặt lịch ngay</a>
+    </div>
+  </section>
+
+  <!-- Giới thiệu -->
+  <section class="intro">
+    <h2>Giới thiệu về chúng tôi</h2>
+    <p>
+      Phòng khám XYZ với đội ngũ bác sĩ giàu kinh nghiệm và trang thiết bị hiện
+      đại, cam kết mang lại dịch vụ y tế chất lượng cao.
+    </p>
+  </section>
+
+  <!-- Dịch vụ nổi bật -->
+  <section class="services">
+    <h2>Dịch vụ của chúng tôi</h2>
+    <div class="service-list">
+      <div *ngFor="let service of services" class="service-card">
+        <img
+          [src]="service.image"
+          alt="{{ service.title }}"
+          class="service-image"
+        />
+        <div class="service-content">
+          <i [class]="service.icon"></i>
+          <h3>{{ service.title }}</h3>
+          <p>{{ service.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Đội ngũ bác sĩ -->
+  <section class="doctors">
+    <h2>Đội ngũ bác sĩ</h2>
+    <div class="doctor-list">
+      <div *ngFor="let doctor of doctors" class="doctor-card">
+        <img [src]="doctor.image" alt="{{ doctor.name }}" />
+        <h3>{{ doctor.name }}</h3>
+        <p>{{ doctor.specialty }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Đặt lịch khám nhanh -->
+  <section class="quick-booking">
+    <h2>Đặt lịch khám nhanh</h2>
+    <form>
+      <a href="doctor" class="button">Đặt lịch</a>
+    </form>
+  </section>
+
+  <!-- Đánh giá từ khách hàng -->
+  <section class="testimonials">
+    <h2>Đánh giá từ khách hàng</h2>
+    <div class="testimonial-list">
+      <div *ngFor="let testimonial of testimonials" class="testimonial-item">
+        <p>
+          "{{ testimonial.comment }}" - <strong>{{ testimonial.name }}</strong>
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
