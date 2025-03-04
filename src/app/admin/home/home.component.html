@@ -1,1 +1,87 @@
-<p>home works!</p>
+<div class="home">
+  <h2>Trang Chủ Clinic</h2>
+
+  <!-- Thống kê tổng quan -->
+  <div class="stats-grid">
+    <!-- Tổng tài khoản -->
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Tổng Tài Khoản</h3>
+        <p>{{ totalAccounts }}</p>
+      </div>
+    </div>
+
+    <!-- Tổng bác sĩ -->
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-user-md"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Tổng Bác Sĩ</h3>
+        <p>{{ totalDoctors }}</p>
+      </div>
+    </div>
+
+    <!-- Tổng bệnh nhân -->
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-procedures"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Tổng Bệnh Nhân</h3>
+        <p>{{ totalPatients }}</p>
+      </div>
+    </div>
+
+    <!-- Tổng loại thuốc -->
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-pills"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Tổng Loại Thuốc</h3>
+        <p>{{ totalMedicines }}</p>
+      </div>
+    </div>
+
+    <!-- Tổng số hồ sơ bệnh án -->
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-file-medical"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Hồ Sơ Bệnh Án</h3>
+        <p>Hoàn thành: {{ completedRecords }}</p>
+        <p>Đang thực hiện: {{ inProgressRecords }}</p>
+        <p>Đã hủy: {{ canceledRecords }}</p>
+      </div>
+    </div>
+
+    <!-- Tổng số phòng khám -->
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-hospital"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Phòng Khám</h3>
+        <p>Đang rảnh: {{ availableClinics }}</p>
+        <p>Đang hoạt động: {{ activeClinics }}</p>
+        <p>Đang tu sửa: {{ underMaintenanceClinics }}</p>
+      </div>
+    </div>
+
+    <!-- Tổng doanh thu -->
+    <div class="stat-card">
+      <div class="stat-icon">
+        <i class="fas fa-coins"></i>
+      </div>
+      <div class="stat-info">
+        <h3>Tổng Doanh Thu</h3>
+        <p>{{ totalRevenue | currency: 'VND':'symbol' }}</p>
+      </div>
+    </div>
+  </div>
+</div>

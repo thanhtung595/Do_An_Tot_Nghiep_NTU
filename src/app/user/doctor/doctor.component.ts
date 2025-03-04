@@ -44,6 +44,31 @@ export class DoctorComponent {
   isBooking: boolean = false; // Trạng thái đặt lịch khám
   showModal: boolean = false; // Hiển thị popup
 
+  // Biến cho tìm kiếm và lọc
+  searchText: string = '';
+  selectedSpecialty: string = '';
+  specialties: string[] = ['Bác sĩ đa khoa', 'Bác sĩ tim mạch', 'Bác sĩ nhi khoa'];
+
+  // Lọc danh sách bác sĩ
+  get filteredDoctors() {
+    return this.doctors.filter(doctor => {
+      const matchesSearch = doctor.name.toLowerCase().includes(this.searchText.toLowerCase());
+      const matchesSpecialty = this.selectedSpecialty ? doctor.specialty === this.selectedSpecialty : true;
+      return matchesSearch && matchesSpecialty;
+    });
+  }
+
+  // Lọc theo chuyên khoa
+  filterBySpecialty(specialty: string) {
+    this.selectedSpecialty = specialty;
+  }
+
+  // Xóa lọc
+  clearFilters() {
+    this.selectedSpecialty = '';
+    this.searchText = '';
+  }
+
   // Mở popup xem chi tiết bác sĩ
   viewDetail(doctor: any) {
     this.selectedDoctor = doctor;

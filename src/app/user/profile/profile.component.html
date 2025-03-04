@@ -1,0 +1,94 @@
+<div class="profile-container">
+  <h1>Thông Tin Cá Nhân</h1>
+
+  <!-- Menu dựa trên role -->
+  <div class="profile-menu">
+    <button (click)="activeTab = 'profile'" [class.active]="activeTab === 'profile'">Thông Tin Cá Nhân</button>
+    <button *ngIf="user.role === 'patient'" (click)="activeTab = 'medicalHistory'" [class.active]="activeTab === 'medicalHistory'">Lịch Sử Khám Bệnh</button>
+    <button *ngIf="user.role === 'doctor'" (click)="activeTab = 'patientHistory'" [class.active]="activeTab === 'patientHistory'">Lịch Sử Khám Bệnh Bệnh Nhân</button>
+  </div>
+
+  <!-- Hiển thị nội dung dựa trên tab được chọn -->
+  <div class="profile-content">
+    <!-- Thông tin cá nhân -->
+    <div *ngIf="activeTab === 'profile'" class="profile-info">
+      <div class="avatar-section">
+        <img src="https://scontent.fhan2-5.fna.fbcdn.net/v/t1.6435-9/125408833_193036345700650_8843732697979880226_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=K98C6NZ8ZicQ7kNvgGO0-Rx&_nc_oc=AdiG2E54MyijB_HeECEvM_A3pR0YfmkuyUYs6Vqo2GvieSWQ2b_i-VD-_c4xbE4Gxgs&_nc_zt=23&_nc_ht=scontent.fhan2-5.fna&_nc_gid=Ah-7NlTMtedMVMsehA_4Kzp&oh=00_AYDlfLsThrTcJwH0bPD4_Inyk-bRJ3hQ3ofDIlh7zO-J6w&oe=67EC0BDE"
+        alt="Avatar" class="avatar">
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" class="file-input">
+        <button (click)="uploadAvatar()">Cập nhật ảnh đại diện</button>
+      </div>
+
+      <div class="details-section">
+        <p><strong>Tên:</strong> {{ user.name }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Số điện thoại:</strong> {{ user.phone }}</p>
+        <p><strong>Địa chỉ:</strong> {{ user.address }}</p>
+      </div>
+
+      <!-- Form chỉnh sửa thông tin -->
+      <div class="edit-form" *ngIf="isEditing">
+        <h2>Chỉnh Sửa Thông Tin</h2>
+        <form #editForm="ngForm" (ngSubmit)="saveChanges()">
+          <div class="form-group">
+            <label for="name">Tên:</label>
+            <input type="text" id="name" name="name" [(ngModel)]="user.name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" [(ngModel)]="user.email" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Số điện thoại:</label>
+            <input type="text" id="phone" name="phone" [(ngModel)]="user.phone">
+          </div>
+          <div class="form-group">
+            <label for="address">Địa chỉ:</label>
+            <input type="text" id="address" name="address" [(ngModel)]="user.address">
+          </div>
+          <button type="submit">Lưu thay đổi</button>
+          <button type="button" (click)="cancelEdit()">Hủy</button>
+        </form>
+      </div>
+
+      <!-- Nút chỉnh sửa thông tin -->
+      <div class="actions">
+        <button (click)="toggleEdit()">{{ isEditing ? 'Hủy' : 'Chỉnh sửa thông tin' }}</button>
+      </div>
+    </div>
+
+    <!-- Lịch sử khám bệnh (cho bệnh nhân) -->
+    <div *ngIf="activeTab === 'medicalHistory' && user.role === 'patient'" class="medical-history">
+      <h2>Lịch Sử Khám Bệnh</h2>
+      <div *ngFor="let record of medicalRecords" class="record-card" (click)="viewMedicalRecord(record)">
+        <p><strong>Ngày khám:</strong> {{ record.date }}</p>
+        <p><strong>Bác sĩ:</strong> {{ record.doctor }}</p>
+        <p><strong>Chẩn đoán:</strong> {{ record.diagnosis }}</p>
+      </div>
+    </div>
+
+    <!-- Lịch sử khám bệnh bệnh nhân (cho bác sĩ) -->
+    <div *ngIf="activeTab === 'patientHistory' && user.role === 'doctor'" class="patient-history">
+      <h2>Lịch Sử Khám Bệnh Bệnh Nhân</h2>
+      <div *ngFor="let patient of patientRecords" class="patient-card">
+        <p><strong>Tên bệnh nhân:</strong> {{ patient.name }}</p>
+        <p><strong>Ngày khám:</strong> {{ patient.date }}</p>
+        <p><strong>Chẩn đoán:</strong> {{ patient.diagnosis }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup hiển thị chi tiết hồ sơ bệnh án -->
+  <div *ngIf="showRecordDetail" class="modal-overlay">
+    <div class="modal-content">
+      <button class="close-button" (click)="closeRecordDetail()">&times;</button>
+      <h2>Chi Tiết Hồ Sơ Bệnh Án</h2>
+      <div *ngIf="selectedRecord">
+        <p><strong>Ngày khám:</strong> {{ selectedRecord.date }}</p>
+        <p><strong>Bác sĩ:</strong> {{ selectedRecord.doctor }}</p>
+        <p><strong>Chẩn đoán:</strong> {{ selectedRecord.diagnosis }}</p>
+        <p><strong>Ghi chú:</strong> {{ selectedRecord.notes }}</p>
+      </div>
+    </div>
+  </div>
+</div>

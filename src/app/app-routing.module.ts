@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './user/home/home.component'
-import { LoginComponent } from './user/login/login.component'
-import { DiagnosisComponent } from './user/diagnosis/diagnosis.component'
-import { DoctorComponent } from './user/doctor/doctor.component'
+import { HomeComponent } from '@app/user/home/home.component'
+import { LoginComponent } from '@app/user/login/login.component'
+import { DiagnosisComponent } from '@app/user/diagnosis/diagnosis.component'
+import { DoctorComponent } from '@app/user/doctor/doctor.component'
+import { ProfileComponent } from '@app/user/profile/profile.component'
+import { AdminHomeComponent } from '@app/admin/home/home.component'
+import { AdminUserComponent } from '@app/admin/user/user.component'
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -11,6 +14,12 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'diagnosis', component: DiagnosisComponent },
   { path: 'doctor', component: DoctorComponent },
+  { path: 'profile', component: ProfileComponent },
+
+
+  { path: 'admin/home', component: AdminHomeComponent },
+  { path: 'admin/users', component: AdminUserComponent },
+
   { path: '**', redirectTo: 'home' },
 ];
 

@@ -1,9 +1,19 @@
 <ng-container *ngIf="!isLoginPage()">
-  <app-header></app-header>
+  <ng-container *ngIf="isAdmin(); else userHeader">
+    <div class="layout">
+      <app-sidebar></app-sidebar>
+      <!-- Nội dung chính -->
+      <div class="main-content">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #userHeader>
+    <app-header></app-header>
+    <router-outlet></router-outlet>
+  </ng-template>
 </ng-container>
 
-<router-outlet></router-outlet>
-
-<ng-container *ngIf="!isLoginPage()">
+<!-- <ng-container *ngIf="!isLoginPage()">
   <app-footer></app-footer>
-</ng-container>
+</ng-container> -->

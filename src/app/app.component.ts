@@ -12,4 +12,8 @@ export class AppComponent {
   isLoginPage(): boolean {
     return this.router.url === '/login';
   }
+
+  isAdmin(): boolean {
+    return this.router.url.includes('admin');
+  }
 }

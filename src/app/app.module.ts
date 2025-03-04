@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +13,13 @@ import { HeaderComponent } from './user/shared/header/header.component';
 import { FooterComponent } from './user/shared/footer/footer.component';
 import { DiagnosisComponent } from './user/diagnosis/diagnosis.component';
 import { DoctorComponent } from './user/doctor/doctor.component';
+import { ProfileComponent } from './user/profile/profile.component';
+import { ServiceComponent } from './admin/service/service.component';
+import { PatientsComponent } from './admin/patients/patients.component';
+import { MedicinesComponent } from './admin/medicines/medicines.component';
+import { RoomComponent } from './admin/room/room.component';
+import { AdminUserComponent } from './admin/user/user.component';
+import { SidebarComponent } from './admin/shared/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -20,13 +29,22 @@ import { DoctorComponent } from './user/doctor/doctor.component';
     HeaderComponent,
     FooterComponent,
     DiagnosisComponent,
-    DoctorComponent
+    DoctorComponent,
+    ProfileComponent,
+    ServiceComponent,
+    PatientsComponent,
+    MedicinesComponent,
+    RoomComponent,
+    AdminUserComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule,
+    CommonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
