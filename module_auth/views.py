@@ -4,10 +4,10 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.db import connection
-from django.contrib.auth.hashers import check_password
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.hashers import make_password, check_password
 import logging
 from service.logutils import log_utils
+from .query_constants import GET_USER_BY_USERNAME_PASSWORDHASH, CHECK_USER_REGISTER_EXIT, REGISTER_USER_BY_USERNAME_PASSWORDHASH
 
 logger = logging.getLogger(__name__)
 
@@ -22,47 +22,100 @@ class LoginView(APIView):
             log_utils.LogStart(subject, username)
 
             if not username or not password:
-                return Response({"error": "Username and password are required"}, status=400)
+                return Response({"msg": "Username and password are required"}, status=400)
 
+            
             # Truy vấn dữ liệu từ PostgreSQL
             with connection.cursor() as cursor:
-                cursor.execute("SELECT id, username, password FROM account WHERE username = %s", [username])
+                cursor.execute(GET_USER_BY_USERNAME_PASSWORDHASH, [username])
                 user = cursor.fetchone()
 
+            # Kiểm tra user tồn tại
             if not user:
                 # Write log warning
                 waring_msg = "Invalid username or password"
                 log_utils.LogWarning(subject, waring_msg)
-                return Response({"error": waring_msg}, status=401)
+                return Response({"msg": waring_msg}, status=401)
 
-            # user_id, _, hashed_password = user  # user[0] = id, user[1] = username, user[2] = password
+            # Kiểm tra password hash
+            password_db = str(user[2])
+            if check_password(password, password_db):
+                # Tạo JWT Token
+                refresh = RefreshToken()
+                refresh["user_id"] = str(user[0])
+                
+                response = Response({"msg": "Login successful"})
 
-            # if not check_password(password, hashed_password):
-            #     return Response({"error": "Invalid username or password"}, status=401)
+                # Sử dụng cookie để lưu token
+                response.set_cookie(
+                    key="access_token", value=str(refresh.access_token),
+                    httponly=True, samesite="Lax", secure=True
+                )
+                response.set_cookie(
+                    key="refresh_token", value=str(refresh),
+                    httponly=True, samesite="Lax", secure=True
+                )
 
-            # Tạo JWT Token
-            refresh = RefreshToken()
-            refresh["user_id"] = str(user[0])
-            
-            response = Response({"message": "Login successful"})
-
-            # Sử dụng cookie để lưu token
-            response.set_cookie(
-                key="access_token", value=str(refresh.access_token),
-                httponly=True, samesite="Lax", secure=True
-            )
-            response.set_cookie(
-                key="refresh_token", value=str(refresh),
-                httponly=True, samesite="Lax", secure=True
-            )
-
-            # Write log end
-            log_utils.LogEnd(subject)
-            return response
+                # Write log end
+                log_utils.LogEnd(subject)
+                return response
+            else:
+                 # Write log warning
+                waring_msg = "Invalid username or password"
+                log_utils.LogWarning(subject, waring_msg)
+                return Response({"msg": waring_msg}, status=401)
 
         except Exception as e:
             error_message = f"{str(e)}"
             log_utils.log_error(subject, error_message)
 
             logger.error(f"Login error: {str(e)}")
-            return Response({"error": "Internal Server Error"}, status=500)
+            return Response({"msg": "Internal Server Error"}, status=500)
+        
+# Function register
+class RegisterView(APIView):
+    def post(self, request):
+        subject = 'register'
+        try:
+            username = request.data.get("username")
+            password = request.data.get("password")
+            msg = "username = %s - password = %s", [username, password]
+            # Write log start
+            log_utils.LogStart(subject, msg)
+
+            if not username or not password:
+                msg = "Username and password are required"
+                log_utils.LogWarning(subject, msg)
+                return Response({"msg": msg}, status=400)
+
+            # Kiểm tra tài khoản đã tồn tại chưa
+            with connection.cursor() as cursor:
+                cursor.execute(CHECK_USER_REGISTER_EXIT, [username])
+                userExit = cursor.fetchone()
+                userExit = userExit[0]  # Lấy giá trị count từ tuple
+
+            if userExit > 0:
+                msg = "Tài khoản đã tồn tại."
+                log_utils.LogWarning(subject, msg)
+                return Response({"msg": msg}, status=409)  # 409: Conflict    
+
+            hashed_password = make_password(password)  # Hash mật khẩu trước khi lưu
+
+            # Truy vấn dữ liệu từ PostgreSQL
+            with connection.cursor() as cursor:
+                cursor.execute(REGISTER_USER_BY_USERNAME_PASSWORDHASH, [username, hashed_password])
+                userID = cursor.fetchone()
+
+            # Kiểm tra tạo tài khoản có thành công
+            if userID:
+                log_utils.LogEnd(subject)
+                return Response({"msg": "Register successful"})
+            else:
+                raise ValueError("Tạo thất bại do server lỗi.")
+
+        except Exception as e:
+            error_message = f"{str(e)}"
+            log_utils.log_error(subject, error_message)
+
+            logger.error(f"Login error: {str(e)}")
+            return Response({"msg": "Internal Server Error"}, status=500)        

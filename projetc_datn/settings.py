@@ -11,11 +11,30 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from django.conf import settings
+import os
+from colorama import Fore, Style
+
+# Text Run App
+print(Fore.RED + "CLINIC MANAGEMENT" + Fore.CYAN + " RUN " + Fore.MAGENTA + "APP" + Style.RESET_ALL)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Thư mục chứa MEDIA public
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Thư mục chứa IMG public
+IMG_URL = '/img/'
+IMG_ROOT = os.path.join(BASE_DIR, 'projetc_datn', 'img')
+
+print("IMG_ROOT:", settings.IMG_ROOT)
+print("IMG_ROOT có tồn tại không:", os.path.exists(settings.IMG_ROOT))
+
+full_path = os.path.join(settings.IMG_ROOT)
+print("********* FULL PATH IMG:", full_path +" *********")
+print("PATH IMG PUBLIC tồn tại:", os.path.exists(full_path))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -39,10 +58,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
-    'module_auth'
+
+    # Cấu hình CORS
+    'corsheaders',
+
+    # Cấu hình module
+    'module_auth',
+    'module_service',
 ]
 
 MIDDLEWARE = [
+    # CommonMiddleware
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -85,7 +113,7 @@ WSGI_APPLICATION = 'projetc_datn.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'project_datn',
+        'NAME': 'clinic_management',
         'USER': 'postgres',
         'PASSWORD': 'Tung77778503',
         'HOST': 'localhost',
@@ -134,3 +162,10 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Use Cors
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",
+]
+
+CORS_ALLOW_CREDENTIALS = True
