@@ -118,4 +118,16 @@ class RegisterView(APIView):
             log_utils.log_error(subject, error_message)
 
             logger.error(f"Login error: {str(e)}")
-            return Response({"msg": "Internal Server Error"}, status=500)        
+            return Response({"msg": "Internal Server Error"}, status=500)  
+
+# Function logout
+class LogoutView(APIView):
+    def get(self, request):
+        try:
+            response = Response({"msg": "Logged out successfully"})
+            response.delete_cookie("access_token")
+            response.delete_cookie("refresh_token")
+            return response
+        except Exception as e:
+            logger.error(f"Login error: {str(e)}")
+            return Response({"msg": "Internal Server Error"}, status=500)                  

@@ -10,11 +10,7 @@ logger = logging.getLogger(__name__)
 
 class ServiceView(APIView):
     def get(self, request):
-        subject = 'service'
         try:
-            # Write log start
-            log_utils.LogStart(subject)
-            
             # Truy vấn dữ liệu từ PostgreSQL
             with connection.cursor() as cursor:
                 cursor.execute(SELECT_ALL_SERVICE)
@@ -28,12 +24,7 @@ class ServiceView(APIView):
                 for row in service
             ]
 
-            # Write log end
-            log_utils.LogEnd(subject)
             return Response({"service": service_list})
         except Exception as e:
-            error_message = f"{str(e)}"
-            log_utils.LogError(subject, error_message)
-
             logger.error(f"Login error: {str(e)}")
             return Response({"msg": "Internal Server Error"}, status=500)    

@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     # Cấu hình module
     'module_auth',
     'module_service',
+    'module_header',
 ]
 
 MIDDLEWARE = [

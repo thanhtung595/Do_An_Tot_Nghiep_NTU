@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('module_auth.urls')),
     path('api/', include('module_service.urls')),
+    path('api/', include('module_header.urls')),
 
     re_path(r'^img/(?P<path>.*)$', serve, {'document_root': settings.IMG_ROOT}),
 ]
