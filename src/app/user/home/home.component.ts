@@ -20,10 +20,10 @@ export class HomeComponent {
     this.homeApiService.getService().subscribe({
       next: (data) => {
         this.services = data?.service ?? [];
-        console.log(this.services);
+        console.log("services",this.services);
       },
       error: (error) => {
-        console.error('Error fetching users:', error);
+        console.error('Error fetching services:', error);
       }
     });
   }

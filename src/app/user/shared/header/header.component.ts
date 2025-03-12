@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { HeaderApiServiceService } from '@app/services/api/header/header.api.service.service'
+import { AuthApiService } from '@app/services/api/auth/auth.api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -6,5 +9,36 @@ import { Component } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
+  constructor(private headerApiService: HeaderApiServiceService,
+    private authApiService : AuthApiService,
+    private router : Router
+  ) { }
 
+  headers : any[] = [];
+  ngOnInit(): void {
+    this.headerApiService.getHeader().subscribe({
+      next: (data) => {
+        this.headers = data?.header ?? [];
+        console.log("headers",this.headers);
+      },
+      error: (error) => {
+        console.error('Error fetching services:', error);
+      }
+    });
+  }
+
+  onClickLogout(data : any, event: Event){
+    if(data.url == "logout"){
+      event.preventDefault();
+
+      this.authApiService.logout().subscribe({
+        next: (data) => {
+          window.location.href = '/home';
+        },
+        error: (error) => {
+          console.error('Error:', error);
+        }
+      });
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthApiService } from '@app/services/api/auth/auth.api.service';
 
 @Component({
   selector: 'app-login',
@@ -9,21 +10,26 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   username: string = '';
   password: string = '';
+  msgError = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authApiService : AuthApiService) {}
 
   onSubmit() {
     // Xử lý đăng nhập ở đây
     console.log('Username:', this.username);
     console.log('Password:', this.password);
 
-    // Gọi API đăng nhập hoặc xử lý logic đăng nhập
-    // Ví dụ: this.authService.login(this.username, this.password);
-    if (this.username === 'admin' && this.password === 'admin') {
-      alert('Đăng nhập thành công!');
-      this.router.navigate(['/home']);
-    } else {
-      alert('Sai email hoặc mật khẩu!');
-    }
+
+    this.authApiService.login(this.username, this.password).subscribe({
+      next: (data) => {
+        this.router.navigate(['/home']).then(() => {
+          window.location.href = '/home';
+        });
+      },
+      error: (error) => {
+        this.msgError = error.error.msg;
+        console.error('Error fetching users:', this.msgError);
+      }
+    });
   }
 }

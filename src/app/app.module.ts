@@ -20,6 +20,7 @@ import { MedicinesComponent } from './admin/medicines/medicines.component';
 import { RoomComponent } from './admin/room/room.component';
 import { AdminUserComponent } from './admin/user/user.component';
 import { SidebarComponent } from './admin/shared/sidebar/sidebar.component';
+import { RegisterComponent } from './user/register/register.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { SidebarComponent } from './admin/shared/sidebar/sidebar.component';
     MedicinesComponent,
     RoomComponent,
     AdminUserComponent,
-    SidebarComponent
+    SidebarComponent,
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,

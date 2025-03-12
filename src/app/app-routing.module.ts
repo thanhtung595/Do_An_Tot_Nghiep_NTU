@@ -7,11 +7,13 @@ import { DoctorComponent } from '@app/user/doctor/doctor.component'
 import { ProfileComponent } from '@app/user/profile/profile.component'
 import { AdminHomeComponent } from '@app/admin/home/home.component'
 import { AdminUserComponent } from '@app/admin/user/user.component'
+import { RegisterComponent } from '@app/user/register/register.component'
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'diagnosis', component: DiagnosisComponent },
   { path: 'doctor', component: DoctorComponent },
   { path: 'profile', component: ProfileComponent },

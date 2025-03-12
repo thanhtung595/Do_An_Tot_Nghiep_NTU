@@ -1,4 +1,4 @@
-<ng-container *ngIf="!isLoginPage()">
+<ng-container *ngIf="!isLoginPage(); else loginPage">
   <ng-container *ngIf="isAdmin(); else userHeader">
     <div class="layout">
       <app-sidebar></app-sidebar>
@@ -13,7 +13,9 @@
     <router-outlet></router-outlet>
   </ng-template>
 </ng-container>
-
+<ng-template #loginPage>
+  <router-outlet></router-outlet>
+</ng-template>
 <!-- <ng-container *ngIf="!isLoginPage()">
   <app-footer></app-footer>
 </ng-container> -->

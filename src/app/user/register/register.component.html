@@ -1,8 +1,8 @@
 <div class="login-container">
-  <h2>Login</h2>
+  <h2>Đăng ký</h2>
   <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
     <div class="form-group">
-      <label for="username">Username</label>
+      <label for="username">Tài khoản</label>
       <input
         type="text"
         id="username"
@@ -12,12 +12,12 @@
         #usernameInput="ngModel"
       />
       <div *ngIf="usernameInput.invalid && (usernameInput.dirty || usernameInput.touched)" class="error-message">
-        Username is required.
+        Tên tài khoản là bắt buộc.
       </div>
     </div>
 
     <div class="form-group">
-      <label for="password">Password</label>
+      <label for="password">Mật khẩu</label>
       <input
         type="password"
         id="password"
@@ -26,10 +26,22 @@
         required
         #passwordInput="ngModel"
       />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Nhập lại mật khẩu</label>
+      <input
+        type="password"
+        id="password_2"
+        name="password_2"
+        [(ngModel)]="password_2"
+        required
+        #passwordInput="ngModel"
+      />
       <div *ngIf="msgError" class="error-message">
         Thông báo: {{ msgError }}
       </div>
     </div>
-    <button type="submit" [disabled]="!loginForm.form.valid">Login</button>
+    <button type="submit" [disabled]="!loginForm.form.valid">Xác nhận</button>
   </form>
 </div>
