@@ -9,20 +9,20 @@ import { API_BASE_URL } from '@app/constants'
 })
 export class AuthApiService {
 
-  private apiUrl = `${API_BASE_URL}api/login/`;
+  // private apiUrl = `${API_BASE_URL}api/login/`;
+  private apiUrl = "http://localhost/auth/login";
 
   constructor(private http: HttpClient) { }
 
   // Hàm login
-  login(username: string, password: string): Observable<any> {
-    const body = { username, password };
+  login(userName: string, password: string): Observable<any> {
+    const body = { userName, password };
     return this.http.post<any>(this.apiUrl, body, { withCredentials: true });
   }
 
-// Hàm register
-  register(username: string, password: string): Observable<any> {
-    const body = { username, password };
-    return this.http.post<any>(API_BASE_URL+"api/register/", body, { withCredentials: true });
+  // Hàm register
+  register(user: any): Observable<any> {
+    return this.http.post<any>(API_BASE_URL+"api/register/", user, { withCredentials: true });
   }
 
   // Hàm logout

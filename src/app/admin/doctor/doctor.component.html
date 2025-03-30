@@ -1,1 +1,242 @@
-<p>doctor works!</p>
+<div class="doctor-management">
+  <h2>Quản lý Bác sỹ</h2>
+
+  <!-- Thanh tìm kiếm -->
+  <div class="search-container">
+    <input class="search-input" type="text" [(ngModel)]="searchName" placeholder="Tìm theo tên..." />
+    <input class="search-input"
+      type="text"
+      [(ngModel)]="searchEmail"
+      placeholder="Tìm theo email..."
+    />
+    <select class="search-input" [(ngModel)]="searchRole">
+      <option value="">Tất cả quyền</option>
+      <option value="admin">Admin</option>
+      <option value="doctor">doctor</option>
+    </select>
+  </div>
+
+  <button class="add-doctor-btn" (click)="openModal('add')">Thêm bác sỹ</button>
+
+  <!-- Bảng danh sách doctor -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Tài khoản</th>
+        <th>Tên</th>
+        <th>Email</th>
+        <th>SĐT</th>
+        <th>Khoa</th>
+        <th>Kinh nghiệm</th>
+        <th>Ngày làm viêc</th>
+        <th>Thời gian làm</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let doctor of paginateddoctors()">
+        <td class="td-list-fromat">{{ doctor.id }}</td>
+        <td class="td-list-fromat">{{ doctor.username }}</td>
+        <td class="td-list-fromat">{{ doctor.fullname }}</td>
+        <td class="td-list-fromat">{{ doctor.email }}</td>
+        <td class="td-list-fromat">{{ doctor.phonenumber }}</td>
+        <td class="td-list-fromat">{{ doctor.name }}</td>
+        <td class="td-list-fromat">{{ doctor.experience }}</td>
+        <td class="td-list-fromat">{{ doctor.workdays }}</td>
+        <td class="td-list-fromat">{{ doctor.timeonline }}</td>
+        <td class="td-list-fromat">
+          <button (click)="openModal('edit', doctor)">Sửa</button>
+          <button (click)="openModal('delete', doctor)">Xóa</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Phân trang -->
+  <div class="pagination">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">❮</button>
+    <span>Trang {{ currentPage }} / {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+      ❯
+    </button>
+  </div>
+
+  <!-- Chọn số doctor / trang -->
+  <div class="page-size-selector">
+    <label>Hiển thị: {{ totaldoctor }} / </label>
+    <select (change)="setPageSize($event)">
+      <option value="10">10 doctor</option>
+      <option value="20">20 doctor</option>
+      <option value="30">30 doctor</option>
+    </select>
+  </div>
+
+  <!-- Popup (Modal) -->
+  <div class="modal" *ngIf="isModalOpen">
+    <div class="modal-content">
+      <h3 *ngIf="modalType === 'add'">Thêm doctor</h3>
+      <h3 *ngIf="modalType === 'edit'">Sửa doctor</h3>
+      <h3 *ngIf="modalType === 'delete'">Xóa doctor</h3>
+      <div *ngIf="msgError" class="error-message">
+        Thông báo: {{ msgError }}
+      </div>
+
+      <form
+        class="form-popup bg-white p-6 rounded-lg shadow-lg w-96 space-y-4"
+        *ngIf="modalType !== 'delete'"
+      >
+        <!-- username -->
+        <div class="form-group">
+          <label class="form-label">Tài khoản:</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedDoctor.username"
+            required
+            class="form-input"
+            name="username"
+          />
+        </div>
+
+        <!-- password -->
+        <div class="form-group">
+          <label class="form-label">Mật khẩu:</label>
+          <input
+            type="password"
+            [(ngModel)]="selectedDoctor.password"
+            required
+            class="form-input"
+            name="password"
+          />
+        </div>
+
+        <!-- fullName -->
+        <div class="form-group">
+          <label class="form-label">Tên:</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedDoctor.fullname"
+            required
+            class="form-input"
+            name="fullName"
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label">Email:</label>
+          <input
+            type="email"
+            [(ngModel)]="selectedDoctor.email"
+            required
+            class="form-input"
+            name="email"
+          />
+        </div>
+
+        <!-- phoneNumber -->
+        <div class="form-group">
+          <label class="form-label">Điện thoại:</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedDoctor.phonenumber"
+            required
+            class="form-input"
+            name="phone"
+          />
+        </div>
+
+        <!-- address -->
+        <div class="form-group">
+          <label class="form-label">Địa chỉ:</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedDoctor.address"
+            required
+            class="form-input"
+            name="address"
+          />
+        </div>
+
+        <!-- experience -->
+        <div class="form-group">
+          <label class="form-label">Kinh nghiệm:</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedDoctor.experience"
+            required
+            class="form-input"
+            name="experience"
+          />
+        </div>
+
+        <!-- workdays -->
+        <div class="form-group">
+          <label class="form-label">Ngày thứ làm việc:</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedDoctor.workdays"
+            required
+            class="form-input"
+            name="workdays"
+            placeholder="Thứ 2 - Thứ 7"
+          />
+        </div>
+
+        <!-- timeonline -->
+        <div class="form-group">
+          <label class="form-label">Giờ làm việc:</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedDoctor.timeonline"
+            required
+            placeholder="08:00 AM - 17:00 PM"
+            class="form-input"
+            name="timeonline"
+          />
+        </div>
+
+        <!-- Chuyên ngành -->
+        <div class="form-group">
+          <label class="form-label">Chuyên ngành:</label>
+          <select [(ngModel)]="selectedDoctor.departmentid" name="department">
+            <option *ngFor="let department of departments" [value]="department.id">
+              {{ department.name }}
+            </option>
+          </select>
+        </div>
+      </form>
+
+      <p *ngIf="modalType === 'delete'">
+        Bạn có chắc chắn muốn xóa <strong>{{ selectedDoctor.name }}</strong
+        >?
+      </p>
+
+      <!-- Nút hành động -->
+      <div class="modal-actions">
+        <button
+          class="btn-submit"
+          *ngIf="modalType === 'add'"
+          (click)="adddoctor()"
+        >
+          Thêm
+        </button>
+        <button
+          class="btn-submit"
+          *ngIf="modalType === 'edit'"
+          (click)="updatedoctor()"
+        >
+          Lưu
+        </button>
+        <button
+          class="btn-delete"
+          *ngIf="modalType === 'delete'"
+          (click)="deletedoctor()"
+        >
+          Xóa
+        </button>
+        <button class="close-btn" (click)="closeModal()">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>

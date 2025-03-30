@@ -22,9 +22,12 @@ export class LoginComponent {
 
     this.authApiService.login(this.username, this.password).subscribe({
       next: (data) => {
-        this.router.navigate(['/home']).then(() => {
-          window.location.href = '/home';
-        });
+        console.log(data)
+        console.log(data.data.token.accessToken)
+        // document.cookie = `token=${data.data.token.accessToken}; path=/;`;
+        // // this.router.navigate(['/home']).then(() => {
+        // //   window.location.href = '/home';
+        // // });
       },
       error: (error) => {
         this.msgError = error.error.msg;

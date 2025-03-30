@@ -4,8 +4,8 @@
   <!-- Menu dựa trên role -->
   <div class="profile-menu">
     <button (click)="activeTab = 'profile'" [class.active]="activeTab === 'profile'">Thông Tin Cá Nhân</button>
-    <button *ngIf="user.role === 'patient'" (click)="activeTab = 'medicalHistory'" [class.active]="activeTab === 'medicalHistory'">Lịch Sử Khám Bệnh</button>
-    <button *ngIf="user.role === 'doctor'" (click)="activeTab = 'patientHistory'" [class.active]="activeTab === 'patientHistory'">Lịch Sử Khám Bệnh Bệnh Nhân</button>
+    <button *ngIf="user.rolename === 'patient'" (click)="activeTab = 'medicalHistory'" [class.active]="activeTab === 'medicalHistory'">Lịch Sử Khám Bệnh</button>
+    <button *ngIf="user.rolename === 'doctor'" (click)="activeTab = 'patientHistory'" [class.active]="activeTab === 'patientHistory'">Lịch Sử Khám Bệnh Bệnh Nhân</button>
   </div>
 
   <!-- Hiển thị nội dung dựa trên tab được chọn -->
@@ -13,16 +13,21 @@
     <!-- Thông tin cá nhân -->
     <div *ngIf="activeTab === 'profile'" class="profile-info">
       <div class="avatar-section">
-        <img src="https://scontent.fhan2-5.fna.fbcdn.net/v/t1.6435-9/125408833_193036345700650_8843732697979880226_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=K98C6NZ8ZicQ7kNvgGO0-Rx&_nc_oc=AdiG2E54MyijB_HeECEvM_A3pR0YfmkuyUYs6Vqo2GvieSWQ2b_i-VD-_c4xbE4Gxgs&_nc_zt=23&_nc_ht=scontent.fhan2-5.fna&_nc_gid=Ah-7NlTMtedMVMsehA_4Kzp&oh=00_AYDlfLsThrTcJwH0bPD4_Inyk-bRJ3hQ3ofDIlh7zO-J6w&oe=67EC0BDE"
-        alt="Avatar" class="avatar">
+        <img
+        [src]="getImageUrl(user.image)"
+          alt="{{ user.fullname }}"
+          class="avatar"
+        />
         <input type="file" (change)="onFileSelected($event)" accept="image/*" class="file-input">
         <button (click)="uploadAvatar()">Cập nhật ảnh đại diện</button>
       </div>
 
       <div class="details-section">
-        <p><strong>Tên:</strong> {{ user.name }}</p>
+        <p><strong>Tên:</strong> {{ user.fullname }}</p>
         <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Số điện thoại:</strong> {{ user.phone }}</p>
+        <p><strong>Số điện thoại:</strong> {{ user.phonenumber }}</p>
+        <p><strong>Ngày sinh:</strong> {{ user.dateofbirth }}</p>
+        <p><strong>Giới tính:</strong> {{ user.gender }}</p>
         <p><strong>Địa chỉ:</strong> {{ user.address }}</p>
       </div>
 
@@ -32,7 +37,7 @@
         <form #editForm="ngForm" (ngSubmit)="saveChanges()">
           <div class="form-group">
             <label for="name">Tên:</label>
-            <input type="text" id="name" name="name" [(ngModel)]="user.name" required>
+            <input type="text" id="name" name="name" [(ngModel)]="user.fullname" required>
           </div>
           <div class="form-group">
             <label for="email">Email:</label>
@@ -40,7 +45,7 @@
           </div>
           <div class="form-group">
             <label for="phone">Số điện thoại:</label>
-            <input type="text" id="phone" name="phone" [(ngModel)]="user.phone">
+            <input type="text" id="phone" name="phone" [(ngModel)]="user.phonenumber">
           </div>
           <div class="form-group">
             <label for="address">Địa chỉ:</label>
@@ -58,7 +63,7 @@
     </div>
 
     <!-- Lịch sử khám bệnh (cho bệnh nhân) -->
-    <div *ngIf="activeTab === 'medicalHistory' && user.role === 'patient'" class="medical-history">
+    <div *ngIf="activeTab === 'medicalHistory' && user.rolename === 'patient'" class="medical-history">
       <h2>Lịch Sử Khám Bệnh</h2>
       <div *ngFor="let record of medicalRecords" class="record-card" (click)="viewMedicalRecord(record)">
         <p><strong>Ngày khám:</strong> {{ record.date }}</p>
@@ -68,7 +73,7 @@
     </div>
 
     <!-- Lịch sử khám bệnh bệnh nhân (cho bác sĩ) -->
-    <div *ngIf="activeTab === 'patientHistory' && user.role === 'doctor'" class="patient-history">
+    <div *ngIf="activeTab === 'patientHistory' && user.rolename === 'doctor'" class="patient-history">
       <h2>Lịch Sử Khám Bệnh Bệnh Nhân</h2>
       <div *ngFor="let patient of patientRecords" class="patient-card">
         <p><strong>Tên bệnh nhân:</strong> {{ patient.name }}</p>

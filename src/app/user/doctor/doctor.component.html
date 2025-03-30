@@ -17,10 +17,12 @@
   <!-- Danh sách bác sĩ -->
   <div class="doctor-cards">
     <div *ngFor="let doctor of filteredDoctors" class="doctor-card">
-      <img [src]="doctor.image" alt="{{ doctor.name }}" class="doctor-image">
+      <img [src]="getImageUrl(doctor.image)"
+        alt="{{ doctor.name }}"
+        class="doctor-image">
       <div class="doctor-info">
-        <h2>{{ doctor.name }}</h2>
-        <p><strong>Chuyên khoa:</strong> {{ doctor.specialty }}</p>
+        <h2>{{ doctor.fullname }}</h2>
+        <p><strong>Chuyên khoa:</strong> {{ doctor.name }}</p>
         <p><strong>Kinh nghiệm:</strong> {{ doctor.experience }}</p>
         <button (click)="viewDetail(doctor)">Xem chi tiết</button>
         <button (click)="openBookingForm(doctor)">Đặt lịch khám</button>
@@ -36,25 +38,35 @@
       <!-- Chi tiết bác sĩ -->
       <div *ngIf="!isBooking">
         <h2>Chi tiết bác sĩ:</h2>
-        <h3>{{ selectedDoctor.name }}</h3>
-        <p><strong>Số điện thoại:</strong> {{ selectedDoctor.phone }}</p>
-        <p><strong>Chuyên khoa:</strong> {{ selectedDoctor.specialty }}</p>
+        <h3>{{ selectedDoctor.fullname }}</h3>
+        <p><strong>Số điện thoại:</strong> {{ selectedDoctor.phonenumber }}</p>
+        <p><strong>Chuyên khoa:</strong> {{ selectedDoctor.name }}</p>
         <p><strong>Kinh nghiệm:</strong> {{ selectedDoctor.experience }}</p>
-        <p><strong>Lịch làm việc:</strong> {{ selectedDoctor.schedule }}</p>
+        <p><strong>Quê quán:</strong> {{ selectedDoctor.address }}</p>
+        <p><strong>Lịch làm việc:</strong> {{ selectedDoctor.workdays }} * {{ selectedDoctor.timeonline }}</p>
       </div>
 
       <!-- Form đặt lịch khám -->
       <div *ngIf="isBooking">
         <h2>Đặt lịch khám với:</h2>
-        <h3>{{ selectedDoctor.name }}</h3>
+        <h3>{{ selectedDoctor.fullname }}</h3>
         <form #bookingForm="ngForm" (ngSubmit)="bookAppointment(bookingForm)">
           <div class="form-group">
+            <label class="form-label">Triệu chứng:</label>
+            <input
+              type="text"
+              ngModel required
+              class="form-input"
+              name="diagnosis"
+            />
+          </div>
+          <div class="form-group">
             <label for="date">Ngày khám:</label>
-            <input type="date" id="date" name="date" ngModel required>
+            <input type="date" id="date" name="workday" ngModel required>
           </div>
           <div class="form-group">
             <label for="time">Giờ khám:</label>
-            <input type="time" id="time" name="time" ngModel required>
+            <input type="time" id="time" name="timeOnline" step="1" ngModel required>
           </div>
           <button type="submit">Xác nhận đặt lịch</button>
           <button type="button" (click)="closeModal()">Hủy</button>

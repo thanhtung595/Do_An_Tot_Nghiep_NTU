@@ -19,6 +19,7 @@ import { PatientsComponent } from './admin/patients/patients.component';
 import { MedicinesComponent } from './admin/medicines/medicines.component';
 import { RoomComponent } from './admin/room/room.component';
 import { AdminUserComponent } from './admin/user/user.component';
+import { DoctorAdminComponent } from '@app/admin/doctor/doctor.component';
 import { SidebarComponent } from './admin/shared/sidebar/sidebar.component';
 import { RegisterComponent } from './user/register/register.component';
 
@@ -37,6 +38,7 @@ import { RegisterComponent } from './user/register/register.component';
     MedicinesComponent,
     RoomComponent,
     AdminUserComponent,
+    DoctorAdminComponent,
     SidebarComponent,
     RegisterComponent,
   ],

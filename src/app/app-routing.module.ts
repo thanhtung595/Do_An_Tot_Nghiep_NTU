@@ -6,8 +6,11 @@ import { DiagnosisComponent } from '@app/user/diagnosis/diagnosis.component'
 import { DoctorComponent } from '@app/user/doctor/doctor.component'
 import { ProfileComponent } from '@app/user/profile/profile.component'
 import { AdminHomeComponent } from '@app/admin/home/home.component'
-import { AdminUserComponent } from '@app/admin/user/user.component'
 import { RegisterComponent } from '@app/user/register/register.component'
+
+
+import { AdminUserComponent } from '@app/admin/user/user.component'
+import { DoctorAdminComponent } from '@app/admin/doctor/doctor.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -21,6 +24,7 @@ const routes: Routes = [
 
   { path: 'admin/home', component: AdminHomeComponent },
   { path: 'admin/users', component: AdminUserComponent },
+  { path: 'admin/doctors', component: DoctorAdminComponent },
 
   { path: '**', redirectTo: 'home' },
 ];

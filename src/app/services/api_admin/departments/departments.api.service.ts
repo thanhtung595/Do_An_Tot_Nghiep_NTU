@@ -1,0 +1,19 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { API_BASE_URL } from '@app/constants'
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DepartmentsApiService {
+
+  private apiUrl = `${API_BASE_URL}api/service/`;
+
+  constructor(private http: HttpClient) { }
+
+  // Hàm lấy danh sách service
+  getService(): Observable<any> {
+    return this.http.get<any>(this.apiUrl);
+  }
+}

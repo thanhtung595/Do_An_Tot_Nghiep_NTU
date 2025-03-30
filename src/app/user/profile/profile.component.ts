@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ProfleApiServiceService } from '@app/services/api/profile/profle.api.service.service'
+import { API_BASE_URL } from '@app/constants'
 
 @Component({
   selector: 'app-profile',
@@ -6,15 +8,36 @@ import { Component } from '@angular/core';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent {
+  constructor(private profleApiServiceService: ProfleApiServiceService) { }
+
+  getImageUrl(imgPath: string): string {
+    return `${API_BASE_URL}${imgPath}`;
+  }
+
   // Thông tin người dùng
   user = {
-    name: 'Nguyễn Văn A',
+    fullname: 'Nguyễn Văn A',
     email: 'nguyenvana@gmail.com',
-    phone: '0123456789',
+    phonenumber: '0123456789',
     address: '123 Đường ABC, Quận 1, TP.HCM',
     avatar: 'https://via.placeholder.com/150',
-    role: 'patient', // Có thể là 'patient' hoặc 'doctor'
+    rolename: 'patient', // Có thể là 'patient' hoặc 'doctor'
+    image: '',
+    dateofbirth: '',
+    gender: '',
   };
+
+  ngOnInit(): void {
+    this.profleApiServiceService.getUser().subscribe({
+      next: (data) => {
+        this.user = data;
+        console.log("user",this.user);
+      },
+      error: (error) => {
+        console.error('Error fetching user1:', error);
+      }
+    });
+  }
 
   // Trạng thái chỉnh sửa
   isEditing: boolean = false;
