@@ -3,12 +3,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework_simplejwt.tokens import RefreshToken
-from django.db import connection
+from django.db import connection, transaction
 from django.contrib.auth.hashers import make_password, check_password
 import logging
 from service.logutils import log_utils
 from .query_constants import GET_USER_BY_USERNAME_PASSWORDHASH, CHECK_USER_REGISTER_EXIT, REGISTER_USER_BY_USERNAME_PASSWORDHASH
-
+from models import RegisterUserDTO
+from querycontans import CREATE_PATIENTS
 logger = logging.getLogger(__name__)
 
 # Function login
@@ -76,49 +77,65 @@ class LoginView(APIView):
 class RegisterView(APIView):
     def post(self, request):
         subject = 'register'
+        data = RegisterUserDTO(request.data)
+        print(data.email)
         try:
-            username = request.data.get("username")
-            password = request.data.get("password")
-            msg = "username = %s - password = %s", [username, password]
+            data = RegisterUserDTO(request.data)
+            msg = "username = %s - password = %s", [data.username, data.password]
             # Write log start
             log_utils.LogStart(subject, msg)
 
-            if not username or not password:
+            if not data.username or not data.password:
                 msg = "Username and password are required"
                 log_utils.LogWarning(subject, msg)
                 return Response({"msg": msg}, status=400)
 
-            # Kiểm tra tài khoản đã tồn tại chưa
-            with connection.cursor() as cursor:
-                cursor.execute(CHECK_USER_REGISTER_EXIT, [username])
-                userExit = cursor.fetchone()
-                userExit = userExit[0]  # Lấy giá trị count từ tuple
+            # Bắt đầu transaction ở đây
+            with transaction.atomic():
+                # Kiểm tra tài khoản đã tồn tại chưa
+                with connection.cursor() as cursor:
+                    cursor.execute(CHECK_USER_REGISTER_EXIT, [data.username])
+                    userExit = cursor.fetchone()
+                    userExit = userExit[0]  # Lấy giá trị count từ tuple
 
-            if userExit > 0:
-                msg = "Tài khoản đã tồn tại."
-                log_utils.LogWarning(subject, msg)
-                return Response({"msg": msg}, status=409)  # 409: Conflict    
+                if userExit > 0:
+                    msg = "Tài khoản đã tồn tại."
+                    log_utils.LogWarning(subject, msg)
+                    return Response({"msg": msg}, status=409)  # 409: Conflict    
 
-            hashed_password = make_password(password)  # Hash mật khẩu trước khi lưu
+                hashed_password = make_password(data.password)  # Hash mật khẩu trước khi lưu
 
-            # Truy vấn dữ liệu từ PostgreSQL
-            with connection.cursor() as cursor:
-                cursor.execute(REGISTER_USER_BY_USERNAME_PASSWORDHASH, [username, hashed_password])
-                userID = cursor.fetchone()
+                # Truy vấn dữ liệu tạo user
+                with connection.cursor() as cursor:
+                    cursor.execute(REGISTER_USER_BY_USERNAME_PASSWORDHASH, [data.username, hashed_password])
+                    userID = cursor.fetchone()
 
-            # Kiểm tra tạo tài khoản có thành công
-            if userID:
-                log_utils.LogEnd(subject)
-                return Response({"msg": "Register successful"})
-            else:
-                raise ValueError("Tạo thất bại do server lỗi.")
+                # Kiểm tra tạo tài khoản có thành công
+                if userID:
+                    # Truy vấn tạo PATIENTS
+                    with connection.cursor() as cursor:
+                        cursor.execute(CREATE_PATIENTS, [data.fullname, data.phone, data.email, userID])
+                        patient = cursor.fetchone()
+
+                    log_utils.LogEnd(subject)
+                    return Response({"msg": "Register successful"})
+                else:
+                    raise ValueError("Tạo thất bại do server lỗi.")
 
         except Exception as e:
             error_message = f"{str(e)}"
-            log_utils.log_error(subject, error_message)
+            log_utils.LogError(subject, error_message)
 
+            # Kiểm tra số điện thoại có bị trùng
+            if 'patients_phonenumber_key' in error_message.lower():
+                return Response({"msg": "Số điện thoại đã tồn tại"}, status=409) # 409: Conflict  
+
+            # Kiểm tra số điện thoại có bị trùng
+            if 'patients_email_key' in error_message.lower():
+                return Response({"msg": "Email đã tồn tại"}, status=409) # 409: Conflict 
+            
             logger.error(f"Login error: {str(e)}")
-            return Response({"msg": "Internal Server Error"}, status=500)  
+            return Response({"msg": "Internal Server Error"}, status=500)
 
 # Function logout
 class LogoutView(APIView):
