@@ -13,6 +13,8 @@ urlpatterns = [
     path('api/', include('module_users.urls')),
     path('api/', include('module_departments.urls')),
     path('api/', include('module_doctor.urls')),
+    path('api/', include('module_appointment.urls')),
+    path('api/', include('module_gemini.urls')),
 
     re_path(r'^img/(?P<path>.*)$', serve, {'document_root': settings.IMG_ROOT}),
 ]

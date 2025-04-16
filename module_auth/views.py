@@ -44,6 +44,7 @@ class LoginView(APIView):
                 # Tạo JWT Token
                 refresh = RefreshToken()
                 refresh["user_id"] = str(user[0])
+                refresh["role"] = str(user[3])
                 
                 response = Response({"msg": "Login successful"})
 

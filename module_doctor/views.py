@@ -8,8 +8,11 @@ from models import DoctorDTO
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
 import jwt
+from models.appointment_dto import Appointment
 from service.logutils import log_utils
-from querycontans import SELECT_ALL, CHECK_USER_REGISTER_EXIT, REGISTER_USER_BY_USERNAME_PASSWORDHASH, CREATE_DOCTOR, SELECT_DOCTOR_ALL, INSERT_SCHEDULE, UPDATE_DOCTOR_BY_ID, DELETE_SCHEDULE_BT_ID_DOCTOR
+from querycontans import REGISTER_DOCTOR_BY_USERNAME_PASSWORDHASH, CREATE_MedicalRecords, SELECT_USER_BY_ID,CREATE_Schedule, SELECT_ALL, CHECK_USER_REGISTER_EXIT, REGISTER_USER_BY_USERNAME_PASSWORDHASH, CREATE_DOCTOR, SELECT_DOCTOR_ALL, INSERT_SCHEDULE, UPDATE_DOCTOR_BY_ID, DELETE_SCHEDULE_BT_ID_DOCTOR, SELECT_Schedule_BY_DOCTOR_WORĐAY
+from datetime import datetime
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -163,7 +166,7 @@ class DoctorView(APIView):
 
                 # Truy vấn dữ liệu tạo user
                 with connection.cursor() as cursor:
-                    cursor.execute(REGISTER_USER_BY_USERNAME_PASSWORDHASH, [data.username, hashed_password])
+                    cursor.execute(REGISTER_DOCTOR_BY_USERNAME_PASSWORDHASH, [data.username, hashed_password])
                     userID = cursor.fetchone()
 
                 # Kiểm tra tạo tài khoản có thành công
@@ -224,4 +227,89 @@ class DoctorView(APIView):
             logger.error(f"Login error: {str(e)}")
             return Response({"msg": "Internal Server Error"}, status=500)    
         
-    
+class DoctorViewClient(APIView):
+    def post(self, request):
+        subject = 'bookAppointment'
+        
+        try:
+            # Lấy giá trị user_id của cookie `access_token`
+            access_token = request.COOKIES.get('access_token')
+            if not access_token:
+               return Response({"msg": "Token is missing", "status":401}, status=401)     
+            
+             # Giải mã token và lấy user_id
+            payload = jwt.decode(access_token, settings.SECRET_KEY, algorithms=['HS256'])
+            if not payload:
+                return Response({"msg": "Invalid token"}, status=401)
+            user_id = payload.get('user_id')    
+
+            if not user_id:
+                return Response({"msg": "Invalid token"}, status=401)
+            
+            # Get data request
+            data = Appointment(request.data)
+            print('workday: ', data.workday)
+            print('timeOnline: ', data.timeOnline)
+            # Chuyển đổi chuỗi workday thành đối tượng datetime
+            workday_date = datetime.strptime(data.workday, '%Y-%m-%d').date()
+
+            # Lấy ngày hiện tại
+            today = timezone.now().date()
+
+            if workday_date < today:
+                msg = "Ngày đã qua vui lòng chọn ngày tiếp theo."
+                return Response({"msg": msg}, status=400)
+
+            # Lấy ra thứ trong tuần (thứ Hai = 2, ..., Chủ Nhật = 8)
+            weekday_number = workday_date.isoweekday() + 1
+            # Chuyển đổi thành chuỗi
+            weekday_str = str(weekday_number)
+
+            # Bắt đầu transaction ở đây
+            with transaction.atomic():
+                with connection.cursor() as cursor:
+                    cursor.execute(SELECT_USER_BY_ID, [user_id])    
+                    userExit = cursor.fetchone()
+
+                print('userExit:', userExit[4])
+                if(userExit[15] != 'patient'):
+                    msg = "Tài khoản hiện tại không phải là bệnh nhân."
+                    return Response({"msg": msg}, status=400)
+                
+                with connection.cursor() as cursor:
+                    cursor.execute(SELECT_Schedule_BY_DOCTOR_WORĐAY, [data.doctorID, weekday_str, data.timeOnline, data.timeOnline])
+                    result = cursor.fetchone()
+                
+                # Kiểm tra dữ liệu có tồn tại không
+                exists = result is not None
+                if not exists:
+                    msg = f"Với ngày {workday_date} và giờ {data.timeOnline} không thuộc giờ hành chính của bác sỹ."
+                    return Response({"msg": msg}, status=400)
+                
+                with connection.cursor() as cursor:
+                    cursor.execute(CREATE_Schedule, [userExit[4], data.doctorID, data.note])
+                    schedule = cursor.fetchone()
+
+                    if schedule == 0:
+                        raise ValueError("Server error: Đặt lịch khám.")
+                    
+                with connection.cursor() as cursor:
+                    cursor.execute(CREATE_MedicalRecords, [userExit[4], data.doctorID, schedule, data.diagnosis])
+                    
+            log_utils.LogEnd(subject)
+            return Response({"msg": "Cteate successful"})
+
+        except Exception as e:
+            error_message = f"{str(e)}"
+            log_utils.LogError(subject, error_message)
+
+            # # Kiểm tra số điện thoại có bị trùng
+            # if 'doctors_phonenumber_key' in error_message.lower():
+            #     return Response({"msg": "Số điện thoại đã tồn tại"}, status=409) # 409: Conflict  
+
+            # # Kiểm tra số điện thoại có bị trùng
+            # if 'doctors_email_key' in error_message.lower():
+            #     return Response({"msg": "Email đã tồn tại"}, status=409) # 409: Conflict 
+            
+            logger.error(f"subject: {str(e)}")
+            return Response({"msg": "Internal Server Error"}, status=500)    

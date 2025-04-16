@@ -3,3 +3,4 @@ CREATE_PATIENTS = """
     (%s, NOW(), 'Khác', %s, %s, '', %s, 'img/patients/avatar_default.jpg')
     RETURNING ID
 """
+

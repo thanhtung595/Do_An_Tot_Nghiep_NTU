@@ -68,6 +68,9 @@ INSTALLED_APPS = [
     'module_header',
     'module_users',
     'module_doctor',
+    'module_departments',
+    'module_appointment',
+    'module_gemini',
 ]
 
 MIDDLEWARE = [
@@ -168,7 +171,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Use Cors
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",
+    "http://localhost:3000",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
