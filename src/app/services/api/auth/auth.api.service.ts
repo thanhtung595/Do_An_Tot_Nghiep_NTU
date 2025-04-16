@@ -9,14 +9,13 @@ import { API_BASE_URL } from '@app/constants'
 })
 export class AuthApiService {
 
-  // private apiUrl = `${API_BASE_URL}api/login/`;
-  private apiUrl = "http://localhost/auth/login";
+  private apiUrl = `${API_BASE_URL}api/login/`;
 
   constructor(private http: HttpClient) { }
 
   // Hàm login
-  login(userName: string, password: string): Observable<any> {
-    const body = { userName, password };
+  login(username: string, password: string): Observable<any> {
+    const body = { username, password };
     return this.http.post<any>(this.apiUrl, body, { withCredentials: true });
   }
 

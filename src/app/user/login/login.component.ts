@@ -16,18 +16,15 @@ export class LoginComponent {
 
   onSubmit() {
     // Xử lý đăng nhập ở đây
-    console.log('Username:', this.username);
-    console.log('Password:', this.password);
+    console.log('username:', this.username);
+    console.log('password:', this.password);
 
 
     this.authApiService.login(this.username, this.password).subscribe({
       next: (data) => {
-        console.log(data)
-        console.log(data.data.token.accessToken)
-        // document.cookie = `token=${data.data.token.accessToken}; path=/;`;
-        // // this.router.navigate(['/home']).then(() => {
-        // //   window.location.href = '/home';
-        // // });
+        this.router.navigate(['/home']).then(() => {
+          window.location.href = '/home';
+        });
       },
       error: (error) => {
         this.msgError = error.error.msg;

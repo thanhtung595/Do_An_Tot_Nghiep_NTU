@@ -1,41 +1,46 @@
 import { Component } from '@angular/core';
-import { ProfleApiServiceService } from '@app/services/api/profile/profle.api.service.service'
-import { API_BASE_URL } from '@app/constants'
+import { ProfleApiServiceService } from '@app/services/api/profile/profle.api.service.service';
+import { API_BASE_URL } from '@app/constants';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent {
-  constructor(private profleApiServiceService: ProfleApiServiceService) { }
-
-  getImageUrl(imgPath: string): string {
-    return `${API_BASE_URL}${imgPath}`;
-  }
+  constructor(private profleApiServiceService: ProfleApiServiceService) {}
 
   // Thông tin người dùng
   user = {
-    fullname: 'Nguyễn Văn A',
-    email: 'nguyenvana@gmail.com',
-    phonenumber: '0123456789',
-    address: '123 Đường ABC, Quận 1, TP.HCM',
-    avatar: 'https://via.placeholder.com/150',
-    rolename: 'patient', // Có thể là 'patient' hoặc 'doctor'
+    fullname: 'Nguyễn Thanh Tùng',
+    email: 'nguyenthanhtung.06112003@gmail.com',
+    phonenumber: '083681855',
+    address: 'Thanh Hóa - Việt Nam',
+    avatar:
+      'https://scontent.fhan2-5.fna.fbcdn.net/v/t1.6435-9/125408833_193036345700650_8843732697979880226_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=trlOeXMYQx0Q7kNvgG9ZKZE&_nc_oc=Adnz7KGwoGaUzCDVoL9aL5hzGaAknviLiYtJIIipCa2S9nVKI0Tk4lkVrNOKCUlc4tY&_nc_zt=23&_nc_ht=scontent.fhan2-5.fna&_nc_gid=FRTsjvCLJXo1CNUqG0F-Gw&oh=00_AYHJ2VBB7Teyhcw6y0fB9qeLNpwjR_yTvKNng3ppeizHUw&oe=68120F1E',
+    rolename: 'admin', // Có thể là 'patient' hoặc 'doctor'
     image: '',
-    dateofbirth: '',
-    gender: '',
+    dateofbirth: '06-111-2003',
+    gender: 'Nam',
   };
+
+  getImageUrl(imgPath: string): string {
+    if (this.user.rolename == null || this.user.rolename == 'admin') {
+      return `${this.user.avatar}`;
+    }
+    return `${API_BASE_URL}${imgPath}`;
+  }
 
   ngOnInit(): void {
     this.profleApiServiceService.getUser().subscribe({
       next: (data) => {
         this.user = data;
-        console.log("user",this.user);
+        console.log('user', this.user);
+        this.getAppointment();
       },
       error: (error) => {
         console.error('Error fetching user1:', error);
-      }
+      },
     });
   }
 
@@ -47,33 +52,8 @@ export class ProfileComponent {
   activeTab: string = 'profile';
 
   // Dữ liệu giả lập
-  medicalRecords = [
-    {
-      date: '2023-10-01',
-      doctor: 'Dr. John Doe',
-      diagnosis: 'Cảm cúm',
-      notes: 'Nghỉ ngơi và uống thuốc đều đặn.',
-    },
-    {
-      date: '2023-09-15',
-      doctor: 'Dr. Jane Smith',
-      diagnosis: 'Đau dạ dày',
-      notes: 'Hạn chế ăn đồ cay nóng.',
-    },
-  ];
-
-  patientRecords = [
-    {
-      name: 'Nguyễn Văn B',
-      date: '2023-10-05',
-      diagnosis: 'Viêm họng',
-    },
-    {
-      name: 'Trần Thị C',
-      date: '2023-09-20',
-      diagnosis: 'Đau đầu',
-    },
-  ];
+  medicalRecords: any[] = [];
+  patientRecords: any[] = [];
 
   selectedRecord: any = null;
   showRecordDetail: boolean = false; // Hiển thị popup chi tiết hồ sơ
@@ -127,5 +107,25 @@ export class ProfileComponent {
     } else {
       alert('Vui lòng chọn ảnh trước khi cập nhật!');
     }
+  }
+
+  getAppointment() {
+    this.profleApiServiceService.getAppointment().subscribe({
+      next: (data) => {
+        if (this.user.rolename == 'patient') {
+          this.medicalRecords = data.data;
+          console.log('getAppointment', this.medicalRecords);
+        } else if (
+          this.user.rolename != null &&
+          this.user.rolename == 'doctor'
+        ) {
+          this.patientRecords = data.data;
+          console.log('getAppointment', this.patientRecords);
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching user1:', error);
+      },
+    });
   }
 }

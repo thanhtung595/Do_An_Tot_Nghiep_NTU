@@ -8,6 +8,7 @@
   background-color: #f7f3f3;
   color: rgb(78, 84, 85);
   top: 0;
+  height: 20px;
 }
 
 .logo h1 {
@@ -16,7 +17,7 @@
 
 .logo img{
   margin-left: 50px;
-  width: 70px;
+  width: 50px;
 }
 
 .nav ul {
@@ -33,7 +34,7 @@
 .nav ul li a {
   color: rgb(0, 0, 0);
   text-decoration: none;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .nav ul li a:hover {

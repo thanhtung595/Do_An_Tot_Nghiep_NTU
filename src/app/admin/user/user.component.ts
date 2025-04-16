@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { UserApiService } from '@app/services/api_admin/user/user.api.service';
 
 @Component({
   selector: 'app-user',
@@ -6,12 +7,22 @@ import { Component } from '@angular/core';
   styleUrls: ['./user.component.css']
 })
 export class AdminUserComponent {
-  users = Array.from({ length: 100 }, (_, i) => ({
-    id: i + 1,
-    name: `User ${i + 1}`,
-    email: `user${i + 1}@gmail.com`,
-    role: i % 2 === 0 ? 'admin' : 'user'
-  }));
+
+  constructor(private userApiService: UserApiService) {}
+
+  ngOnInit(): void {
+    this.userApiService.getAllUser().subscribe({
+      next: (data) => {
+        this.users = data.data;
+        console.log('user', this.users);
+      },
+      error: (error) => {
+        console.error('Error fetching user1:', error);
+      },
+    });
+  }
+
+  users: any[] = [];
 
   searchName = '';
   searchEmail = '';
@@ -61,6 +72,7 @@ export class AdminUserComponent {
   }
 
   openModal(type: 'add' | 'edit' | 'delete', user: any = null) {
+    console.log(user)
     this.modalType = type;
     this.isModalOpen = true;
     this.selectedUser = user ? { ...user } : { id: this.users.length + 1, name: '', email: '', role: 'user' };
@@ -79,6 +91,7 @@ export class AdminUserComponent {
   updateUser() {
     const index = this.users.findIndex(u => u.id === this.selectedUser.id);
     if (index !== -1) this.users[index] = this.selectedUser;
+    console.log(this.users[index])
     this.closeModal();
   }
 

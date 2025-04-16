@@ -16,4 +16,9 @@ export class ProfleApiServiceService {
   getUser(): Observable<any> {
     return this.http.get<any>(this.apiUrl, { withCredentials: true });
   }
+
+  // Hàm lấy Appointment
+  getAppointment(): Observable<any> {
+    return this.http.get<any>(API_BASE_URL+"api/appointment/", { withCredentials: true });
+  }
 }

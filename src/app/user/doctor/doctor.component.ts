@@ -29,7 +29,6 @@ export class DoctorComponent {
     });
   }
 
-
   selectedDoctor: any = null; // Bác sĩ được chọn để xem chi tiết
   isBooking: boolean = false; // Trạng thái đặt lịch khám
   showModal: boolean = false; // Hiển thị popup
@@ -88,9 +87,30 @@ export class DoctorComponent {
       diagnosis: bookingForm.value.diagnosis,
       workday: bookingForm.value.workday,
       timeOnline: bookingForm.value.timeOnline,
+      note: bookingForm.value.note,
     };
-
-    console.log("data: ",data)
+    if (bookingForm.valid) {
+      console.log("data: ",data);
+      this.doctorApiService.createAppointments(data).subscribe({
+        next: (data) => {
+          console.log(data)
+          console.log(data.status)
+          alert("Bạn đã đặt lịch khám thành công.");
+          this.closeModal(); // Đóng popup sau khi đặt lịch
+        },
+        error: (error) => {
+          console.error('Error fetching bookAppointment:', error);
+          if(error.status == 401){
+            alert("Bạn cần đăng nhập trước khi đặt lịch");
+            return;
+          }
+          if(error.status == 400){
+            alert(error.error.msg);
+            return;
+          }
+        }
+      });
+    }
     // if (bookingForm.valid) {
 
     //   // alert(

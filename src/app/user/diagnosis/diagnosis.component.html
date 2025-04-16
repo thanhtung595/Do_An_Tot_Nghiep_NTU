@@ -1,25 +1,50 @@
-<div class="diagnosis-container">
-  <h1>Chuẩn đoán bệnh với AI</h1>
-  <form [formGroup]="diagnosisForm" (ngSubmit)="onSubmit()" class="diagnosis-form">
-    <div class="form-group">
-      <label for="symptoms">Nhập các triệu chứng của bạn:</label>
-      <textarea
-        id="symptoms"
-        formControlName="symptoms"
-        rows="5"
-        placeholder="Ví dụ: Đau đầu, sốt, ho..."
-      ></textarea>
-      <div *ngIf="diagnosisForm.get('symptoms')?.invalid && diagnosisForm.get('symptoms')?.touched" class="error-message">
-        Vui lòng nhập ít nhất 10 ký tự.
+<div class="chat-container">
+  <h1 class="title-class">Chuẩn đoán bệnh với AI</h1>
+
+  <div #chatBox id="chat-box" class="chat-box">
+    <div *ngFor="let msg of chatMessages">
+      <div class="chat-message" [ngClass]="msg.type">
+        <strong *ngIf="msg.type === 'user'">Bạn:</strong>
+        <strong *ngIf="msg.type === 'ai'">AI:</strong>
+        <span [innerHTML]="msg.message"></span>
+
+        <!-- Hiển thị thông tin bác sĩ nếu có -->
+        <div *ngIf="msg.type === 'ai' && msg.doctors">
+          <br><div>🧑‍ Bác sỹ phù hợp với bạn.</div>
+          <div *ngIf="msg.doctors.length > 0; else noDoctor">
+            <div class="doctor-card" *ngFor="let doctor of msg.doctors">
+              <img [src]="getImageUrl(doctor.hinhanh)" alt="Ảnh bác sĩ" class="doctor-avatar" />
+              <div class="doctor-info">
+                <div>⚕️ Họ tên: {{ doctor.ten }}</div>
+                <div>📧 Email: {{ doctor.email }}</div>
+                <div>📞 Số điện thoại: {{ doctor.phone }}</div>
+                <div>🏥 Chuyên khoa: {{ doctor.khoa }}</div>
+                <div>🎓 Kinh nghiệm: {{ doctor.namkinhnghiem }}</div>
+                <div>📅 Lịch làm việc: {{ doctor.lichlamviec }}</div>
+                <div>⏰ Thời gian hành chính: {{ doctor.thoigianlamviec }}</div>
+              </div>
+            </div>
+          </div>
+          <ng-template #noDoctor>
+            <div class="no-doctor">Không có bác sĩ phù hợp.</div>
+          </ng-template>
+        </div>
       </div>
     </div>
-    <button type="submit" [disabled]="diagnosisForm.invalid || isLoading" class="diagnose-button">
-      {{ isLoading ? 'Đang chuẩn đoán...' : 'Chuẩn đoán' }}
+
+    <div *ngIf="isLoading" class="chat-message ai loading">
+      AI đang chuẩn đoán...
+    </div>
+  </div>
+
+  <form [formGroup]="diagnosisForm" (ngSubmit)="onSubmit()" class="chat-form">
+    <textarea
+      formControlName="symptoms"
+      placeholder="Nhập triệu chứng..."
+      rows="3"
+    ></textarea>
+    <button type="submit" [disabled]="diagnosisForm.invalid || isLoading">
+      Gửi
     </button>
   </form>
-
-  <div *ngIf="diagnosisResult" class="diagnosis-result">
-    <h2>Kết quả chuẩn đoán:</h2>
-    <p>{{ diagnosisResult }}</p>
-  </div>
 </div>

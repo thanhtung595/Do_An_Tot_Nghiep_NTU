@@ -31,4 +31,9 @@ export class DoctorApiService {
   getAllDoctor(): Observable<any> {
     return this.http.get<any>(API_BASE_URL+"api/doctor/");
   }
+
+  // Hàm đặt lịch khám
+  createAppointments(doctor: any): Observable<any> {
+    return this.http.post<any>(API_BASE_URL+"api/doctor/appointment/", doctor, { withCredentials: true });
+  }
 }

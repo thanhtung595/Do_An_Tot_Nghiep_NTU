@@ -18,6 +18,7 @@
           alt="{{ user.fullname }}"
           class="avatar"
         />
+
         <input type="file" (change)="onFileSelected($event)" accept="image/*" class="file-input">
         <button (click)="uploadAvatar()">Cập nhật ảnh đại diện</button>
       </div>
@@ -66,19 +67,23 @@
     <div *ngIf="activeTab === 'medicalHistory' && user.rolename === 'patient'" class="medical-history">
       <h2>Lịch Sử Khám Bệnh</h2>
       <div *ngFor="let record of medicalRecords" class="record-card" (click)="viewMedicalRecord(record)">
-        <p><strong>Ngày khám:</strong> {{ record.date }}</p>
-        <p><strong>Bác sĩ:</strong> {{ record.doctor }}</p>
-        <p><strong>Chẩn đoán:</strong> {{ record.diagnosis }}</p>
+        <p><strong>Ngày khám:</strong> {{ record.appointmentdate }}</p>
+        <p><strong>Bác sĩ:</strong> {{ record.doctorname }}</p>
+        <p><strong>Triệu chứng:</strong> {{ record.symptom }}</p>
+        <p><strong>Ghi chú:</strong> {{ record.notes }}</p>
+        <p><strong>Trạng thái:</strong> {{ record.status }}</p>
       </div>
     </div>
 
     <!-- Lịch sử khám bệnh bệnh nhân (cho bác sĩ) -->
     <div *ngIf="activeTab === 'patientHistory' && user.rolename === 'doctor'" class="patient-history">
       <h2>Lịch Sử Khám Bệnh Bệnh Nhân</h2>
-      <div *ngFor="let patient of patientRecords" class="patient-card">
-        <p><strong>Tên bệnh nhân:</strong> {{ patient.name }}</p>
-        <p><strong>Ngày khám:</strong> {{ patient.date }}</p>
-        <p><strong>Chẩn đoán:</strong> {{ patient.diagnosis }}</p>
+      <div *ngFor="let patient of patientRecords" class="patient-card" (click)="viewMedicalRecord(patient)">
+        <p><strong>Ngày khám:</strong> {{ patient.appointmentdate }}</p>
+        <p><strong>Tên bệnh nhân:</strong> {{ patient.patientname }}</p>
+        <p><strong>Triệu chứng:</strong> {{ patient.symptom }}</p>
+        <p><strong>Ghi chú:</strong> {{ patient.notes }}</p>
+        <p><strong>Trạng thái:</strong> {{ patient.status }}</p>
       </div>
     </div>
   </div>
@@ -89,10 +94,13 @@
       <button class="close-button" (click)="closeRecordDetail()">&times;</button>
       <h2>Chi Tiết Hồ Sơ Bệnh Án</h2>
       <div *ngIf="selectedRecord">
-        <p><strong>Ngày khám:</strong> {{ selectedRecord.date }}</p>
-        <p><strong>Bác sĩ:</strong> {{ selectedRecord.doctor }}</p>
+        <p><strong>Ngày khám:</strong> {{ selectedRecord.appointmentdate }}</p>
+        <p><strong>Bác sĩ:</strong> {{ selectedRecord.doctorname }}</p>
+        <p><strong>Triệu chứng:</strong> {{ selectedRecord.symptom }}</p>
         <p><strong>Chẩn đoán:</strong> {{ selectedRecord.diagnosis }}</p>
+        <p><strong>Kế hoạch điều trị:</strong> {{ selectedRecord.treatmentplan }}</p>
         <p><strong>Ghi chú:</strong> {{ selectedRecord.notes }}</p>
+        <p><strong>Trạng thái:</strong> {{ selectedRecord.status }}</p>
       </div>
     </div>
   </div>
