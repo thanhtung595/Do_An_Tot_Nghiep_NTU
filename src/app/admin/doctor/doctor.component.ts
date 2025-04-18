@@ -53,9 +53,9 @@ export class DoctorAdminComponent {
 
   filtereddoctors() {
     const listFilter = this.doctors.filter(doctor => {
-      const nameMatch = doctor.name.toLowerCase().includes(this.searchName.toLowerCase());
+      const nameMatch = doctor.username.toLowerCase().includes(this.searchName.toLowerCase());
       const emailMatch = doctor.email.toLowerCase().includes(this.searchEmail.toLowerCase());
-      const roleMatch = this.searchRole ? doctor.role === this.searchRole : true;
+      const roleMatch = this.searchRole ? doctor.name === this.searchRole : true;
       return nameMatch && emailMatch && roleMatch;
     });
     this.totaldoctor = listFilter.length;
@@ -115,8 +115,8 @@ export class DoctorAdminComponent {
         this.msgError = error.error.msg;
       },
     });
-    // this.doctors.push(this.selectedDoctor);
-    // this.closeModal();
+    this.doctors.push(this.selectedDoctor);
+    this.closeModal();
   }
 
   updatedoctor() {

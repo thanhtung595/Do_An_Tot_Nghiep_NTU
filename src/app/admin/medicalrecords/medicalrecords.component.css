@@ -1,4 +1,4 @@
-.doctor-management {
+.user-management {
   max-width: 90%;
   margin: auto;
   padding: 20px;
@@ -47,7 +47,7 @@ button {
   cursor: pointer;
 }
 
-.add-doctor-btn {
+.add-user-btn {
   margin-top: 10px;
   margin-bottom: 20px;
   background-color: green;
@@ -71,7 +71,7 @@ button:hover {
   margin: 0 5px;
 }
 
-/* Chọn số doctor mỗi trang */
+/* Chọn số user mỗi trang */
 .page-size-selector {
   text-align: center;
   margin-top: 10px;
@@ -108,7 +108,7 @@ button:hover {
 
 /* Các nhóm input */
 .form-group {
-  margin-bottom: 5px;
+  margin-bottom: 15px;
   text-align: left;
 }
 
@@ -123,7 +123,6 @@ button:hover {
 /* Input và Select */
 .form-group input,
 .form-group select {
-  height: 0px;
   width: 98%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -147,7 +146,7 @@ button:hover {
   color: white;
   border: none;
   border-radius: 5px;
-  font-size: 12px;
+  font-size: 16px;
   cursor: pointer;
   transition: 0.3s;
 }
@@ -157,7 +156,7 @@ button:hover {
 }
 
 .modal-actions {
-  margin-top: 5px;
+  margin-top: 20px;
 }
 
 .lable-field {
@@ -221,11 +220,4 @@ button:hover {
 /* Các giá trị trong list table */
 .td-list-fromat {
   text-align: center;
-}
-
-.error-message {
-  text-align: center;
-  margin-top: 10px;
-  color: red;
-  font-size: 0.9em;
 }

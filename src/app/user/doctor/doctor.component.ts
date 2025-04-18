@@ -36,13 +36,13 @@ export class DoctorComponent {
   // Biến cho tìm kiếm và lọc
   searchText: string = '';
   selectedSpecialty: string = '';
-  specialties: string[] = ['Bác sĩ đa khoa', 'Bác sĩ tim mạch', 'Bác sĩ nhi khoa'];
+  specialties: string[] = ['Khoa Nội', 'Khoa Ngoại', 'Khoa Nhi', 'Khoa Phụ sản', 'Khoa Tai - Mũi - Họng', 'Khoa Mắt', 'Khoa Da liễu', 'Khoa Răng - Hàm - Mặt', 'Khoa Xét nghiệm', 'Khoa Chẩn đoán hình ảnh', 'Khoa Đông y - Y học cổ truyền'];
 
   // Lọc danh sách bác sĩ
   get filteredDoctors() {
     return this.doctors.filter(doctor => {
-      const matchesSearch = doctor.name.toLowerCase().includes(this.searchText.toLowerCase());
-      const matchesSpecialty = this.selectedSpecialty ? doctor.specialty === this.selectedSpecialty : true;
+      const matchesSearch = doctor.fullname.toLowerCase().includes(this.searchText.toLowerCase());
+      const matchesSpecialty = this.selectedSpecialty ? doctor.name === this.selectedSpecialty : true;
       return matchesSearch && matchesSpecialty;
     });
   }

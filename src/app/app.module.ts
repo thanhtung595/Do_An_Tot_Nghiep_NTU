@@ -22,6 +22,7 @@ import { AdminUserComponent } from './admin/user/user.component';
 import { DoctorAdminComponent } from '@app/admin/doctor/doctor.component';
 import { SidebarComponent } from './admin/shared/sidebar/sidebar.component';
 import { RegisterComponent } from './user/register/register.component';
+import { AdminMedicalrecordsComponent } from './admin/medicalrecords/medicalrecords.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { RegisterComponent } from './user/register/register.component';
     DoctorAdminComponent,
     SidebarComponent,
     RegisterComponent,
+    AdminMedicalrecordsComponent,
   ],
   imports: [
     BrowserModule,
