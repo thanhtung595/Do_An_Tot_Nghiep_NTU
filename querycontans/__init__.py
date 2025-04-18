@@ -1,6 +1,6 @@
 from .query_patients import CREATE_PATIENTS
 from .query_users import SELECT_ALL_USER, REGISTER_DOCTOR_BY_USERNAME_PASSWORDHASH, SELECT_USER_DOCTOR_BY_ID, SELECT_USER_BY_ID, CHECK_USER_REGISTER_EXIT, GET_USER_BY_USERNAME_PASSWORDHASH, REGISTER_USER_BY_USERNAME_PASSWORDHASH
-from .query_departments import SELECT_ALL
+from .query_departments import SELECT_ALL_Departments, SELECT_ALL
 from .query_doctor import SELECT_DOCTOR_ALL_VI, CREATE_DOCTOR, SELECT_DOCTOR_ALL, INSERT_SCHEDULE, UPDATE_DOCTOR_BY_ID, DELETE_SCHEDULE_BT_ID_DOCTOR
 from .query_schedule import SELECT_Schedule_BY_DOCTOR_WORĐAY, CREATE_Schedule, CREATE_MedicalRecords
-from .query_pointments import SELECT_Appointments_BY_ID_Doctor, SELECT_Appointments_BY_ID_Patients
+from .query_pointments import UPDATE_Medicalrecords_Appointment,SELECT_ALL, SELECT_Appointments_BY_ID_Doctor, SELECT_Appointments_BY_ID_Patients

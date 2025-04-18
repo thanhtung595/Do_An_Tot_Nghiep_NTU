@@ -18,10 +18,10 @@ logger = logging.getLogger(__name__)
 
 class DoctorView(APIView):
 
-    # Hàm check format ngày làm việc
+    # Hàm kiểm tra và trích xuất các ngày làm việc từ chuỗi đầu vào
     @classmethod
     def extract_days(cls, input_str):    
-        # Danh sách các ngày hợp lệ
+        # Danh sách các ngày hợp lệ (2-7 và CN)
         valid_days = ["2", "3", "4", "5", "6", "7", "CN"]
 
         # Regex phát hiện các ngày không hợp lệ
@@ -42,7 +42,7 @@ class DoctorView(APIView):
 
         return sorted_days
     
-    # Hàm check format giờ làm việc
+    # Hàm kiểm tra và trích xuất giờ làm việc từ chuỗi đầu vào
     @classmethod
     def extract_times(cls, input_str):
         # Regex lấy giờ theo format HH:MM AM/PM
@@ -57,13 +57,14 @@ class DoctorView(APIView):
         
         return times
 
-    # Function update doctor
+    # Hàm cập nhật thông tin bác sĩ
     def put(self, request):
         try:
-            # Get data request
+            # Lấy dữ liệu từ request
             data = DoctorDTO(request.data)
             print(data)
 
+            # Kiểm tra thông tin bắt buộc
             if not data.username:
                 return Response({"msg": "Cần nhập tài khoản"}, status=400)
 
@@ -83,63 +84,63 @@ class DoctorView(APIView):
             for day in list_day:
                 print(day + list_time[0] + list_time[1])
 
-            # Bắt đầu transaction ở đây
+            # Bắt đầu transaction để đảm bảo tính toàn vẹn dữ liệu
             with transaction.atomic():
-                # Update Doctor
+                # Cập nhật thông tin bác sĩ
                 with connection.cursor() as cursor:
                     cursor.execute(UPDATE_DOCTOR_BY_ID, [data.fullname, data.email, data.phone, data.address, data.experience, data.departmentID, data.idDoctor])
                 
-                # Xóa các lịch làm việc bác sỹ cũ
+                # Xóa các lịch làm việc cũ của bác sĩ
                 with connection.cursor() as cursor:
                     cursor.execute(DELETE_SCHEDULE_BT_ID_DOCTOR, [data.idDoctor])
 
-                # Truy vấn tạo lịch làm việc bác sỹ
-                    for day in list_day:
-                        with connection.cursor() as cursor:
-                            cursor.execute(INSERT_SCHEDULE, [data.idDoctor, day, list_time[0], list_time[1]])
-                            schedule = cursor.fetchone()
-                            if schedule == 0:
-                                raise ValueError("Server error: Tạo lịch làm việc bác sỹ.")
+                # Tạo lịch làm việc mới cho bác sĩ
+                for day in list_day:
+                    with connection.cursor() as cursor:
+                        cursor.execute(INSERT_SCHEDULE, [data.idDoctor, day, list_time[0], list_time[1]])
+                        schedule = cursor.fetchone()
+                        if schedule == 0:
+                            raise ValueError("Server error: Tạo lịch làm việc bác sỹ.")
 
             return Response({"msg": "Update successful"})
         except Exception as e:
             logger.error(f"Update Doctor: {str(e)}")
             return Response({"msg": "Internal Server Error"}, status=500)    
     
-    # Function create doctor
+    # Hàm tạo mới bác sĩ
     def post(self, request):
         subject = 'register'
         
         try:
-            # Lấy giá trị user_id của cookie `access_token`
+            # Kiểm tra và lấy thông tin từ token
             access_token = request.COOKIES.get('access_token')
             if not access_token:
                return Response({"msg": "Token is missing"}, status=401)     
             
-             # Giải mã token và lấy user_id
+            # Giải mã token và lấy user_id
             payload = jwt.decode(access_token, settings.SECRET_KEY, algorithms=['HS256'])
             user_id = payload.get('user_id')    
 
             if not user_id:
                 return Response({"msg": "Invalid token"}, status=401)
             
-            # Get data request
+            # Lấy dữ liệu từ request
             data = DoctorDTO(request.data)
 
             print(data)
-            # return Response({"msg": "Register successful"})
             msg = "username = %s - password = %s", [data.username, data.password]
-            # Write log start
+            # Ghi log bắt đầu quá trình đăng ký
             log_utils.LogStart(subject, msg)
 
+            # Kiểm tra thông tin bắt buộc
             if not data.username or not data.password:
                 msg = "Username and password are required"
                 log_utils.LogWarning(subject, msg)
                 return Response({"msg": msg}, status=400)
 
-            # Bắt đầu transaction ở đây
+            # Bắt đầu transaction để đảm bảo tính toàn vẹn dữ liệu
             with transaction.atomic():
-                # Kiểm tra format ngày làm việc và lấy ra thứ làm việc
+                # Kiểm tra format ngày làm việc
                 list_day = self.extract_days(data.workdays)
                 print(list_day)
                 if list_day == None:
@@ -162,23 +163,24 @@ class DoctorView(APIView):
                     log_utils.LogWarning(subject, msg)
                     return Response({"msg": msg}, status=409)  # 409: Conflict    
 
-                hashed_password = make_password(data.password)  # Hash mật khẩu trước khi lưu
+                # Mã hóa mật khẩu trước khi lưu
+                hashed_password = make_password(data.password)
 
-                # Truy vấn dữ liệu tạo user
+                # Tạo tài khoản người dùng mới
                 with connection.cursor() as cursor:
                     cursor.execute(REGISTER_DOCTOR_BY_USERNAME_PASSWORDHASH, [data.username, hashed_password])
                     userID = cursor.fetchone()
 
-                # Kiểm tra tạo tài khoản có thành công
+                # Kiểm tra việc tạo tài khoản
                 if userID:
-                    # Truy vấn tạo doctor
+                    # Tạo thông tin bác sĩ
                     with connection.cursor() as cursor:
                         cursor.execute(CREATE_DOCTOR, [data.fullname, data.phone, data.email, data.address, userID, data.departmentID, data.experience])
                         doctorId = cursor.fetchone()
                     if doctorId == 0:
                         raise ValueError("Server error: Truy vấn tạo doctor")
                     
-                    # Truy vấn tạo lịch làm việc bác sỹ
+                    # Tạo lịch làm việc cho bác sĩ
                     for day in list_day:
                         with connection.cursor() as cursor:
                             cursor.execute(INSERT_SCHEDULE, [doctorId, day, list_time[0], list_time[1]])
@@ -195,28 +197,29 @@ class DoctorView(APIView):
             error_message = f"{str(e)}"
             log_utils.LogError(subject, error_message)
 
-            # Kiểm tra số điện thoại có bị trùng
+            # Xử lý các trường hợp lỗi cụ thể
             if 'doctors_phonenumber_key' in error_message.lower():
                 return Response({"msg": "Số điện thoại đã tồn tại"}, status=409) # 409: Conflict  
 
-            # Kiểm tra số điện thoại có bị trùng
             if 'doctors_email_key' in error_message.lower():
                 return Response({"msg": "Email đã tồn tại"}, status=409) # 409: Conflict 
             
             logger.error(f"subject: {str(e)}")
             return Response({"msg": "Internal Server Error"}, status=500)
 
-    # Function get all doctor
+    # Hàm lấy danh sách tất cả bác sĩ
     def get(self, request):
         try:
-            # Truy vấn dữ liệu từ PostgreSQL
+            # Truy vấn dữ liệu từ database
             with connection.cursor() as cursor:
                 cursor.execute(SELECT_DOCTOR_ALL)
                 doctor = cursor.fetchall()
 
+            # Kiểm tra nếu không có dữ liệu
             if not doctor:
                 return Response({"doctors": []}, status=200)
 
+            # Chuyển đổi dữ liệu từ tuple sang dictionary
             doctor_list = [
                 dict(zip([col[0] for col in cursor.description], row)) 
                 for row in doctor
@@ -232,12 +235,12 @@ class DoctorViewClient(APIView):
         subject = 'bookAppointment'
         
         try:
-            # Lấy giá trị user_id của cookie `access_token`
+            # Kiểm tra và lấy thông tin từ token
             access_token = request.COOKIES.get('access_token')
             if not access_token:
                return Response({"msg": "Token is missing", "status":401}, status=401)     
             
-             # Giải mã token và lấy user_id
+            # Giải mã token và lấy user_id
             payload = jwt.decode(access_token, settings.SECRET_KEY, algorithms=['HS256'])
             if not payload:
                 return Response({"msg": "Invalid token"}, status=401)
@@ -246,7 +249,7 @@ class DoctorViewClient(APIView):
             if not user_id:
                 return Response({"msg": "Invalid token"}, status=401)
             
-            # Get data request
+            # Lấy dữ liệu từ request
             data = Appointment(request.data)
             print('workday: ', data.workday)
             print('timeOnline: ', data.timeOnline)
