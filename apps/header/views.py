@@ -1,41 +1,24 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.db import connection
-from .constants.header_query_constants import GET_ALL_HEADER
 import logging
+from .services.header_service import HeaderService
 
 logger = logging.getLogger(__name__)
 
 class HeaderView(APIView):
     def get(self, request):
         try:
-            # Mặc định là đã đăng nhập
-            isToken = "1";     
-            
             # Kiểm tra xem người dùng đã đăng nhập chưa
-            access_token = request.COOKIES.get('access_token')
-            if not access_token:
-               isToken = "0";     
-
-            # Truy vấn dữ liệu header từ database
-            with connection.cursor() as cursor:
-                cursor.execute(GET_ALL_HEADER, [isToken])
-                header = cursor.fetchall()
-
-            # Kiểm tra nếu không có dữ liệu
-            if not header:
-                return Response({"header": []}, status=400)
-
-            # Chuyển đổi dữ liệu từ tuple sang dictionary
-            header_list = [
-                dict(zip([col[0] for col in cursor.description], row)) 
-                for row in header
-            ]
-
-            # Trả về danh sách header
-            return Response({"header": header_list})
+            is_logged_in = bool(request.COOKIES.get('access_token'))
+            
+            header_list, msg, status_code = HeaderService.get_header(is_logged_in)
+            
+            if header_list is not None:
+                return Response({"header": header_list}, status=status_code)
+            else:
+                return Response({"msg": msg}, status=status_code)
+                
         except Exception as e:
-            # Xử lý lỗi và ghi log
-            logger.error(f"Login error: {str(e)}")
-            return Response({"msg": "Internal Server Error"}, status=500)    
+            logger.error(f"Get header error: {str(e)}")
+            return Response({"msg": "Internal Server Error"}, status=500) 
