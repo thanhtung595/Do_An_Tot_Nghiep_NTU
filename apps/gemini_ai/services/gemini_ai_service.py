@@ -11,8 +11,35 @@ genai.configure(api_key="AIzaSyDYt8TiuPNNiUE4P77uBohIWXtd8ZIXswE")
 model = genai.GenerativeModel(model_name="models/gemini-1.5-pro")
 
 class GeminiService:
+    """
+    Lớp dịch vụ xử lý các tương tác với Gemini AI
+    
+    Cung cấp các phương thức để:
+    - Chẩn đoán bệnh dựa trên triệu chứng
+    - Tìm kiếm bác sĩ phù hợp với chuyên khoa
+    - Xử lý và phân tích kết quả từ AI
+    """
+    
     @staticmethod
     def get_diagnosis(symptoms: str):
+        """
+        Phương thức chẩn đoán bệnh dựa trên triệu chứng
+        
+        Args:
+            symptoms (str): Chuỗi mô tả các triệu chứng của bệnh nhân
+            
+        Returns:
+            tuple: (result, message, status_code)
+                - result: Kết quả chẩn đoán dưới dạng dict hoặc None nếu có lỗi
+                - message: Thông báo lỗi hoặc "Success" nếu thành công
+                - status_code: Mã HTTP trả về
+                
+        Kết quả trả về bao gồm:
+            - diagnosis: Mô tả chi tiết về chẩn đoán
+            - chuyen_khoa: Chuyên khoa phù hợp
+            - suggested_doctors: Danh sách bác sĩ phù hợp
+            - full_ai_output: Kết quả đầy đủ từ AI
+        """
         try:
             if not symptoms:
                 return None, "Vui lòng nhập triệu chứng", 400

@@ -5,8 +5,14 @@ from apps.departments.constants.departments_query_constants import SELECT_ALL_De
 logger = logging.getLogger(__name__)
 
 class DepartmentService:
+    """
+    Service xử lý các thao tác liên quan đến khoa/phòng
+    """
     @staticmethod
     def get_all_departments():
+        """
+        Lấy danh sách tất cả các khoa/phòng từ cơ sở dữ liệu
+        """
         try:
             with connection.cursor() as cursor:
                 cursor.execute(SELECT_ALL_Departments)

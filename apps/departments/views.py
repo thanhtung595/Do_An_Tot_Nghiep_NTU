@@ -7,6 +7,9 @@ from .services.departments_service import DepartmentService
 logger = logging.getLogger(__name__)
 
 class DepartmentsGetView(APIView):
+    """
+    API View để lấy danh sách tất cả các khoa/phòng
+    """
     def get(self, request):
         try:
             departments_list, msg, status_code = DepartmentService.get_all_departments()

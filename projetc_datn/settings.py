@@ -15,68 +15,62 @@ from django.conf import settings
 import os
 from colorama import Fore, Style
 
-# Text Run App
+# Hiển thị thông báo khởi động ứng dụng với màu sắc
 print(Fore.RED + "CLINIC MANAGEMENT" + Fore.CYAN + " RUN " + Fore.MAGENTA + "APP" + Style.RESET_ALL)
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Đường dẫn gốc của dự án
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Thư mục chứa MEDIA public
+# Cấu hình thư mục media để lưu trữ file upload
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Thư mục chứa IMG public
+# Cấu hình thư mục img để lưu trữ hình ảnh
 IMG_URL = '/img/'
 IMG_ROOT = os.path.join(BASE_DIR, 'projetc_datn', 'img')
 
+# Kiểm tra và hiển thị thông tin về thư mục img
 print("IMG_ROOT:", settings.IMG_ROOT)
 print("IMG_ROOT có tồn tại không:", os.path.exists(settings.IMG_ROOT))
 
 full_path = os.path.join(settings.IMG_ROOT)
 print("********* FULL PATH IMG:", full_path +" *********")
 print("PATH IMG PUBLIC tồn tại:", os.path.exists(full_path))
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# Cấu hình bảo mật
 SECRET_KEY = 'django-insecure-9j&xd%idbgk87#%)4%p_izp5+ltem+-6u2%^#4s881e+h&i*3@'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
-
-# Application definition
-
+# Cấu hình các ứng dụng được cài đặt
 INSTALLED_APPS = [
+    # Các ứng dụng mặc định của Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # Các thư viện bổ sung
     'rest_framework',
     'rest_framework_simplejwt',
-
-    # Cấu hình CORS
     'corsheaders',
 
-    # Cấu hình module
-    'apps.appointment',
-    'apps.authentication',
-    'apps.departments',
-    'apps.doctor',
-    'apps.gemini_ai',
-    'apps.header',
-    'apps.services',
-    'apps.users',
+    # Các ứng dụng của dự án
+    'apps.appointment',      # Quản lý lịch hẹn
+    'apps.authentication',   # Xác thực người dùng
+    'apps.departments',      # Quản lý khoa/phòng
+    'apps.doctor',          # Quản lý bác sĩ
+    'apps.gemini_ai',       # Tích hợp AI
+    'apps.header',          # Header của ứng dụng
+    'apps.services',        # Dịch vụ
+    'apps.users',           # Quản lý người dùng
 ]
 
+# Cấu hình middleware
 MIDDLEWARE = [
-    # CommonMiddleware
-    'corsheaders.middleware.CorsMiddleware',
-
+    'corsheaders.middleware.CorsMiddleware',  # Xử lý CORS
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -86,14 +80,15 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Cấu hình REST Framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
+# Cấu hình URL và template
 ROOT_URLCONF = 'projetc_datn.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -110,12 +105,10 @@ TEMPLATES = [
     },
 ]
 
+# Cấu hình WSGI
 WSGI_APPLICATION = 'projetc_datn.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+# Cấu hình cơ sở dữ liệu PostgreSQL
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -127,10 +120,7 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
+# Cấu hình xác thực mật khẩu
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -146,32 +136,20 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
+# Cấu hình ngôn ngữ và múi giờ
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
+# Cấu hình file tĩnh
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
+# Cấu hình trường khóa chính mặc định
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Use Cors
+# Cấu hình CORS
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "http://localhost:3000",  # Cho phép truy cập từ frontend React
 ]
-
 CORS_ALLOW_CREDENTIALS = True
