@@ -63,14 +63,14 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # Cấu hình module
-    'module_auth',
-    'module_service',
-    'module_header',
-    'module_users',
-    'module_doctor',
-    'module_departments',
-    'module_appointment',
-    'module_gemini',
+    'apps.appointment',
+    'apps.auth',
+    'apps.departments',
+    'apps.doctor',
+    'apps.gemini_ai',
+    'apps.header',
+    'apps.services',
+    'apps.users',
 ]
 
 MIDDLEWARE = [
