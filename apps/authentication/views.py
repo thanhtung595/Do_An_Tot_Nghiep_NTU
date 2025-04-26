@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.db import connection, transaction
 from django.contrib.auth.hashers import make_password, check_password
 import logging
-from ...core.services_core.logutils import log_utils
+from core.services_core.logutils import log_utils
 from .constants.auth_query_constants import GET_USER_BY_USERNAME_PASSWORDHASH, CHECK_USER_REGISTER_EXIT, REGISTER_USER_BY_USERNAME_PASSWORDHASH
 from models import RegisterUserDTO
 from querycontans import CREATE_PATIENTS

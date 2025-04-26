@@ -5,7 +5,7 @@ from django.db import connection
 import logging
 from django.conf import settings
 import jwt
-from ...core.services_core.logutils import log_utils
+from core.services_core.logutils import log_utils
 from .constants.appointment_query_constants import SELECT_ALL, SELECT_Appointments_BY_ID_Patients, SELECT_Appointments_BY_ID_Doctor
 from .dtos.appointment_dto import AppointmentUpdate
 

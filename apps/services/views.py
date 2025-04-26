@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db import connection
 import logging
-from service.logutils import log_utils
+from core.services_core.logutils import log_utils
 from .constants.services_query_constants import SELECT_ALL_SERVICE
 
 # Khởi tạo logger để ghi log

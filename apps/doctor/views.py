@@ -9,7 +9,7 @@ from django.contrib.auth.hashers import make_password
 from django.conf import settings
 import jwt
 from models.appointment_dto import Appointment
-from ...core.services_core.logutils import log_utils
+from core.services_core.logutils import log_utils
 from .constants.doctor_query_constants import REGISTER_DOCTOR_BY_USERNAME_PASSWORDHASH, CREATE_MedicalRecords, SELECT_USER_BY_ID, CREATE_Schedule, CHECK_USER_REGISTER_EXIT, CREATE_DOCTOR, SELECT_DOCTOR_ALL, INSERT_SCHEDULE, UPDATE_DOCTOR_BY_ID, DELETE_SCHEDULE_BT_ID_DOCTOR, SELECT_Schedule_BY_DOCTOR_WORĐAY
 from datetime import datetime
 from django.utils import timezone

@@ -7,14 +7,14 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('app.users.urls')),
-    path('api/', include('app.appointment.urls')),
-    path('api/', include('app.auth.urls')),
-    path('api/', include('app.departments.urls')),
-    path('api/', include('app.doctor.urls')),
-    path('api/', include('app.gemini_ai.urls')),
-    path('api/', include('app.header.urls')),
-    path('api/', include('app.services.urls')),
+    path('api/', include('apps.users.urls')),
+    path('api/', include('apps.appointment.urls')),
+    path('api/', include('apps.authentication.urls')),
+    path('api/', include('apps.departments.urls')),
+    path('api/', include('apps.doctor.urls')),
+    path('api/', include('apps.gemini_ai.urls')),
+    path('api/', include('apps.header.urls')),
+    path('api/', include('apps.services.urls')),
 
     re_path(r'^img/(?P<path>.*)$', serve, {'document_root': settings.IMG_ROOT}),
 ]

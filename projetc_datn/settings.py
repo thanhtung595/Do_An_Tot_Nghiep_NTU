@@ -64,7 +64,7 @@ INSTALLED_APPS = [
 
     # Cấu hình module
     'apps.appointment',
-    'apps.auth',
+    'apps.authentication',
     'apps.departments',
     'apps.doctor',
     'apps.gemini_ai',
