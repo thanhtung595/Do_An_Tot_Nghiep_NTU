@@ -1,14 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProfleApiServiceService } from '@app/services/api/profile/profle.api.service.service';
 import { API_BASE_URL } from '@app/constants';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
-export class ProfileComponent {
-  constructor(private profleApiServiceService: ProfleApiServiceService) {}
+export class ProfileComponent implements OnInit {
+  constructor(
+    private profleApiServiceService: ProfleApiServiceService,
+    private router: Router
+  ) {}
 
   // Thông tin người dùng
   user = {
@@ -127,5 +131,9 @@ export class ProfileComponent {
         console.error('Error fetching user1:', error);
       },
     });
+  }
+
+  navigateToPayment(recordId: number): void {
+    this.router.navigate(['/payment', recordId]);
   }
 }

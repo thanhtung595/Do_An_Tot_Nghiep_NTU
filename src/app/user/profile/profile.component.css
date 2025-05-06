@@ -201,3 +201,30 @@
 .close-button:hover {
   color: #000;
 }
+
+.payment-action {
+  margin-top: 1.5rem;
+  text-align: right;
+}
+
+.payment-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.payment-button:hover {
+  background-color: #357abd;
+}
+
+.payment-button i {
+  font-size: 1rem;
+}
