@@ -44,3 +44,20 @@ button:disabled {
   font-size: 0.9em;
 }
 
+.forgot-password-link {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.forgot-password-link a {
+  color: #3498db;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.forgot-password-link a:hover {
+  color: #2980b9;
+  text-decoration: underline;
+}
+

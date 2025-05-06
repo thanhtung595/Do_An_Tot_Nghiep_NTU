@@ -7,7 +7,7 @@ import { DoctorComponent } from '@app/user/doctor/doctor.component'
 import { ProfileComponent } from '@app/user/profile/profile.component'
 import { AdminHomeComponent } from '@app/admin/home/home.component'
 import { RegisterComponent } from '@app/user/register/register.component'
-
+import { ForgotPasswordComponent } from '@app/user/forgot-password/forgot-password.component'
 
 import { AdminUserComponent } from '@app/admin/user/user.component'
 import { DoctorAdminComponent } from '@app/admin/doctor/doctor.component';
@@ -19,6 +19,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'diagnosis', component: DiagnosisComponent },
   { path: 'doctor', component: DoctorComponent },
   { path: 'profile', component: ProfileComponent },

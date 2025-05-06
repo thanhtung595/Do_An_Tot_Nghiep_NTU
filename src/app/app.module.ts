@@ -23,6 +23,7 @@ import { DoctorAdminComponent } from '@app/admin/doctor/doctor.component';
 import { SidebarComponent } from './admin/shared/sidebar/sidebar.component';
 import { RegisterComponent } from './user/register/register.component';
 import { AdminMedicalrecordsComponent } from './admin/medicalrecords/medicalrecords.component';
+import { ForgotPasswordComponent } from './user/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { AdminMedicalrecordsComponent } from './admin/medicalrecords/medicalreco
     SidebarComponent,
     RegisterComponent,
     AdminMedicalrecordsComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
