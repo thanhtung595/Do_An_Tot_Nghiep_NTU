@@ -6,6 +6,7 @@
     <button (click)="activeTab = 'profile'" [class.active]="activeTab === 'profile'">Thông Tin Cá Nhân</button>
     <button *ngIf="user.rolename === 'patient'" (click)="activeTab = 'medicalHistory'" [class.active]="activeTab === 'medicalHistory'">Lịch Sử Khám Bệnh</button>
     <button *ngIf="user.rolename === 'doctor'" (click)="activeTab = 'patientHistory'" [class.active]="activeTab === 'patientHistory'">Lịch Sử Khám Bệnh Bệnh Nhân</button>
+    <a href="doctor/patient-history" *ngIf="user.rolename === 'doctor'" [class.active]="activeTab === 'patientHistory'">Quản lý hồ sơ bệnh án</a>
   </div>
 
   <!-- Hiển thị nội dung dựa trên tab được chọn -->

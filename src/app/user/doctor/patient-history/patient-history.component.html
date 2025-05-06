@@ -1,0 +1,46 @@
+<div class="patient-history-container">
+  <div class="header">
+    <h2>Lịch sử khám bệnh</h2>
+    <div class="search-box">
+      <input type="text" placeholder="Tìm kiếm bệnh nhân..." />
+      <button class="search-button">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tên bệnh nhân</th>
+          <th>Ngày khám</th>
+          <th>Chẩn đoán</th>
+          <th>Trạng thái</th>
+          <th>Lịch tái khám</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let record of patientRecords">
+          <td>{{record.id}}</td>
+          <td>{{record.patientName}}</td>
+          <td>{{record.date}}</td>
+          <td>{{record.diagnosis}}</td>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(record.status)">
+              {{record.status}}
+            </span>
+          </td>
+          <td>{{record.nextAppointment || 'Không có'}}</td>
+          <td>
+            <button class="edit-button" (click)="editRecord(record.id)">
+              <i class="fas fa-edit"></i> Chỉnh sửa
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div> 

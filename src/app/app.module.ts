@@ -24,6 +24,8 @@ import { SidebarComponent } from './admin/shared/sidebar/sidebar.component';
 import { RegisterComponent } from './user/register/register.component';
 import { AdminMedicalrecordsComponent } from './admin/medicalrecords/medicalrecords.component';
 import { ForgotPasswordComponent } from './user/forgot-password/forgot-password.component';
+import { DoctorPatientHistoryComponent } from './user/doctor/patient-history/patient-history.component';
+import { DoctorEditMedicalRecordComponent } from './user/doctor/edit-medical-record/edit-medical-record.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { ForgotPasswordComponent } from './user/forgot-password/forgot-password.
     SidebarComponent,
     RegisterComponent,
     AdminMedicalrecordsComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    DoctorPatientHistoryComponent,
+    DoctorEditMedicalRecordComponent
   ],
   imports: [
     BrowserModule,
