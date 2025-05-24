@@ -1,0 +1,74 @@
+<div class="payment-container">
+  <div class="payment-card">
+    <div class="header">
+      <h2>Thanh toán viện phí</h2>
+      <div class="patient-info">
+        <span class="patient-name">{{paymentInfo.patientName}}</span>
+        <span class="record-id">Mã hồ sơ: {{paymentInfo.id}}</span>
+      </div>
+    </div>
+
+    <div class="invoice-details">
+      <div class="section">
+        <h3>Thông tin khám bệnh</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Ngày khám:</label>
+            <span>{{paymentInfo.date}}</span>
+          </div>
+          <div class="info-item">
+            <label>Chẩn đoán:</label>
+            <span>{{paymentInfo.diagnosis}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Chi tiết hóa đơn</h3>
+        <div class="invoice-items">
+          <div class="invoice-header">
+            <span class="item-name">Tên dịch vụ</span>
+            <span class="item-quantity">Số lượng</span>
+            <span class="item-price">Đơn giá</span>
+            <span class="item-total">Thành tiền</span>
+          </div>
+          <div class="invoice-item" *ngFor="let item of paymentInfo.items">
+            <span class="item-name">{{item.name}}</span>
+            <span class="item-quantity">{{item.quantity}}</span>
+            <span class="item-price">{{item.price | number}} VNĐ</span>
+            <span class="item-total">{{item.price * item.quantity | number}} VNĐ</span>
+          </div>
+        </div>
+        <div class="invoice-total">
+          <span>Tổng cộng:</span>
+          <span class="total-amount">{{getTotal() | number}} VNĐ</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Phương thức thanh toán</h3>
+        <div class="payment-methods">
+          <div class="payment-method" 
+               *ngFor="let method of paymentMethods"
+               [class.selected]="selectedPaymentMethod === method.id"
+               (click)="selectedPaymentMethod = method.id">
+            <img *ngIf="method.id !== 'cash'" [src]="method.icon" [alt]="method.name">
+            <i *ngIf="method.id === 'cash'" [class]="method.icon"></i>
+            <span class="method-name">{{method.name}}</span>
+            <span class="method-description">{{method.description}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="payment-actions">
+      <button class="cancel-button" (click)="cancel()">Hủy</button>
+      <button class="pay-button" 
+              [disabled]="isProcessing || !selectedPaymentMethod"
+              (click)="processPayment()">
+        <span *ngIf="isProcessing" class="spinner"></span>
+        <span *ngIf="!isProcessing">Thanh toán</span>
+      </button>
+    </div>
+  </div>
+</div> 

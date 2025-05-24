@@ -105,8 +105,8 @@
         <p><strong>Thanh toán:</strong> {{ selectedRecord.paymentstatus }}</p>
         
         <!-- Hiển thị nút thanh toán nếu chưa thanh toán -->
-        <div *ngIf="selectedRecord.paymentstatus === 'Chưa thanh toán'" class="payment-action">
-          <button class="payment-button" (click)="navigateToPayment(selectedRecord.id)">
+        <div class="payment-action" *ngIf="selectedRecord && selectedRecord.paymentstatus === 'Chưa thanh toán' && selectedRecord.appointmentsid">
+          <button class="payment-button" (click)="navigateToPayment(selectedRecord.appointmentsid)">
             <i class="fas fa-money-bill"></i>
             Thanh toán viện phí
           </button>

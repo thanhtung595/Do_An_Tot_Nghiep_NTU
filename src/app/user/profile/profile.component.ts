@@ -133,7 +133,20 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  navigateToPayment(recordId: number): void {
-    this.router.navigate(['/payment', recordId]);
+  navigateToPayment(recordId: any): void {
+    if (recordId) {
+      console.log('Navigating to payment with ID:', recordId); // Debug log
+      this.router.navigate(['/payment', recordId]).then(
+        (success) => {
+          if (!success) {
+            console.error('Navigation failed');
+            alert('Không thể chuyển đến trang thanh toán. Vui lòng thử lại sau.');
+          }
+        }
+      );
+    } else {
+      console.error('Record ID is undefined');
+      alert('Không thể thực hiện thanh toán. Vui lòng thử lại sau.');
+    }
   }
 }

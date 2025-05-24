@@ -26,6 +26,7 @@ import { AdminMedicalrecordsComponent } from './admin/medicalrecords/medicalreco
 import { ForgotPasswordComponent } from './user/forgot-password/forgot-password.component';
 import { DoctorPatientHistoryComponent } from './user/doctor/patient-history/patient-history.component';
 import { DoctorEditMedicalRecordComponent } from './user/doctor/edit-medical-record/edit-medical-record.component';
+import { PaymentComponent } from './user/payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { DoctorEditMedicalRecordComponent } from './user/doctor/edit-medical-rec
     AdminMedicalrecordsComponent,
     ForgotPasswordComponent,
     DoctorPatientHistoryComponent,
-    DoctorEditMedicalRecordComponent
+    DoctorEditMedicalRecordComponent,
+    PaymentComponent
   ],
   imports: [
     BrowserModule,

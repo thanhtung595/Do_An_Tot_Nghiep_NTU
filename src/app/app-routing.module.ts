@@ -10,6 +10,7 @@ import { RegisterComponent } from '@app/user/register/register.component'
 import { ForgotPasswordComponent } from '@app/user/forgot-password/forgot-password.component'
 import { DoctorPatientHistoryComponent } from '@app/user/doctor/patient-history/patient-history.component'
 import { DoctorEditMedicalRecordComponent } from '@app/user/doctor/edit-medical-record/edit-medical-record.component'
+import { PaymentComponent } from './user/payment/payment.component';
 
 import { AdminUserComponent } from '@app/admin/user/user.component'
 import { DoctorAdminComponent } from '@app/admin/doctor/doctor.component';
@@ -33,6 +34,11 @@ const routes: Routes = [
   { path: 'admin/doctors', component: DoctorAdminComponent },
   { path: 'admin/medicines', component: MedicinesComponent },
   { path: 'admin/medicalrecords', component: AdminMedicalrecordsComponent },
+
+  {
+    path: 'payment/:id',
+    component: PaymentComponent
+  },
 
   { path: '**', redirectTo: 'home' },
 ];
