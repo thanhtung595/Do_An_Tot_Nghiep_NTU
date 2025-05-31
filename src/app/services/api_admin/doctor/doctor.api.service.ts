@@ -8,7 +8,7 @@ import { API_BASE_URL } from '@app/constants'
 })
 export class DoctorApiService {
 
-  private apiUrl = `${API_BASE_URL}api/departments/`;
+  private apiUrl = `${API_BASE_URL}api/departments`;
 
   constructor(private http: HttpClient) { }
 
@@ -19,21 +19,21 @@ export class DoctorApiService {
 
   // Hàm create doctor
   createDoctor(doctor: any): Observable<any> {
-    return this.http.post<any>(API_BASE_URL+"api/doctor/", doctor, { withCredentials: true });
+    return this.http.post<any>(API_BASE_URL+"api/doctor", doctor);
   }
 
   // Hàm update doctor
   updateDoctor(doctor: any): Observable<any> {
-    return this.http.put<any>(API_BASE_URL+"api/doctor/", doctor, { withCredentials: true });
+    return this.http.put<any>(API_BASE_URL+"api/doctor", doctor);
   }
 
   // Hàm get all doctor
   getAllDoctor(): Observable<any> {
-    return this.http.get<any>(API_BASE_URL+"api/doctor/");
+    return this.http.get<any>(API_BASE_URL+"api/doctor");
   }
 
   // Hàm đặt lịch khám
   createAppointments(doctor: any): Observable<any> {
-    return this.http.post<any>(API_BASE_URL+"api/doctor/appointment/", doctor, { withCredentials: true });
+    return this.http.post<any>(API_BASE_URL+"api/doctor/appointment", doctor);
   }
 }

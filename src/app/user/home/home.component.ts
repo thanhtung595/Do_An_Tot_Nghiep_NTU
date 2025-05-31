@@ -19,7 +19,7 @@ export class HomeComponent {
   ngOnInit(): void {
     this.homeApiService.getService().subscribe({
       next: (data) => {
-        this.services = data?.service ?? [];
+        this.services = data?.data.service ?? [];
         console.log("services",this.services);
       },
       error: (error) => {

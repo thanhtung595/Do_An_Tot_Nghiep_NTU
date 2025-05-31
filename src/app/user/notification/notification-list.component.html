@@ -1,0 +1,115 @@
+<!-- Thanh tìm kiếm và lọc -->
+<div class="notification-list-container">
+  <div class="header">
+    <h1>Thông báo đến</h1>
+    <div class="search-filter">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Tìm kiếm tiêu đề..."
+        >
+      </div>
+      <div class="filter-box">
+        <select [(ngModel)]="filterType">
+          <option value="all">Tất cả</option>
+          <option value="appointment">Lịch hẹn</option>
+          <option value="reminder">Nhắc nhở</option>
+          <option value="result">Kết quả</option>
+          <option value="payment">Thanh toán</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Danh sách thông báo -->
+  <div class="notification-list">
+    <div class="notification-item"
+         *ngFor="let notification of getFilteredNotifications()"
+         [class.unread]="!notification.isRead"
+         (click)="viewNotificationDetail(notification)">
+      <div class="notification-icon" [ngClass]="notification.type">
+        <i [ngClass]="{
+          'fas fa-calendar-check': notification.type === 'appointment',
+          'fas fa-bell': notification.type === 'reminder',
+          'fas fa-file-medical': notification.type === 'result',
+          'fas fa-money-bill': notification.type === 'payment'
+        }"></i>
+      </div>
+      <div class="notification-content">
+        <div class="notification-header">
+          <h3>{{notification.title}}</h3>
+          <span class="notification-date">{{notification.date | date:'dd/MM/yyyy HH:mm'}}</span>
+        </div>
+        <p class="patient-name">{{notification.patientName}}</p>
+        <p class="notification-preview">{{notification.content}}</p>
+        <div class="notification-footer">
+          <span class="type-badge">{{getTypeLabel(notification.type)}}</span>
+          <!-- <span class="status-badge" [ngClass]="notification.status">
+            {{getStatusLabel(notification.status)}}
+          </span> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Popup chi tiết thông báo -->
+<div class="notification-detail-modal" *ngIf="showNotificationDetail && selectedNotification">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="header-content">
+        <div class="notification-icon" [ngClass]="selectedNotification.type">
+          <i [ngClass]="{
+            'fas fa-calendar-check': selectedNotification.type === 'appointment',
+            'fas fa-bell': selectedNotification.type === 'reminder',
+            'fas fa-file-medical': selectedNotification.type === 'result',
+            'fas fa-money-bill': selectedNotification.type === 'payment'
+          }"></i>
+        </div>
+        <h2>{{selectedNotification.title}}</h2>
+      </div>
+      <button class="btn-close" (click)="closeNotificationDetail()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="notification-info">
+        <div class="info-section">
+          <h3>Thông tin bệnh nhân</h3>
+          <p><strong>Họ tên:</strong> {{selectedNotification.patientName}}</p>
+          <p><strong>Số điện thoại:</strong> {{selectedNotification.phone}}</p>
+        </div>
+
+        <div class="info-section">
+          <h3>Nội dung thông báo</h3>
+          <p class="notification-content">{{selectedNotification.content}}</p>
+
+          <div *ngIf="selectedNotification.type === 'appointment' && selectedNotification.appointmentDate"
+               class="appointment-info">
+            <p><strong>Ngày hẹn:</strong> {{selectedNotification.appointmentDate | date:'dd/MM/yyyy'}}</p>
+            <p><strong>Giờ hẹn:</strong> {{selectedNotification.appointmentTime}}</p>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h3>Thông tin gửi</h3>
+          <p><strong>Ngày gửi:</strong> {{selectedNotification.date | date:'dd/MM/yyyy HH:mm'}}</p>
+          <!-- <p><strong>Trạng thái:</strong>
+            <span class="status-badge" [ngClass]="selectedNotification.status">
+              {{getStatusLabel(selectedNotification.status)}}
+            </span>
+          </p> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button *ngIf="selectedNotification.status === 'failed'"
+              class="btn-resend"
+              (click)="resendNotification(selectedNotification)">
+        <i class="fas fa-redo"></i> Gửi lại
+      </button>
+    </div>
+  </div>
+</div>

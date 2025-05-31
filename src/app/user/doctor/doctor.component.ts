@@ -20,7 +20,7 @@ export class DoctorComponent {
   getaAllDoctor(){
     this.doctorApiService.getAllDoctor().subscribe({
       next: (data) => {
-        this.doctors = data.doctors;
+        this.doctors = data.data.doctors;
         console.log("doctors", this.doctors);
       },
       error: (error) => {
@@ -91,6 +91,9 @@ export class DoctorComponent {
     };
     if (bookingForm.valid) {
       console.log("data: ",data);
+      Object.entries(data).forEach(([key, value]) => {
+        console.log(`${key}:`, value, '| type:', typeof value);
+      });
       this.doctorApiService.createAppointments(data).subscribe({
         next: (data) => {
           console.log(data)

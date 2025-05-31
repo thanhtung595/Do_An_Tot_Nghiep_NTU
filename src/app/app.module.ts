@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from '@app/services/token/Token.interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +29,8 @@ import { ForgotPasswordComponent } from './user/forgot-password/forgot-password.
 import { DoctorPatientHistoryComponent } from './user/doctor/patient-history/patient-history.component';
 import { DoctorEditMedicalRecordComponent } from './user/doctor/edit-medical-record/edit-medical-record.component';
 import { PaymentComponent } from './user/payment/payment.component';
+import { InvoiceListComponent } from '@app/user/invoice/invoice-list.component';
+import { NotificationListComponent } from '@app/user/notification/notification-list.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +54,9 @@ import { PaymentComponent } from './user/payment/payment.component';
     ForgotPasswordComponent,
     DoctorPatientHistoryComponent,
     DoctorEditMedicalRecordComponent,
-    PaymentComponent
+    PaymentComponent,
+    InvoiceListComponent,
+    NotificationListComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +66,9 @@ import { PaymentComponent } from './user/payment/payment.component';
     HttpClientModule,
     CommonModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

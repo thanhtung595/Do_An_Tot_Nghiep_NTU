@@ -9,7 +9,7 @@ import { API_BASE_URL } from '@app/constants'
 })
 export class AuthApiService {
 
-  private apiUrl = `${API_BASE_URL}api/login/`;
+  private apiUrl = `${API_BASE_URL}api/auth/login`;
 
   constructor(private http: HttpClient) { }
 
@@ -21,11 +21,11 @@ export class AuthApiService {
 
   // Hàm register
   register(user: any): Observable<any> {
-    return this.http.post<any>(API_BASE_URL+"api/register/", user, { withCredentials: true });
+    return this.http.post<any>(API_BASE_URL+"api/auth/register/", user, { withCredentials: true });
   }
 
   // Hàm logout
   logout(): Observable<any> {
-    return this.http.get<any>(API_BASE_URL+"api/logout/", { withCredentials: true });
+    return this.http.get<any>(API_BASE_URL+"api/auth/logout/", { withCredentials: true });
   }
 }

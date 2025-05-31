@@ -34,7 +34,7 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
     treatment: 'Điều trị nội khoa',
     medications: ['Paracetamol 500mg', 'Amoxicillin 500mg'],
     notes: 'Bệnh nhân cần nghỉ ngơi và uống nhiều nước',
-    nextAppointment: '2024-03-22'
+    nextAppointment: '2024-03-22',
   };
 
   newMedication: string = '';
@@ -70,4 +70,4 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
   cancel(): void {
     this.router.navigate(['/doctor/patient-history']);
   }
-} 
+}

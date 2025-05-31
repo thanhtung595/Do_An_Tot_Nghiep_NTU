@@ -1,0 +1,227 @@
+// Container styles
+.invoice-list-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h1 {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 28px;
+  }
+}
+
+// Table styles
+.invoice-table {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    tr:hover {
+      background-color: #f8f9fa;
+    }
+  }
+}
+
+// Status badge styles
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+
+  &.paid {
+    background-color: #e3fcef;
+    color: #00a854;
+  }
+
+  &.unpaid {
+    background-color: #fff1f0;
+    color: #f5222d;
+  }
+}
+
+// Button styles
+.btn-view {
+  padding: 8px 16px;
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #40a9ff;
+  }
+}
+
+// Modal styles
+.invoice-detail-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .modal-content {
+    background: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h2 {
+      margin: 0;
+      color: #2c3e50;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #999;
+
+      &:hover {
+        color: #666;
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 20px;
+  }
+
+  .invoice-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+
+    .info-section {
+      h3 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+
+      p {
+        margin: 10px 0;
+        color: #666;
+        line-height: 1.6;
+
+        strong {
+          color: #2c3e50;
+          margin-right: 8px;
+        }
+      }
+
+      ul {
+        list-style: none;
+        padding-left: 0;
+
+        li {
+          padding: 4px 0;
+          color: #666;
+        }
+      }
+    }
+  }
+
+  .modal-footer {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+
+      i {
+        font-size: 16px;
+      }
+
+      &.btn-print {
+        background-color: #f0f0f0;
+        color: #666;
+
+        &:hover {
+          background-color: #e0e0e0;
+        }
+      }
+
+      &.btn-pay {
+        background-color: #52c41a;
+        color: white;
+
+        &:hover {
+          background-color: #73d13d;
+        }
+      }
+    }
+  }
+}
+
+// Print styles
+@media print {
+  .invoice-list-container {
+    display: none;
+  }
+
+  .invoice-detail-modal {
+    position: static;
+    background: none;
+
+    .modal-content {
+      box-shadow: none;
+      max-height: none;
+    }
+
+    .modal-header .btn-close,
+    .modal-footer {
+      display: none;
+    }
+  }
+}

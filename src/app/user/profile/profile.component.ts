@@ -21,10 +21,10 @@ export class ProfileComponent implements OnInit {
     phonenumber: '083681855',
     address: 'Thanh Hóa - Việt Nam',
     avatar:
-      'https://scontent.fhan2-5.fna.fbcdn.net/v/t1.6435-9/125408833_193036345700650_8843732697979880226_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=trlOeXMYQx0Q7kNvgG9ZKZE&_nc_oc=Adnz7KGwoGaUzCDVoL9aL5hzGaAknviLiYtJIIipCa2S9nVKI0Tk4lkVrNOKCUlc4tY&_nc_zt=23&_nc_ht=scontent.fhan2-5.fna&_nc_gid=FRTsjvCLJXo1CNUqG0F-Gw&oh=00_AYHJ2VBB7Teyhcw6y0fB9qeLNpwjR_yTvKNng3ppeizHUw&oe=68120F1E',
+      'https://ntt-datn-clinic-management.s3.ap-southeast-1.amazonaws.com/avatar/default.jpg',
     rolename: 'admin', // Có thể là 'patient' hoặc 'doctor'
     image: '',
-    dateofbirth: '06-111-2003',
+    dateofbirth: '06-11-2003',
     gender: 'Nam',
   };
 
@@ -32,13 +32,13 @@ export class ProfileComponent implements OnInit {
     if (this.user.rolename == null || this.user.rolename == 'admin') {
       return `${this.user.avatar}`;
     }
-    return `${API_BASE_URL}${imgPath}`;
+    return `${imgPath}`;
   }
 
   ngOnInit(): void {
     this.profleApiServiceService.getUser().subscribe({
       next: (data) => {
-        this.user = data;
+        this.user = data.data.user;
         console.log('user', this.user);
         this.getAppointment();
       },
@@ -117,13 +117,13 @@ export class ProfileComponent implements OnInit {
     this.profleApiServiceService.getAppointment().subscribe({
       next: (data) => {
         if (this.user.rolename == 'patient') {
-          this.medicalRecords = data.data;
+          this.medicalRecords = data.data.appointments;
           console.log('getAppointment', this.medicalRecords);
         } else if (
           this.user.rolename != null &&
           this.user.rolename == 'doctor'
         ) {
-          this.patientRecords = data.data;
+          this.patientRecords = data.data.appointments;
           console.log('getAppointment', this.patientRecords);
         }
       },

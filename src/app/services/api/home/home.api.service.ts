@@ -8,7 +8,7 @@ import { API_BASE_URL } from '@app/constants'
 })
 export class HomeApiService {
 
-  private apiUrl = `${API_BASE_URL}api/service/`;
+  private apiUrl = `${API_BASE_URL}api/services`;
 
   constructor(private http: HttpClient) { }
 

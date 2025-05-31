@@ -6,11 +6,9 @@
     </div>
     <nav class="menu">
       <ul>
-        <li><a routerLink="/admin/home" routerLinkActive="active">Trang chủ</a></li>
-        <li><a routerLink="/admin/users" routerLinkActive="active">Người dùng</a></li>
-        <!-- <li><a routerLink="/admin/services" routerLinkActive="active">Dịch vụ</a></li> -->
-        <li><a routerLink="/admin/medicines" routerLinkActive="active">Kho thuốc</a></li>
-        <li><a routerLink="/admin/medicalrecords" routerLinkActive="active">Hồ sơ bệnh án</a></li>
+        <li *ngFor="let header of headers">
+        <a [href]="header.url"  (click)="onClickLogout(header, $event)" >{{ header.name }}</a>
+      </li>
       </ul>
     </nav>
     <div class="back-to-home">

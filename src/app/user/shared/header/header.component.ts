@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HeaderApiServiceService } from '@app/services/api/header/header.api.service.service'
 import { AuthApiService } from '@app/services/api/auth/auth.api.service';
 import { Router } from '@angular/router';
+import { clearAccessToken } from '@app/services/token/TokenService';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,7 @@ export class HeaderComponent {
   ngOnInit(): void {
     this.headerApiService.getHeader().subscribe({
       next: (data) => {
-        this.headers = data?.header ?? [];
+        this.headers = data?.data.header ?? [];
         console.log("headers",this.headers);
       },
       error: (error) => {
@@ -30,15 +31,8 @@ export class HeaderComponent {
   onClickLogout(data : any, event: Event){
     if(data.url == "logout"){
       event.preventDefault();
-
-      this.authApiService.logout().subscribe({
-        next: (data) => {
-          window.location.href = '/home';
-        },
-        error: (error) => {
-          console.error('Error:', error);
-        }
-      });
+      clearAccessToken();
+      window.location.href = '/home';
     }
   }
 }

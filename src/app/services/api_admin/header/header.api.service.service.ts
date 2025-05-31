@@ -6,19 +6,14 @@ import { API_BASE_URL } from '@app/constants'
 @Injectable({
   providedIn: 'root'
 })
-export class ProfleApiServiceService {
+export class HeaderApiServiceService {
 
-  private apiUrl = `${API_BASE_URL}api/user`;
+  private apiUrl = `${API_BASE_URL}api/header/admin`;
 
   constructor(private http: HttpClient) { }
 
-  // Hàm lấy user
-  getUser(): Observable<any> {
+  // Hàm lấy danh sách header
+  getHeader(): Observable<any> {
     return this.http.get<any>(this.apiUrl);
-  }
-
-  // Hàm lấy Appointment
-  getAppointment(): Observable<any> {
-    return this.http.get<any>(API_BASE_URL+"api/appointment");
   }
 }

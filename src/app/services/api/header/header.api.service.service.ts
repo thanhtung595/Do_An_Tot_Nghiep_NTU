@@ -8,12 +8,12 @@ import { API_BASE_URL } from '@app/constants'
 })
 export class HeaderApiServiceService {
 
-  private apiUrl = `${API_BASE_URL}api/header/`;
+  private apiUrl = `${API_BASE_URL}api/header`;
 
   constructor(private http: HttpClient) { }
 
   // Hàm lấy danh sách header
   getHeader(): Observable<any> {
-    return this.http.get<any>(this.apiUrl, { withCredentials: true });
+    return this.http.get<any>(this.apiUrl);
   }
 }

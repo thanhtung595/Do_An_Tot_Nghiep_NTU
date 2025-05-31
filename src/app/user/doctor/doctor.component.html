@@ -17,7 +17,7 @@
   <!-- Danh sách bác sĩ -->
   <div class="doctor-cards">
     <div *ngFor="let doctor of filteredDoctors" class="doctor-card">
-      <img [src]="getImageUrl(doctor.image)"
+      <img src="{{ doctor.image }}"
         alt="{{ doctor.name }}"
         class="doctor-image">
       <div class="doctor-info">

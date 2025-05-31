@@ -11,6 +11,8 @@ import { ForgotPasswordComponent } from '@app/user/forgot-password/forgot-passwo
 import { DoctorPatientHistoryComponent } from '@app/user/doctor/patient-history/patient-history.component'
 import { DoctorEditMedicalRecordComponent } from '@app/user/doctor/edit-medical-record/edit-medical-record.component'
 import { PaymentComponent } from './user/payment/payment.component';
+import { InvoiceListComponent } from '@app/user/invoice/invoice-list.component';
+import { NotificationListComponent } from '@app/user/notification/notification-list.component';
 
 import { AdminUserComponent } from '@app/admin/user/user.component'
 import { DoctorAdminComponent } from '@app/admin/doctor/doctor.component';
@@ -28,6 +30,8 @@ const routes: Routes = [
   { path: 'doctor/patient-history', component: DoctorPatientHistoryComponent },
   { path: 'doctor/edit-medical-record/:id', component: DoctorEditMedicalRecordComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'invoice', component: InvoiceListComponent },
+  { path: 'notification', component: NotificationListComponent },
 
   { path: 'admin/home', component: AdminHomeComponent },
   { path: 'admin/users', component: AdminUserComponent },

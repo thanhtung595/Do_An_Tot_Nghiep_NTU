@@ -5,7 +5,7 @@
   <div class="profile-menu">
     <button (click)="activeTab = 'profile'" [class.active]="activeTab === 'profile'">Thông Tin Cá Nhân</button>
     <button *ngIf="user.rolename === 'patient'" (click)="activeTab = 'medicalHistory'" [class.active]="activeTab === 'medicalHistory'">Lịch Sử Khám Bệnh</button>
-    <button *ngIf="user.rolename === 'doctor'" (click)="activeTab = 'patientHistory'" [class.active]="activeTab === 'patientHistory'">Lịch Sử Khám Bệnh Bệnh Nhân</button>
+    <!-- <button *ngIf="user.rolename === 'doctor'" (click)="activeTab = 'patientHistory'" [class.active]="activeTab === 'patientHistory'">Lịch Sử Khám Bệnh Bệnh Nhân</button> -->
     <a href="doctor/patient-history" *ngIf="user.rolename === 'doctor'" [class.active]="activeTab === 'patientHistory'">Quản lý hồ sơ bệnh án</a>
   </div>
 
@@ -77,7 +77,7 @@
     </div>
 
     <!-- Lịch sử khám bệnh bệnh nhân (cho bác sĩ) -->
-    <div *ngIf="activeTab === 'patientHistory' && user.rolename === 'doctor'" class="patient-history">
+    <!-- <div *ngIf="activeTab === 'patientHistory' && user.rolename === 'doctor'" class="patient-history">
       <h2>Lịch Sử Khám Bệnh Bệnh Nhân</h2>
       <div *ngFor="let patient of patientRecords" class="patient-card" (click)="viewMedicalRecord(patient)">
         <p><strong>Ngày khám:</strong> {{ patient.appointmentdate }}</p>
@@ -86,7 +86,7 @@
         <p><strong>Ghi chú:</strong> {{ patient.notes }}</p>
         <p><strong>Trạng thái:</strong> {{ patient.status }}</p>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <!-- Popup hiển thị chi tiết hồ sơ bệnh án -->
@@ -103,7 +103,7 @@
         <p><strong>Ghi chú:</strong> {{ selectedRecord.notes }}</p>
         <p><strong>Trạng thái:</strong> {{ selectedRecord.status }}</p>
         <p><strong>Thanh toán:</strong> {{ selectedRecord.paymentstatus }}</p>
-        
+
         <!-- Hiển thị nút thanh toán nếu chưa thanh toán -->
         <div class="payment-action" *ngIf="selectedRecord && selectedRecord.paymentstatus === 'Chưa thanh toán' && selectedRecord.appointmentsid">
           <button class="payment-button" (click)="navigateToPayment(selectedRecord.appointmentsid)">

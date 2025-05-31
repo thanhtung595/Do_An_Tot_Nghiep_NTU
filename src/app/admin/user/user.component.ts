@@ -13,7 +13,7 @@ export class AdminUserComponent {
   ngOnInit(): void {
     this.userApiService.getAllUser().subscribe({
       next: (data) => {
-        this.users = data.data;
+        this.users = data.data.users;
         console.log('user', this.users);
       },
       error: (error) => {
