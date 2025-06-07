@@ -1,0 +1,51 @@
+<!-- review.component.html -->
+<div class="review-container">
+  <div class="header">
+    <h2>Đánh giá phòng khám</h2>
+    <button class="btn btn-primary" (click)="openReviewForm()">+ Thêm đánh giá</button>
+  </div>
+
+  <div class="filters">
+    <input type="text" placeholder="Tìm theo tiêu đề" [(ngModel)]="searchTitle" (input)="applyFilters()" />
+    <input type="text" placeholder="Tìm theo tên bác sĩ" [(ngModel)]="searchDoctor" (input)="applyFilters()" />
+
+    <select [(ngModel)]="sortOption" (change)="sortReviews()">
+      <option value="newest">Mới nhất</option>
+      <option value="oldest">Cũ nhất</option>
+      <option value="highest">Đánh giá cao nhất</option>
+      <option value="lowest">Đánh giá thấp nhất</option>
+    </select>
+  </div>
+
+  <div class="review-list">
+    <div *ngFor="let review of filteredReviews" class="review-card">
+      <div class="review-header">
+        <h4>{{ review.title }}</h4>
+        <span class="rating">{{ review.rating }} ⭐</span>
+      </div>
+      <div class="review-body">
+        <p>{{ review.comment }}</p>
+        <div class="review-footer">
+          <span>Bác sĩ: {{ review.doctor }}</span>
+          <span>Ngày: {{ review.date }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Review Form Popup -->
+  <div class="review-form-overlay" *ngIf="showForm">
+    <div class="review-form">
+      <h3>Thêm đánh giá</h3>
+      <input type="text" placeholder="Tiêu đề" [(ngModel)]="newReview.title" />
+      <input type="text" placeholder="Tên bác sĩ" [(ngModel)]="newReview.doctor" />
+      <textarea placeholder="Nội dung đánh giá" [(ngModel)]="newReview.comment"></textarea>
+      <input type="number" placeholder="Đánh giá (1-5)" [(ngModel)]="newReview.rating" min="1" max="5" />
+
+      <div class="form-actions">
+        <button class="btn cancel" (click)="closeReviewForm()">Hủy</button>
+        <button class="btn submit" (click)="submitReview()">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+</div>

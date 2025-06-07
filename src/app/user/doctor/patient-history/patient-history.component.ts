@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DoctorApiService } from '@app/services/api/doctor/doctor.api.service'
+import { ToastService } from '@app/services/toast/toast.service';
+import { ConfirmDialogService } from '@app/services/dialog/confirm-dialog.service';
 
 interface PatientRecord {
   id: number;
-  patientName: string;
+  patientname: string;
   date: string;
+  symptom: string;
   diagnosis: string;
   status: string;
-  nextAppointment?: string;
+  nextappointment?: string;
 }
 
 @Component({
@@ -19,32 +23,32 @@ export class DoctorPatientHistoryComponent implements OnInit {
   patientRecords: PatientRecord[] = [
     {
       id: 1,
-      patientName: 'Nguyễn Văn A',
+      patientname: 'Nguyễn Văn A',
       date: '2024-03-15',
+      symptom: 'Đau đầu hoa mắt',
       diagnosis: 'Cảm cúm',
       status: 'Đã khám',
-      nextAppointment: '2024-03-22'
-    },
-    {
-      id: 2,
-      patientName: 'Trần Thị B',
-      date: '2024-03-14',
-      diagnosis: 'Đau dạ dày',
-      status: 'Đang điều trị',
-      nextAppointment: '2024-03-21'
-    },
-    {
-      id: 3,
-      patientName: 'Lê Văn C',
-      date: '2024-03-13',
-      diagnosis: 'Viêm họng',
-      status: 'Đã khỏi'
+      nextappointment: '2024-03-22'
     }
   ];
 
-  constructor(private router: Router) {}
+  statusList: string[] = [
+    'Đợi duyệt',
+    'Đã duyệt',
+    'Đã khám',
+    'Đang điều trị',
+    'Đợi kết quả',
+    'Đã khỏi',
+    'Cần tái khám'
+  ];
 
-  ngOnInit(): void {}
+  constructor(private router: Router, private doctorApiService: DoctorApiService,
+    private toastService: ToastService,
+    private confirmDialogService: ConfirmDialogService) {}
+
+  ngOnInit(): void {
+    this.getaAllDoctor();
+  }
 
   editRecord(id: number): void {
     this.router.navigate(['/doctor/edit-medical-record', id]);
@@ -52,14 +56,67 @@ export class DoctorPatientHistoryComponent implements OnInit {
 
   getStatusClass(status: string): string {
     switch (status) {
+      case 'Đợi duyệt':
+        return 'status-pending';
+      case 'Đã duyệt':
+        return 'status-approved';
       case 'Đã khám':
-        return 'status-completed';
+        return 'status-examined';
       case 'Đang điều trị':
-        return 'status-in-progress';
+        return 'status-treating';
+      case 'Đợi kết quả':
+        return 'status-waiting-result';
       case 'Đã khỏi':
-        return 'status-cured';
+        return 'status-recovered';
+      case 'Cần tái khám':
+        return 'status-recheck';
       default:
-        return '';
+        return 'status-unknown';
     }
   }
-} 
+
+  getaAllDoctor(){
+    this.doctorApiService.getPatientHistory().subscribe({
+      next: (data) => {
+        this.patientRecords = data.data.appointments;
+        console.log("doctors", this.patientRecords);
+      },
+      error: (error) => {
+        console.error('Error fetching departments:', error);
+      }
+    });
+  }
+
+  onStatusChange(record: any) {
+    this.confirmDialogService.show({
+        title: 'Xác nhận cập nhật',
+        message: 'Bạn có chắc chắn muốn cập nhật lại trạng thái này.',
+        confirmText: 'Cập nhật',
+        cancelText: 'Hủy',
+        onConfirm: () => {
+          const data = {
+            id : record.id,
+            status : record.status
+          }
+
+          this.doctorApiService.updateStatusAppointment(data).subscribe({
+                next: (data) => {
+                  let text = 'Đã cập nhật ID :'+ record.id + ' thành :' + record.status;
+                  this.toastService.success(text);
+                },
+                error: (error) => {
+                  this.toastService.error(error.data.message);
+                  console.error('Error fetching departments:', error);
+                }
+          });
+        },
+        onCancel: () => {
+          this.toastService.info('Đã hủy thao tác cập nhật');
+        }
+  });
+
+
+    // TODO: gọi API để cập nhật nếu cần
+    // this.http.put('/api/record/' + record.id, { status: record.status }).subscribe(...)
+  }
+}

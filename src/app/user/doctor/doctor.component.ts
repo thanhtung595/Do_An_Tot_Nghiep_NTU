@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { DoctorApiService } from '@app/services/api_admin/doctor/doctor.api.service'
 import { API_BASE_URL } from '@app/constants'
+import { ToastService } from '@app/services/toast/toast.service';
+import { ConfirmDialogService } from '@app/services/dialog/confirm-dialog.service';
+import { NotificationService } from '@app/services/notification/notification.service';
 
 @Component({
   selector: 'app-doctor',
@@ -8,9 +11,14 @@ import { API_BASE_URL } from '@app/constants'
   styleUrls: ['./doctor.component.css'],
 })
 export class DoctorComponent {
-  constructor(private doctorApiService: DoctorApiService) { }
+  constructor(private doctorApiService: DoctorApiService,
+    private confirmDialogService: ConfirmDialogService,
+    private toastService: ToastService,
+    private notificationService: NotificationService
+  ) { }
   ngOnInit(): void {
     this.getaAllDoctor();
+    // this.notificationService.connect();
   }
   getImageUrl(imgPath: string): string {
     return `${API_BASE_URL}${imgPath}`;
@@ -77,10 +85,23 @@ export class DoctorComponent {
     this.showModal = false;
     this.selectedDoctor = null;
     this.isBooking = false;
+    this.toastService.info('Đã hủy thao tác.');
   }
 
   // Đặt lịch khám (giả lập)
   bookAppointment(bookingForm: any) {
+    const fieldLabels: { [key: string]: string } = {
+      fullname: 'Họ tên bệnh nhân',
+      gender: 'Giới tính',
+      address: 'Địa chỉ',
+      phonenumber: 'Số điện thoại',
+      age: 'Ngày sinh',
+      diagnosis: 'Triệu chứng',
+      note: 'Lời nhắn',
+      workday: 'Ngày khám',
+      timeOnline: 'Giờ khám'
+    };
+
     const data =
     {
       doctorID: this.selectedDoctor.id,
@@ -88,38 +109,54 @@ export class DoctorComponent {
       workday: bookingForm.value.workday,
       timeOnline: bookingForm.value.timeOnline,
       note: bookingForm.value.note,
+      fullname: bookingForm.value.fullname,
+      gender: bookingForm.value.gender,
+      address: bookingForm.value.address,
+      phonenumber: bookingForm.value.phonenumber,
+      age: bookingForm.value.age,
     };
-    if (bookingForm.valid) {
-      console.log("data: ",data);
-      Object.entries(data).forEach(([key, value]) => {
-        console.log(`${key}:`, value, '| type:', typeof value);
-      });
-      this.doctorApiService.createAppointments(data).subscribe({
-        next: (data) => {
-          console.log(data)
-          console.log(data.status)
-          alert("Bạn đã đặt lịch khám thành công.");
-          this.closeModal(); // Đóng popup sau khi đặt lịch
-        },
-        error: (error) => {
-          console.error('Error fetching bookAppointment:', error);
-          if(error.status == 401){
-            alert("Bạn cần đăng nhập trước khi đặt lịch");
-            return;
-          }
-          if(error.status == 400){
-            alert(error.error.msg);
-            return;
-          }
-        }
-      });
+    for (const [key, value] of Object.entries(data)) {
+      if (value === null || value === '') {
+        const label = fieldLabels[key] || key;
+        this.toastService.warning(`${label} chưa điền thông tin.`);
+        return;
+      }
     }
-    // if (bookingForm.valid) {
-
-    //   // alert(
-    //   //   `Đã đặt lịch khám với ${this.selectedDoctor.name} vào ${bookingForm.value.date} lúc ${bookingForm.value.time}.`
-    //   // );
-    //   // this.closeModal(); // Đóng popup sau khi đặt lịch
-    // }
+    console.log("data: ",data);
+    this.closeModal(); // Đóng popup sau khi đặt lịch
+    this.confirmDialogService.show({
+        title: 'Xác nhận đặt lịch khám',
+        message: 'Bạn có chắc chắn muốn đặt lịch khám không?',
+        confirmText: 'Xác nhận',
+        cancelText: 'Hủy',
+        onConfirm: () => {
+          Object.entries(data).forEach(([key, value]) => {
+            console.log(`${key}:`, value, '| type:', typeof value);
+          });
+          this.doctorApiService.createAppointments(data).subscribe({
+            next: (data) => {
+              console.log(data)
+              console.log(data.status)
+              this.toastService.success('Bạn đã đặt lịch khám thành công.');
+            },
+            error: (error) => {
+              console.error('Error fetching bookAppointment:', error);
+              if(error.status == 401){
+                this.toastService.warning('Bạn cần đăng nhập trước khi đặt lịch.');
+                return;
+              }else if(error.status == 400){
+                this.toastService.warning(error.error.message);
+                return;
+              } else {
+                this.toastService.error(error.error.message);
+                return;
+              }
+            }
+          });
+        },
+        onCancel: () => {
+          this.toastService.info('Đã hủy đặt lịch khám');
+        }
+    });
   }
 }

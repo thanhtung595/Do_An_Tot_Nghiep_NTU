@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Invoice } from '@app/model/invoice.model';
+import { ToastService } from '@app/services/toast/toast.service';
 
 @Component({
   selector: 'app-invoice-list',
@@ -11,7 +12,7 @@ export class InvoiceListComponent implements OnInit {
   selectedInvoice: Invoice | null = null;
   showInvoiceDetail = false;
 
-  constructor() { }
+  constructor(private toastService: ToastService) {}
 
   ngOnInit(): void {
     this.generateMockData();
@@ -68,6 +69,7 @@ export class InvoiceListComponent implements OnInit {
 
   payInvoice(invoice: Invoice): void {
     invoice.isPaid = true;
+    this.toastService.success('Thanh toán thành công!');
     this.closeInvoiceDetail();
   }
 

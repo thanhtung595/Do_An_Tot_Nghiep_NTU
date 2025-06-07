@@ -1,0 +1,128 @@
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 550px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease-out;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+  }
+
+  &.success {
+    border-left: 4px solid #52c41a;
+    .toast-icon {
+      color: #52c41a;
+    }
+  }
+
+  &.warning {
+    border-left: 4px solid #faad14;
+    .toast-icon {
+      color: #faad14;
+    }
+  }
+
+  &.error {
+    border-left: 4px solid #f5222d;
+    .toast-icon {
+      color: #f5222d;
+    }
+  }
+
+  &.info {
+    border-left: 4px solid #1890ff;
+    .toast-icon {
+      color: #1890ff;
+    }
+  }
+
+  .toast-icon {
+    margin-right: 12px;
+    font-size: 20px;
+  }
+
+  .toast-content {
+    flex: 1;
+    margin-right: 12px;
+
+    .toast-message {
+      margin: 0;
+      color: #333;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
+
+  .toast-close {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #666;
+    }
+
+    i {
+      font-size: 14px;
+    }
+  }
+}
+
+// Animation classes
+:host ::ng-deep {
+  .toast {
+    &.ng-enter {
+      animation: slideIn 0.3s ease-out;
+    }
+
+    &.ng-leave {
+      animation: slideOut 0.3s ease-in;
+    }
+  }
+}

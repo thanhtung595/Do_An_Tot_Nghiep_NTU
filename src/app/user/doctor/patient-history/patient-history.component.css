@@ -69,27 +69,14 @@ th {
 tr:hover {
   background-color: #f8f9fa;
 }
-
 .status-badge {
   padding: 6px 12px;
   border-radius: 20px;
   font-size: 0.9em;
   font-weight: 500;
-}
-
-.status-completed {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-}
-
-.status-in-progress {
-  background-color: #fff3e0;
-  color: #ef6c00;
-}
-
-.status-cured {
-  background-color: #e3f2fd;
-  color: #1976d2;
+  display: inline-block;
+  min-width: 100px;
+  text-align: center;
 }
 
 .edit-button {
@@ -111,4 +98,56 @@ tr:hover {
 
 .edit-button i {
   font-size: 0.9em;
-} 
+}
+
+
+.status-select {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  min-width: 140px;
+}
+
+/* Các màu theo trạng thái như đã khai báo trước đó */
+.status-pending {
+  background-color: #f0f4c3;
+  color: #827717;
+}
+
+.status-approved {
+  background-color: #e0f2f1;
+  color: #00796b;
+}
+
+.status-examined {
+  background-color: #e1f5fe;
+  color: #0288d1;
+}
+
+.status-treating {
+  background-color: #fff3e0;
+  color: #ef6c00;
+}
+
+.status-waiting-result {
+  background-color: #ede7f6;
+  color: #5e35b1;
+}
+
+.status-recovered {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-recheck {
+  background-color: #fce4ec;
+  color: #c2185b;
+}
+
+.status-unknown {
+  background-color: #eeeeee;
+  color: #616161;
+}

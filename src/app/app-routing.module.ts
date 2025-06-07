@@ -13,6 +13,7 @@ import { DoctorEditMedicalRecordComponent } from '@app/user/doctor/edit-medical-
 import { PaymentComponent } from './user/payment/payment.component';
 import { InvoiceListComponent } from '@app/user/invoice/invoice-list.component';
 import { NotificationListComponent } from '@app/user/notification/notification-list.component';
+import { ReviewComponent } from '@app/user/rating/review.component';
 
 import { AdminUserComponent } from '@app/admin/user/user.component'
 import { DoctorAdminComponent } from '@app/admin/doctor/doctor.component';
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'invoice', component: InvoiceListComponent },
   { path: 'notification', component: NotificationListComponent },
+  { path: 'feedback', component: ReviewComponent },
 
   { path: 'admin/home', component: AdminHomeComponent },
   { path: 'admin/users', component: AdminUserComponent },

@@ -1,3 +1,5 @@
+<app-toast></app-toast>
+<app-confirm-dialog></app-confirm-dialog>
 <ng-container *ngIf="!isLoginPage(); else loginPage">
   <ng-container *ngIf="isAdmin(); else userHeader">
     <div class="layout">
@@ -16,6 +18,7 @@
 <ng-template #loginPage>
   <router-outlet></router-outlet>
 </ng-template>
+
 <!-- <ng-container *ngIf="!isLoginPage()">
   <app-footer></app-footer>
 </ng-container> -->

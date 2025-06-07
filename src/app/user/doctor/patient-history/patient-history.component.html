@@ -16,6 +16,7 @@
           <th>ID</th>
           <th>Tên bệnh nhân</th>
           <th>Ngày khám</th>
+          <th>Triệu chứng</th>
           <th>Chẩn đoán</th>
           <th>Trạng thái</th>
           <th>Lịch tái khám</th>
@@ -25,15 +26,22 @@
       <tbody>
         <tr *ngFor="let record of patientRecords">
           <td>{{record.id}}</td>
-          <td>{{record.patientName}}</td>
+          <td>{{record.patientname}}</td>
           <td>{{record.date}}</td>
+          <td>{{record.symptom}}</td>
           <td>{{record.diagnosis}}</td>
           <td>
-            <span class="status-badge" [ngClass]="getStatusClass(record.status)">
-              {{record.status}}
-            </span>
+            <select
+              class="status-select"
+              [ngClass]="getStatusClass(record.status)"
+              [(ngModel)]="record.status"
+              (change)="onStatusChange(record)">
+              <option *ngFor="let status of statusList" [value]="status">
+                {{ status }}
+              </option>
+            </select>
           </td>
-          <td>{{record.nextAppointment || 'Không có'}}</td>
+          <td>{{record.nextappointment}}</td>
           <td>
             <button class="edit-button" (click)="editRecord(record.id)">
               <i class="fas fa-edit"></i> Chỉnh sửa
@@ -43,4 +51,4 @@
       </tbody>
     </table>
   </div>
-</div> 
+</div>

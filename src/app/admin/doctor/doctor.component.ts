@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { DoctorApiService } from '@app/services/api_admin/doctor/doctor.api.service'
+import { ToastService } from '@app/services/toast/toast.service';
+import { ConfirmDialogService } from '@app/services/dialog/confirm-dialog.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-doctor',
@@ -8,7 +11,11 @@ import { DoctorApiService } from '@app/services/api_admin/doctor/doctor.api.serv
 })
 export class DoctorAdminComponent {
 
-  constructor(private doctorApiService: DoctorApiService) { }
+  constructor(private doctorApiService: DoctorApiService,
+    private confirmDialogService: ConfirmDialogService,
+    private toastService: ToastService,
+    private router: Router
+  ) { }
   selecteddepartmentid: number | null = null;
   departments : any[] = [];
 
@@ -17,7 +24,7 @@ export class DoctorAdminComponent {
   ngOnInit(): void {
     this.doctorApiService.getAllDepartments().subscribe({
       next: (data) => {
-        this.departments = data.departments;
+        this.departments = data.data.departments;
         console.log("departments", this.departments);
         // Gán giá trị mặc định là id của phần tử đầu tiên
         if (this.departments.length > 0) {
@@ -93,7 +100,7 @@ export class DoctorAdminComponent {
       // phone: this.selectedDoctor.phoneNumber,
       // address: this.selectedDoctor.address,
       // experience: this.selectedDoctor.experience,
-      // departmentid: this.selecteddepartmentid
+      // department: this.departments.find(dep => dep.id === this.selecteddepartmentid) || null
     };
   }
 
@@ -101,37 +108,45 @@ export class DoctorAdminComponent {
     this.msgError = '';
     this.isModalOpen = false;
     this.selectedDoctor = {};
+    this.toastService.info('Đã hủy thao tác.');
   }
 
   adddoctor() {
-    console.log(this.selectedDoctor)
-    this.doctorApiService.createDoctor(this.selectedDoctor).subscribe({
+    this.selectedDoctor.departmentid = Number(this.selectedDoctor.departmentid);
+    this.selectedDoctor.experience = Number(this.selectedDoctor.experience);
+    const payload = this.selectedDoctor;
+    console.log("payload", payload);
+    this.doctorApiService.createDoctor(payload).subscribe({
       next: (data) => {
+        this.doctors.push(this.selectedDoctor);
         this.getaAllDoctor();
         this.closeModal();
+        this.toastService.success('Đã thêm thành công');
       },
       error: (error) => {
         console.error('Error fetching:', error);
-        this.msgError = error.error.msg;
+        this.toastService.error(error.error.message);
       },
     });
-    this.doctors.push(this.selectedDoctor);
-    this.closeModal();
   }
 
   updatedoctor() {
+    this.selectedDoctor.departmentid = Number(this.selectedDoctor.departmentid);
+    this.selectedDoctor.experience = Number(this.selectedDoctor.experience);
+    const payload = this.selectedDoctor;
+    console.log("payload", payload);
     const index = this.doctors.findIndex(u => u.id === this.selectedDoctor.id);
     if (index !== -1) this.doctors[index] = this.selectedDoctor;
     console.log(this.selectedDoctor)
-    this.doctorApiService.updateDoctor(this.selectedDoctor).subscribe({
+    this.doctorApiService.updateDoctor(payload).subscribe({
       next: (data) => {
         this.getaAllDoctor();
         this.closeModal();
+        this.toastService.success('Đã cập nhật thành công');
       },
       error: (error) => {
         this.getaAllDoctor();
-        console.error('Error fetching:', error);
-        this.msgError = error.error.msg;
+        this.toastService.error(error.error.message);
       },
     });
   }
@@ -144,12 +159,16 @@ export class DoctorAdminComponent {
   getaAllDoctor(){
     this.doctorApiService.getAllDoctor().subscribe({
       next: (data) => {
-        this.doctors = data.doctors;
+        this.doctors = data.data.doctors;
         console.log("doctors", this.doctors);
       },
       error: (error) => {
         console.error('Error fetching departments:', error);
       }
     });
+  }
+
+  toLinkDoctors(){
+    this.router.navigate(['/admin/users']);
   }
 }

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserApiService } from '@app/services/api_admin/user/user.api.service';
 
 @Component({
@@ -8,7 +9,7 @@ import { UserApiService } from '@app/services/api_admin/user/user.api.service';
 })
 export class AdminUserComponent {
 
-  constructor(private userApiService: UserApiService) {}
+  constructor(private userApiService: UserApiService, private router: Router) {}
 
   ngOnInit(): void {
     this.userApiService.getAllUser().subscribe({
@@ -98,5 +99,9 @@ export class AdminUserComponent {
   deleteUser() {
     this.users = this.users.filter(u => u.id !== this.selectedUser.id);
     this.closeModal();
+  }
+
+  toLinkDoctors(){
+    this.router.navigate(['/admin/doctors']);
   }
 }

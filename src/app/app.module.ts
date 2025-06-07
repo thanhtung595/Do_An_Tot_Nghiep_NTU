@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from '@app/services/token/Token.interceptor';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,6 +32,9 @@ import { DoctorEditMedicalRecordComponent } from './user/doctor/edit-medical-rec
 import { PaymentComponent } from './user/payment/payment.component';
 import { InvoiceListComponent } from '@app/user/invoice/invoice-list.component';
 import { NotificationListComponent } from '@app/user/notification/notification-list.component';
+import { ToastComponent } from '@app/toast/toast.component';
+import { ConfirmDialogComponent } from '@app/dialog/confirm-dialog.component';
+import { ReviewComponent } from '@app/user/rating/review.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +60,10 @@ import { NotificationListComponent } from '@app/user/notification/notification-l
     DoctorEditMedicalRecordComponent,
     PaymentComponent,
     InvoiceListComponent,
-    NotificationListComponent
+    NotificationListComponent,
+    ToastComponent,
+    ConfirmDialogComponent,
+    ReviewComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +71,8 @@ import { NotificationListComponent } from '@app/user/notification/notification-l
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    BrowserAnimationsModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

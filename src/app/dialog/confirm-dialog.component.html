@@ -1,0 +1,21 @@
+<div class="confirm-dialog-overlay" *ngIf="dialogData" @fadeInOut>
+  <div class="confirm-dialog" @slideInOut>
+    <div class="confirm-dialog-header">
+      <h2>{{ dialogData.title }}</h2>
+      <button class="close-button" (click)="onCancel()">
+        <i class="material-icons">close</i>
+      </button>
+    </div>
+    <div class="confirm-dialog-content">
+      <p>{{ dialogData.message }}</p>
+    </div>
+    <div class="confirm-dialog-actions">
+      <button class="cancel-button" (click)="onCancel()">
+        {{ dialogData.cancelText || 'Hủy' }}
+      </button>
+      <button class="confirm-button" (click)="onConfirm()">
+        {{ dialogData.confirmText || 'Xác nhận' }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -47,15 +47,64 @@
       </div>
 
       <!-- Form đặt lịch khám -->
-      <div *ngIf="isBooking">
+      <div *ngIf="isBooking" class="booking-modal">
         <h2>Đặt lịch khám với:</h2>
         <h3>{{ selectedDoctor.fullname }}</h3>
         <form #bookingForm="ngForm" (ngSubmit)="bookAppointment(bookingForm)">
           <div class="form-group">
+            <label class="form-label">Họ tên bệnh nhân:</label>
+            <input
+              type="text"
+              ngModel
+              class="form-input"
+              name="fullname"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Giới tính:</label>
+            <select
+              ngModel
+              name="gender"
+              class="form-input"
+            >
+              <option value="">-- Chọn giới tính --</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Đia chỉ:</label>
+            <input
+              type="text"
+              ngModel
+              class="form-input"
+              name="address"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Số điện thoại:</label>
+            <input
+              type="text"
+              ngModel
+              class="form-input"
+              name="phonenumber"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ngày sinh:</label>
+            <input
+              type="date"
+              ngModel
+              class="form-input"
+              name="age"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-label">Triệu chứng:</label>
             <input
               type="text"
-              ngModel required
+              ngModel
               class="form-input"
               name="diagnosis"
             />
@@ -64,18 +113,18 @@
             <label class="form-label">Lời nhắn:</label>
             <input
               type="text"
-              ngModel required
+              ngModel
               class="form-input"
               name="note"
             />
           </div>
           <div class="form-group">
             <label for="date">Ngày khám:</label>
-            <input type="date" id="date" name="workday" ngModel required>
+            <input type="date" id="date" name="workday" ngModel>
           </div>
           <div class="form-group">
             <label for="time">Giờ khám:</label>
-            <input type="time" id="time" name="timeOnline" step="1" ngModel required>
+            <input type="time" id="time" name="timeOnline" step="1" ngModel>
           </div>
           <button type="submit">Xác nhận đặt lịch</button>
           <button type="button" (click)="closeModal()">Hủy</button>
