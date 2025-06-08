@@ -25,7 +25,9 @@ export class AppComponent {
         // Đợi đến khi kết nối mới subscribe topic
         this.notificationService.subscribeToTopic('/user/queue/notifications').subscribe(data => {
           if (data) {
+            // console.log('wsQueueNotifications', data)
             this.toastService.info(data.message);
+
           }
         });
       }

@@ -27,7 +27,7 @@
   <div class="notification-list">
     <div class="notification-item"
          *ngFor="let notification of getFilteredNotifications()"
-         [class.unread]="!notification.isRead"
+         [class.unread]="!notification.isread"
          (click)="viewNotificationDetail(notification)">
       <div class="notification-icon" [ngClass]="notification.type">
         <i [ngClass]="{
@@ -42,7 +42,7 @@
           <h3>{{notification.title}}</h3>
           <span class="notification-date">{{notification.date | date:'dd/MM/yyyy HH:mm'}}</span>
         </div>
-        <p class="patient-name">{{notification.patientName}}</p>
+        <p class="patient-name">{{notification.patientname}}</p>
         <p class="notification-preview">{{notification.content}}</p>
         <div class="notification-footer">
           <span class="type-badge">{{getTypeLabel(notification.type)}}</span>
@@ -77,7 +77,7 @@
       <div class="notification-info">
         <div class="info-section">
           <h3>Thông tin bệnh nhân</h3>
-          <p><strong>Họ tên:</strong> {{selectedNotification.patientName}}</p>
+          <p><strong>Họ tên:</strong> {{selectedNotification.patientname}}</p>
           <p><strong>Số điện thoại:</strong> {{selectedNotification.phone}}</p>
         </div>
 
@@ -85,15 +85,17 @@
           <h3>Nội dung thông báo</h3>
           <p class="notification-content">{{selectedNotification.content}}</p>
 
-          <div *ngIf="selectedNotification.type === 'appointment' && selectedNotification.appointmentDate"
+          <div *ngIf="selectedNotification.type === 'appointment' && selectedNotification.appointmentdate"
                class="appointment-info">
-            <p><strong>Ngày hẹn:</strong> {{selectedNotification.appointmentDate | date:'dd/MM/yyyy'}}</p>
-            <p><strong>Giờ hẹn:</strong> {{selectedNotification.appointmentTime}}</p>
+            <p><strong>Ngày hẹn:</strong> {{selectedNotification.appointmentdate | date:'dd/MM/yyyy'}}</p>
+            <p><strong>Giờ hẹn:</strong> {{selectedNotification.appointmenttime}}</p>
           </div>
         </div>
 
         <div class="info-section">
           <h3>Thông tin gửi</h3>
+          <p><strong>Gửi từ:</strong> {{selectedNotification.patientname}}</p>
+          <p><strong>Gửi đến:</strong> {{selectedNotification.doctorname}}</p>
           <p><strong>Ngày gửi:</strong> {{selectedNotification.date | date:'dd/MM/yyyy HH:mm'}}</p>
           <!-- <p><strong>Trạng thái:</strong>
             <span class="status-badge" [ngClass]="selectedNotification.status">

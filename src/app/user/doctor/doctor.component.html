@@ -4,28 +4,30 @@
   <!-- Thanh tìm kiếm và lọc -->
   <div class="search-filter-container">
     <input type="text" [(ngModel)]="searchText" placeholder="Tìm kiếm bác sĩ..." class="search-input">
-    <div class="filter-buttons">
-      <button *ngFor="let specialty of specialties"
-              (click)="filterBySpecialty(specialty)"
-              [class.active]="selectedSpecialty === specialty">
+    <select [(ngModel)]="selectedSpecialty" (change)="filterBySpecialty(selectedSpecialty)" class="filter-select">
+      <option value="">Tất cả chuyên khoa</option>
+      <option *ngFor="let specialty of specialties" [value]="specialty">
         {{ specialty }}
-      </button>
-      <button (click)="clearFilters()">Xóa lọc</button>
-    </div>
+      </option>
+    </select>
   </div>
 
   <!-- Danh sách bác sĩ -->
   <div class="doctor-cards">
     <div *ngFor="let doctor of filteredDoctors" class="doctor-card">
-      <img src="{{ doctor.image }}"
-        alt="{{ doctor.name }}"
-        class="doctor-image">
+      <div class="doctor-image-container">
+        <img src="{{ doctor.image }}"
+          alt="{{ doctor.name }}"
+          class="doctor-image">
+      </div>
       <div class="doctor-info">
         <h2>{{ doctor.fullname }}</h2>
         <p><strong>Chuyên khoa:</strong> {{ doctor.name }}</p>
         <p><strong>Kinh nghiệm:</strong> {{ doctor.experience }}</p>
-        <button (click)="viewDetail(doctor)">Xem chi tiết</button>
-        <button (click)="openBookingForm(doctor)">Đặt lịch khám</button>
+        <div class="button-group">
+          <button (click)="viewDetail(doctor)">Xem chi tiết</button>
+          <button (click)="openBookingForm(doctor)">Đặt lịch khám</button>
+        </div>
       </div>
     </div>
   </div>
@@ -36,98 +38,97 @@
       <button class="close-button" (click)="closeModal()">&times;</button>
 
       <!-- Chi tiết bác sĩ -->
-      <div *ngIf="!isBooking">
-        <h2>Chi tiết bác sĩ:</h2>
+      <div *ngIf="!isBooking" class="doctor-detail">
+        <h2>Chi tiết bác sĩ</h2>
         <h3>{{ selectedDoctor.fullname }}</h3>
-        <p><strong>Số điện thoại:</strong> {{ selectedDoctor.phonenumber }}</p>
-        <p><strong>Chuyên khoa:</strong> {{ selectedDoctor.name }}</p>
-        <p><strong>Kinh nghiệm:</strong> {{ selectedDoctor.experience }}</p>
-        <p><strong>Quê quán:</strong> {{ selectedDoctor.address }}</p>
-        <p><strong>Lịch làm việc:</strong> {{ selectedDoctor.workdays }} * {{ selectedDoctor.timeonline }}</p>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <strong>Số điện thoại</strong>
+            <p>{{ selectedDoctor.phonenumber }}</p>
+          </div>
+
+          <div class="info-item">
+            <strong>Chuyên khoa</strong>
+            <p>{{ selectedDoctor.name }}</p>
+          </div>
+
+          <div class="info-item">
+            <strong>Kinh nghiệm</strong>
+            <p>{{ selectedDoctor.experience }}</p>
+          </div>
+
+          <div class="info-item">
+            <strong>Quê quán</strong>
+            <p>{{ selectedDoctor.address }}</p>
+          </div>
+        </div>
+
+        <div class="schedule">
+          <strong>Lịch làm việc</strong>
+          <p>{{ selectedDoctor.workdays }} * {{ selectedDoctor.timeonline }}</p>
+        </div>
       </div>
 
       <!-- Form đặt lịch khám -->
       <div *ngIf="isBooking" class="booking-modal">
-        <h2>Đặt lịch khám với:</h2>
+        <h2>Đặt lịch khám</h2>
         <h3>{{ selectedDoctor.fullname }}</h3>
-        <form #bookingForm="ngForm" (ngSubmit)="bookAppointment(bookingForm)">
+        <form #bookingForm="ngForm" (ngSubmit)="bookAppointment(bookingForm)" class="booking-form">
           <div class="form-group">
-            <label class="form-label">Họ tên bệnh nhân:</label>
-            <input
-              type="text"
-              ngModel
-              class="form-input"
-              name="fullname"
-            />
+            <label class="form-label">Họ tên bệnh nhân</label>
+            <input type="text" ngModel class="form-input" name="fullname" placeholder="Nhập họ tên" />
           </div>
+
           <div class="form-group">
-            <label class="form-label">Giới tính:</label>
-            <select
-              ngModel
-              name="gender"
-              class="form-input"
-            >
+            <label class="form-label">Giới tính</label>
+            <select ngModel name="gender" class="form-input">
               <option value="">-- Chọn giới tính --</option>
               <option value="Nam">Nam</option>
               <option value="Nữ">Nữ</option>
               <option value="Khác">Khác</option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-label">Đia chỉ:</label>
-            <input
-              type="text"
-              ngModel
-              class="form-input"
-              name="address"
-            />
+
+          <div class="form-group full-width">
+            <label class="form-label">Địa chỉ</label>
+            <input type="text" ngModel class="form-input" name="address" placeholder="Nhập địa chỉ" />
           </div>
+
           <div class="form-group">
-            <label class="form-label">Số điện thoại:</label>
-            <input
-              type="text"
-              ngModel
-              class="form-input"
-              name="phonenumber"
-            />
+            <label class="form-label">Số điện thoại</label>
+            <input type="text" ngModel class="form-input" name="phonenumber" placeholder="Nhập số điện thoại" />
           </div>
+
           <div class="form-group">
-            <label class="form-label">Ngày sinh:</label>
-            <input
-              type="date"
-              ngModel
-              class="form-input"
-              name="age"
-            />
+            <label class="form-label">Ngày sinh</label>
+            <input type="date" ngModel class="form-input" name="age" />
           </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Triệu chứng</label>
+            <input type="text" ngModel class="form-input" name="diagnosis" placeholder="Mô tả triệu chứng" />
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Lời nhắn</label>
+            <input type="text" ngModel class="form-input" name="note" placeholder="Nhập lời nhắn (nếu có)" />
+          </div>
+
           <div class="form-group">
-            <label class="form-label">Triệu chứng:</label>
-            <input
-              type="text"
-              ngModel
-              class="form-input"
-              name="diagnosis"
-            />
+            <label class="form-label">Ngày khám</label>
+            <input type="date" ngModel class="form-input" name="workday" />
           </div>
+
           <div class="form-group">
-            <label class="form-label">Lời nhắn:</label>
-            <input
-              type="text"
-              ngModel
-              class="form-input"
-              name="note"
-            />
+            <label class="form-label">Giờ khám</label>
+            <input type="time" ngModel class="form-input" name="timeOnline" step="1" />
           </div>
-          <div class="form-group">
-            <label for="date">Ngày khám:</label>
-            <input type="date" id="date" name="workday" ngModel>
+
+          <div class="booking-actions">
+            <button type="submit">Xác nhận đặt lịch</button>
+            <button type="button" (click)="closeModal()">Hủy</button>
           </div>
-          <div class="form-group">
-            <label for="time">Giờ khám:</label>
-            <input type="time" id="time" name="timeOnline" step="1" ngModel>
-          </div>
-          <button type="submit">Xác nhận đặt lịch</button>
-          <button type="button" (click)="closeModal()">Hủy</button>
         </form>
       </div>
     </div>

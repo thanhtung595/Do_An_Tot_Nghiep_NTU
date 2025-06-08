@@ -1,29 +1,36 @@
 .profile-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+  color: #2c3e50;
   text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .profile-info {
-  display: flex;
+  display: grid;
+  grid-template-columns: 300px 1fr;
   gap: 2rem;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
 }
 
 .avatar-section {
-  align-items: center;
   text-align: center;
 }
 
 .avatar {
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
+  border: 4px solid #3498db;
   margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .file-input {
@@ -31,147 +38,263 @@
 }
 
 .avatar-section button {
-  width: 60%;
-  background-color: #007bff;
+  width: 100%;
+  padding: 0.8rem;
+  background: #3498db;
   color: white;
-  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.avatar-section button:hover {
-  background-color: #0056b3;
-}
-
-.details-section {
-  text-align: left;
-}
-
-.details-section p {
-  margin: 0.5rem 0;
-  font-size: 1.1rem;
-}
-
-.edit-form {
-  background-color: #f9f9f9;
-  padding: 1rem;
   border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
   margin-top: 1rem;
 }
 
-.form-group {
+.avatar-section button:hover {
+  background: #2980b9;
+  transform: translateY(-1px);
+}
+
+.details-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.details-section p {
   margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #495057;
+  display: flex;
+  align-items: center;
+}
+
+.details-section strong {
+  min-width: 120px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.edit-form {
+  grid-column: 1 / -1;
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.edit-form h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 0;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: bold;
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 0.8rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
   font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.form-group input:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.btn-save {
+  padding: 0.8rem 1.5rem;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-save:hover {
+  background: #2980b9;
+  transform: translateY(-1px);
+}
+
+.btn-cancel {
+  padding: 0.8rem 1.5rem;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancel:hover {
+  background: #c0392b;
+  transform: translateY(-1px);
 }
 
 .actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
   margin-top: 1rem;
 }
 
-.actions button {
-  background-color: #28a745;
+.btn-edit {
+  padding: 0.8rem 1.5rem;
+  background: #3498db;
   color: white;
-  padding: 0.5rem 1rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-.actions button:hover {
-  background-color: #218838;
+.btn-edit:hover {
+  background: #2980b9;
+  transform: translateY(-1px);
+}
+
+.btn-change-password {
+  padding: 0.8rem 1.5rem;
+  background: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-change-password:hover {
+  background: #27ae60;
+  transform: translateY(-1px);
+}
+
+/* Password Modal Styles */
+.password-modal {
+  max-width: 500px;
+}
+
+.password-modal .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.password-modal .form-actions {
+  margin-top: 2rem;
 }
 
 .profile-menu {
   display: flex;
   gap: 1rem;
-  justify-content: center;
   margin-bottom: 2rem;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.profile-menu button {
-  background-color: #f1f1f1;
-  color: #333;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
+.profile-menu button,
 .profile-menu a {
-  text-decoration: none;
-  background-color: #f1f1f1;
-  color: #333;
-  padding: 0.5rem 1rem;
+  padding: 0.8rem 1.5rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  background: transparent;
+  color: #495057;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  text-align: center;
 }
 
-.profile-menu button.active {
-  background-color: #007bff;
+.profile-menu button:hover,
+.profile-menu a:hover {
+  background: #e9ecef;
+  color: #2c3e50;
+}
+
+.profile-menu button.active,
+.profile-menu a.active {
+  background: #3498db;
   color: white;
 }
 
-.profile-menu button:hover {
-  background-color: #ddd;
+.medical-history {
+  padding: 1rem 0;
 }
 
-.profile-menu a:hover {
-  background-color: #ddd;
+.medical-history h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
 }
 
-.medical-history, .patient-history {
-  margin-top: 1rem;
-}
-
-.record-card, .patient-card {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
+.record-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 12px;
   margin-bottom: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-.record-card:hover, .patient-card:hover {
-  background-color: #f1f1f1;
+.record-card:hover {
+  background: #e9ecef;
+  transform: translateY(-2px);
 }
 
-.record-detail {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-top: 1rem;
+.record-card p {
+  margin-bottom: 0.5rem;
+  color: #495057;
 }
 
-/* Popup styles */
+.record-card strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -179,11 +302,13 @@
 }
 
 .modal-content {
-  background-color: white;
+  background: white;
   padding: 2rem;
-  border-radius: 8px;
-  width: 500px;
-  max-width: 90%;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
   position: relative;
 }
 
@@ -195,36 +320,97 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #333;
+  color: #666;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
 }
 
 .close-button:hover {
-  color: #000;
+  background: #f0f0f0;
+  color: #333;
+}
+
+.modal-content h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+}
+
+.modal-content p {
+  margin-bottom: 1rem;
+  color: #495057;
+}
+
+.modal-content strong {
+  color: #2c3e50;
+  font-weight: 600;
 }
 
 .payment-action {
   margin-top: 1.5rem;
-  text-align: right;
+  text-align: center;
 }
 
 .payment-button {
+  padding: 1rem 2rem;
+  background: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background-color: #4a90e2;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
 }
 
 .payment-button:hover {
-  background-color: #357abd;
+  background: #27ae60;
+  transform: translateY(-1px);
 }
 
-.payment-button i {
-  font-size: 1rem;
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 1rem;
+  }
+
+  .profile-menu {
+    flex-direction: column;
+  }
+
+  .profile-info {
+    grid-template-columns: 1fr;
+  }
+
+  .avatar-section {
+    margin-bottom: 2rem;
+  }
+
+  .details-section {
+    padding: 1rem;
+  }
+
+  .modal-content {
+    padding: 1.5rem;
+    width: 95%;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .btn-edit,
+  .btn-change-password {
+    width: 100%;
+  }
 }

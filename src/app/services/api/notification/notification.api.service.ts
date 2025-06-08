@@ -6,19 +6,18 @@ import { API_BASE_URL } from '@app/constants'
 @Injectable({
   providedIn: 'root'
 })
-export class HeaderApiServiceService {
+export class NotificationApiService {
 
-  private apiUrl = `${API_BASE_URL}api/header`;
+  private apiUrl = `${API_BASE_URL}api/notification`;
 
   constructor(private http: HttpClient) { }
 
   // Hàm lấy danh sách header
-  getHeader(): Observable<any> {
+  getNotification(): Observable<any> {
     return this.http.get<any>(this.apiUrl);
   }
 
-  // Hàm lấy danh sách header
-  getCountIsRead(): Observable<any> {
-    return this.http.get<any>(API_BASE_URL+'api/notification/count-isread');
+  updateIsRead(data: any): Observable<any> {
+    return this.http.put<any>(this.apiUrl +"/update-isread", data);
   }
 }

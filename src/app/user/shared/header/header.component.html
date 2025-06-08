@@ -11,7 +11,7 @@
            (click)="onClickLogout(header, $event)"
            [class.active]="isActive(header.url)">
           {{ header.name }}
-          <span *ngIf="header.name === 'Thông báo'" class="notification-badge">5</span>
+          <span *ngIf="header.name === 'Thông báo'" class="notification-badge">{{ notificationBadge }}</span>
         </a>
       </li>
     </ul>

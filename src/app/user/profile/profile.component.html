@@ -14,14 +14,9 @@
     <!-- Thông tin cá nhân -->
     <div *ngIf="activeTab === 'profile'" class="profile-info">
       <div class="avatar-section">
-        <img
-        [src]="getImageUrl(user.image)"
-          alt="{{ user.fullname }}"
-          class="avatar"
-        />
-
-        <input type="file" (change)="onFileSelected($event)" accept="image/*" class="file-input">
-        <button (click)="uploadAvatar()">Cập nhật ảnh đại diện</button>
+        <img [src]="user.image || 'assets/images/default-avatar.png'" alt="Avatar" class="avatar">
+        <input type="file" #fileInput class="file-input" (change)="onFileSelected($event)" accept="image/*">
+        <button type="button" (click)="fileInput.click()">Cập nhật ảnh đại diện</button>
       </div>
 
       <div class="details-section">
@@ -37,30 +32,35 @@
       <div class="edit-form" *ngIf="isEditing">
         <h2>Chỉnh Sửa Thông Tin</h2>
         <form #editForm="ngForm" (ngSubmit)="saveChanges()">
-          <div class="form-group">
-            <label for="name">Tên:</label>
-            <input type="text" id="name" name="name" [(ngModel)]="user.fullname" required>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="name">Tên:</label>
+              <input type="text" id="name" name="name" [(ngModel)]="user.fullname" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" [(ngModel)]="user.email" required>
+            </div>
+            <div class="form-group">
+              <label for="phone">Số điện thoại:</label>
+              <input type="text" id="phone" name="phone" [(ngModel)]="user.phonenumber">
+            </div>
+            <div class="form-group">
+              <label for="address">Địa chỉ:</label>
+              <input type="text" id="address" name="address" [(ngModel)]="user.address">
+            </div>
           </div>
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" [(ngModel)]="user.email" required>
+          <div class="form-actions">
+            <button type="submit" class="btn-save">Lưu thay đổi</button>
+            <button type="button" class="btn-cancel" (click)="cancelEdit()">Hủy</button>
           </div>
-          <div class="form-group">
-            <label for="phone">Số điện thoại:</label>
-            <input type="text" id="phone" name="phone" [(ngModel)]="user.phonenumber">
-          </div>
-          <div class="form-group">
-            <label for="address">Địa chỉ:</label>
-            <input type="text" id="address" name="address" [(ngModel)]="user.address">
-          </div>
-          <button type="submit">Lưu thay đổi</button>
-          <button type="button" (click)="cancelEdit()">Hủy</button>
         </form>
       </div>
 
-      <!-- Nút chỉnh sửa thông tin -->
+      <!-- Nút chỉnh sửa thông tin và đổi mật khẩu -->
       <div class="actions">
-        <button (click)="toggleEdit()">{{ isEditing ? 'Hủy' : 'Chỉnh sửa thông tin' }}</button>
+        <button class="btn-edit" (click)="toggleEdit()">{{ isEditing ? 'Hủy' : 'Chỉnh sửa thông tin' }}</button>
+        <button class="btn-change-password" (click)="showChangePasswordModal()">Đổi mật khẩu</button>
       </div>
     </div>
 
@@ -112,6 +112,32 @@
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- Popup đổi mật khẩu -->
+  <div *ngIf="showPasswordModal" class="modal-overlay">
+    <div class="modal-content password-modal">
+      <button class="close-button" (click)="closePasswordModal()">&times;</button>
+      <h2>Đổi Mật Khẩu</h2>
+      <form #passwordForm="ngForm" (ngSubmit)="changePassword()">
+        <div class="form-group">
+          <label for="currentPassword">Mật khẩu hiện tại:</label>
+          <input type="password" id="currentPassword" name="currentPassword" [(ngModel)]="passwordData.currentPassword" required>
+        </div>
+        <div class="form-group">
+          <label for="newPassword">Mật khẩu mới:</label>
+          <input type="password" id="newPassword" name="newPassword" [(ngModel)]="passwordData.newPassword" required>
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Nhập lại mật khẩu mới:</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" [(ngModel)]="passwordData.confirmPassword" required>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-save">Đổi mật khẩu</button>
+          <button type="button" class="btn-cancel" (click)="closePasswordModal()">Hủy</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

@@ -19,23 +19,26 @@ export class NotificationService {
   connect() {
     const token = localStorage.getItem('accessToken');
 
-    this.stompClient = new Client({
-      webSocketFactory: () => new SockJS(`${API_BASE_URL}ws-notification?access_token=${token}`),
-      reconnectDelay: 55000,
-      connectHeaders: {}
-    });
+    if(token === null){
+      return;
+    }
+      this.stompClient = new Client({
+        webSocketFactory: () => new SockJS(`${API_BASE_URL}ws-notification?access_token=${token}`),
+        reconnectDelay: 60000,
+        connectHeaders: {}
+      });
 
-    this.stompClient.onConnect = (frame) => {
-      console.log('WebSocket connected success.');
-      this.connectionStatusSubject.next(true); // báo đã kết nối
-    };
+      this.stompClient.onConnect = (frame) => {
+        console.log('WebSocket connected success.');
+        this.connectionStatusSubject.next(true); // báo đã kết nối
+      };
 
-    this.stompClient.onStompError = (frame) => {
-      console.error('Broker error:', frame.headers['message']);
-      console.error('Details:', frame.body);
-    };
+      this.stompClient.onStompError = (frame) => {
+        console.error('Broker error:', frame.headers['message']);
+        console.error('Details:', frame.body);
+      };
 
-    this.stompClient.activate();
+      this.stompClient.activate();
   }
 
   subscribeToTopic(topic: string): Observable<any> {

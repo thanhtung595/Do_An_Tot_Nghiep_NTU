@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ProfleApiServiceService } from '@app/services/api/profile/profle.api.service.service';
 import { API_BASE_URL } from '@app/constants';
 import { Router } from '@angular/router';
@@ -9,6 +9,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
+  @ViewChild('fileInput') fileInput!: ElementRef;
+  selectedFile: File | null = null;
+  previewUrl: string = '';
+
   constructor(
     private profleApiServiceService: ProfleApiServiceService,
     private router: Router
@@ -50,7 +54,6 @@ export class ProfileComponent implements OnInit {
 
   // Trạng thái chỉnh sửa
   isEditing: boolean = false;
-  selectedFile: File | null = null;
 
   // Tab hiện tại
   activeTab: string = 'profile';
@@ -61,6 +64,13 @@ export class ProfileComponent implements OnInit {
 
   selectedRecord: any = null;
   showRecordDetail: boolean = false; // Hiển thị popup chi tiết hồ sơ
+
+  showPasswordModal: boolean = false;
+  passwordData = {
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  };
 
   // Chuyển đổi tab
   setActiveTab(tab: string) {
@@ -93,23 +103,31 @@ export class ProfileComponent implements OnInit {
     this.isEditing = false;
   }
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFile = file;
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.selectedFile = input.files[0];
+
+      // Tạo preview URL
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.user.avatar = e.target.result;
+        this.previewUrl = e.target.result as string;
+        // Cập nhật avatar preview
+        if (this.user) {
+          this.user.image = this.previewUrl;
+          console.log('File to upload:', this.selectedFile);
+        }
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(this.selectedFile);
     }
   }
 
-  uploadAvatar() {
+  // Hàm này sẽ được gọi khi bạn có API để upload ảnh
+  uploadAvatar(): void {
     if (this.selectedFile) {
-      alert(`Đã cập nhật ảnh đại diện: ${this.selectedFile.name}`);
-    } else {
-      alert('Vui lòng chọn ảnh trước khi cập nhật!');
+      // TODO: Implement API call to upload avatar
+      console.log('File to upload:', this.selectedFile);
+      // Sau khi upload thành công, cập nhật user.avatar với URL mới từ server
     }
   }
 
@@ -148,5 +166,29 @@ export class ProfileComponent implements OnInit {
       console.error('Record ID is undefined');
       alert('Không thể thực hiện thanh toán. Vui lòng thử lại sau.');
     }
+  }
+
+  showChangePasswordModal(): void {
+    this.showPasswordModal = true;
+  }
+
+  closePasswordModal(): void {
+    this.showPasswordModal = false;
+    this.passwordData = {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    };
+  }
+
+  changePassword(): void {
+    if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
+      alert('Mật khẩu mới không khớp!');
+      return;
+    }
+
+    // TODO: Implement API call to change password
+    console.log('Changing password:', this.passwordData);
+    this.closePasswordModal();
   }
 }

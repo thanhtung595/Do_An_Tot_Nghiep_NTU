@@ -1,13 +1,14 @@
 export interface Notification {
   id: number;
-  patientName: string;
+  patientname: string;
+  doctorname: string;
   phone: string;
   type: 'appointment' | 'reminder' | 'result' | 'payment';
   title: string;
   content: string;
   date: Date;
-  isRead: boolean;
+  isread: boolean;
   status: 'pending' | 'sent' | 'failed';
-  appointmentDate?: Date;
-  appointmentTime?: string;
+  appointmentdate?: Date;
+  appointmenttime?: string;
 }
