@@ -3,12 +3,16 @@
     <div>
       <img src="https://cache.clinic.co/assets/img/logo.png" alt="logo-"/>
     </div>
-    <!-- <h1>CLINIC</h1> -->
   </div>
   <nav class="nav">
     <ul>
       <li *ngFor="let header of headers">
-        <a [href]="header.url"  (click)="onClickLogout(header, $event)" >{{ header.name }}</a>
+        <a [routerLink]="header.url"
+           (click)="onClickLogout(header, $event)"
+           [class.active]="isActive(header.url)">
+          {{ header.name }}
+          <span *ngIf="header.name === 'Thông báo'" class="notification-badge">5</span>
+        </a>
       </li>
     </ul>
   </nav>
