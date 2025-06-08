@@ -19,12 +19,16 @@
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
     "@stomp/stompjs": "^7.1.1",
+    "crypto-browserify": "^3.12.1",
+    "global": "^4.4.0",
     "rxjs": "~7.8.0",
     "sockjs-client": "^1.5.1",
+    "stream-browserify": "^3.0.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
   },
   "devDependencies": {
+    "@angular-builders/custom-webpack": "^15.0.0",
     "@angular-devkit/build-angular": "^15.2.11",
     "@angular/cli": "~15.2.11",
     "@angular/compiler-cli": "^15.2.0",

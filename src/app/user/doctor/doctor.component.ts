@@ -12,14 +12,17 @@ import { NotificationService } from '@app/services/notification/notification.ser
 })
 export class DoctorComponent {
   constructor(private doctorApiService: DoctorApiService,
-    private confirmDialogService: ConfirmDialogService,
     private toastService: ToastService,
     private notificationService: NotificationService
   ) { }
+
+  // Data ws
+  latestNotification: any = null;
+
   ngOnInit(): void {
     this.getaAllDoctor();
-    // this.notificationService.connect();
   }
+
   getImageUrl(imgPath: string): string {
     return `${API_BASE_URL}${imgPath}`;
   }
@@ -115,48 +118,50 @@ export class DoctorComponent {
       phonenumber: bookingForm.value.phonenumber,
       age: bookingForm.value.age,
     };
-    for (const [key, value] of Object.entries(data)) {
-      if (value === null || value === '') {
-        const label = fieldLabels[key] || key;
-        this.toastService.warning(`${label} chưa điền thông tin.`);
-        return;
-      }
-    }
-    console.log("data: ",data);
-    this.closeModal(); // Đóng popup sau khi đặt lịch
-    this.confirmDialogService.show({
-        title: 'Xác nhận đặt lịch khám',
-        message: 'Bạn có chắc chắn muốn đặt lịch khám không?',
-        confirmText: 'Xác nhận',
-        cancelText: 'Hủy',
-        onConfirm: () => {
-          Object.entries(data).forEach(([key, value]) => {
-            console.log(`${key}:`, value, '| type:', typeof value);
-          });
-          this.doctorApiService.createAppointments(data).subscribe({
-            next: (data) => {
-              console.log(data)
-              console.log(data.status)
-              this.toastService.success('Bạn đã đặt lịch khám thành công.');
-            },
-            error: (error) => {
-              console.error('Error fetching bookAppointment:', error);
-              if(error.status == 401){
-                this.toastService.warning('Bạn cần đăng nhập trước khi đặt lịch.');
-                return;
-              }else if(error.status == 400){
-                this.toastService.warning(error.error.message);
-                return;
-              } else {
-                this.toastService.error(error.error.message);
-                return;
-              }
-            }
-          });
-        },
-        onCancel: () => {
-          this.toastService.info('Đã hủy đặt lịch khám');
+
+    this.doctorApiService.createAppointments(data).subscribe({
+      next: (data) => {
+        this.toastService.success('Bạn đã đặt lịch khám thành công.');
+        this.closeModal();
+      },
+      error: (error) => {
+        console.error('Error fetching bookAppointment:', error);
+        if(error.status == 401){
+          this.toastService.warning('Bạn cần đăng nhập trước khi đặt lịch.');
+          return;
+        }else if(error.status == 400){
+          this.toastService.warning(error.error.message);
+          return;
+        } else {
+          this.toastService.error(error.error.message);
+          return;
         }
+      }
     });
+
+    // for (const [key, value] of Object.entries(data)) {
+    //   if (value === null || value === '') {
+    //     const label = fieldLabels[key] || key;
+    //     this.toastService.warning(`${label} chưa điền thông tin.`);
+    //     return;
+    //   }
+    // }
+    // console.log("data: ",data);
+    // this.closeModal(); // Đóng popup sau khi đặt lịch
+    // this.confirmDialogService.show({
+    //     title: 'Xác nhận đặt lịch khám',
+    //     message: 'Bạn có chắc chắn muốn đặt lịch khám không?',
+    //     confirmText: 'Xác nhận',
+    //     cancelText: 'Hủy',
+    //     onConfirm: () => {
+    //       // Object.entries(data).forEach(([key, value]) => {
+    //       //   console.log(`${key}:`, value, '| type:', typeof value);
+    //       // });
+
+    //     },
+    //     onCancel: () => {
+    //       this.toastService.info('Đã hủy đặt lịch khám');
+    //     }
+    // });
   }
 }
