@@ -1,39 +1,95 @@
 <div class="login-container">
-  <h2>Login</h2>
-  <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input
-        type="text"
-        id="username"
-        name="username"
-        [(ngModel)]="username"
-        required
-        #usernameInput="ngModel"
-      />
-      <div *ngIf="usernameInput.invalid && (usernameInput.dirty || usernameInput.touched)" class="error-message">
-        Username is required.
+  <a routerLink="/home" class="back-home">
+    <i class="fas fa-arrow-left"></i>
+    <span>Quay về trang chủ</span>
+  </a>
+
+  <div class="login-box">
+    <div class="login-header">
+      <div class="logo">
+        <img src="https://ps.w.org/login-customizer/assets/icon-256x256.png?rev=2455454" alt="Logo">
       </div>
+      <h1>Chào mừng trở lại!</h1>
+      <p>Vui lòng đăng nhập để tiếp tục</p>
     </div>
 
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        [(ngModel)]="password"
-        required
-        #passwordInput="ngModel"
-      />
-      <div *ngIf="msgError" class="error-message">
-        Thông báo: {{ msgError }}
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Tài khoản</label>
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input
+            type="text"
+            id="username"
+            formControlName="username"
+            placeholder="Nhập tài khoản của bạn"
+            [ngClass]="{'is-invalid': loginForm.get('username')?.invalid && loginForm.get('username')?.touched}"
+          >
+        </div>
+        <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="error-message">
+          <span *ngIf="loginForm.get('username')?.errors?.['required']">Tài khoản là bắt buộc</span>
+        </div>
       </div>
+
+      <div class="form-group">
+        <label for="password">Mật khẩu</label>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            placeholder="Nhập mật khẩu của bạn"
+            [ngClass]="{'is-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}"
+          >
+          <i
+            class="fas"
+            [class.fa-eye]="!showPassword"
+            [class.fa-eye-slash]="showPassword"
+            (click)="togglePasswordVisibility()"
+          ></i>
+        </div>
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-message">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">Mật khẩu là bắt buộc</span>
+          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Mật khẩu phải có ít nhất 6 ký tự</span>
+        </div>
+      </div>
+
+      <div class="form-options">
+        <div class="remember-me">
+          <input type="checkbox" id="rememberMe" formControlName="rememberMe">
+          <label for="rememberMe">Ghi nhớ đăng nhập</label>
+        </div>
+        <a href="#" class="forgot-password">Quên mật khẩu?</a>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" class="login-button" [disabled]="loginForm.invalid || isLoading">
+        <div *ngIf="isLoading" class="spinner"></div>
+        <span *ngIf="!isLoading">Đăng nhập</span>
+      </button>
+    </form>
+
+    <!-- <div class="divider">
+      <span>Hoặc đăng nhập với</span>
     </div>
-    <button type="submit" [disabled]="!loginForm.form.valid">Login</button>
-    
-    <div class="forgot-password-link">
-      <a routerLink="/forgot-password">Quên mật khẩu?</a>
+
+    <div class="social-login">
+      <button class="social-button google" (click)="loginWithGoogle()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Google_Chrome_icon_%28February_2022%29.svg/800px-Google_Chrome_icon_%28February_2022%29.svg.png" alt="Google">
+        Đăng nhập với Google
+      </button>
+      <button class="social-button facebook" (click)="loginWithFacebook()">
+        <img src="https://www.facebook.com/images/fb_icon_325x325.png" alt="Facebook">
+        Đăng nhập với Facebook
+      </button>
+    </div> -->
+
+    <div class="register-link">
+      Chưa có tài khoản? <a href="#">Đăng ký ngay</a>
     </div>
-  </form>
+  </div>
 </div>

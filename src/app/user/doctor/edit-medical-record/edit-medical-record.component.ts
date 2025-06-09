@@ -93,80 +93,28 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
   }
 
   loadMedicines() {
-    // Dữ liệu giả lập cho danh sách thuốc
-    this.medicines = [
-      {
-        id: 1,
-        name: 'Paracetamol 500mg',
-        description: 'Thuốc hạ sốt, giảm đau',
-        price: 5000,
-        unit: 'Viên'
+    this.doctorApiService.getMedicines().subscribe({
+      next: (data) => {
+        this.medicines = data?.data.medicines ?? [];
+        console.log("medicines",this.medicines);
       },
-      {
-        id: 2,
-        name: 'Amoxicillin 500mg',
-        description: 'Kháng sinh',
-        price: 15000,
-        unit: 'Viên'
-      },
-      {
-        id: 3,
-        name: 'Ibuprofen 400mg',
-        description: 'Thuốc giảm đau, kháng viêm',
-        price: 8000,
-        unit: 'Viên'
-      },
-      {
-        id: 4,
-        name: 'Omeprazole 20mg',
-        description: 'Thuốc điều trị dạ dày',
-        price: 12000,
-        unit: 'Viên'
-      },
-      {
-        id: 5,
-        name: 'Cetirizine 10mg',
-        description: 'Thuốc kháng histamin',
-        price: 7000,
-        unit: 'Viên'
+      error: (error) => {
+        console.error('Error fetching medicines:', error);
       }
-    ];
+    });
+
   }
 
   loadServices() {
-    // Dữ liệu giả lập cho danh sách dịch vụ
-    this.services = [
-      {
-        id: 1,
-        name: 'Khám tổng quát',
-        description: 'Khám sức khỏe tổng quát',
-        price: 200000
+    this.doctorApiService.getService().subscribe({
+      next: (data) => {
+        this.services = data?.data.service ?? [];
+        console.log("services",this.services);
       },
-      {
-        id: 2,
-        name: 'Xét nghiệm máu',
-        description: 'Xét nghiệm công thức máu',
-        price: 150000
-      },
-      {
-        id: 3,
-        name: 'Chụp X-quang',
-        description: 'Chụp X-quang phổi',
-        price: 300000
-      },
-      {
-        id: 4,
-        name: 'Siêu âm',
-        description: 'Siêu âm ổ bụng',
-        price: 250000
-      },
-      {
-        id: 5,
-        name: 'Điện tâm đồ',
-        description: 'Đo điện tâm đồ',
-        price: 180000
+      error: (error) => {
+        console.error('Error fetching services:', error);
       }
-    ];
+    });
   }
 
   openMedicinePopup() {
