@@ -15,7 +15,8 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
   today: string = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
   medicalRecord: any = {
     medicines: [],
-    services: []
+    services: [],
+    status: ''
   };
 
   // Danh sách thuốc và dịch vụ
@@ -31,6 +32,9 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
   showServicePopup = false;
   searchMedicineText = '';
   searchServiceText = '';
+
+  // Danh sách trạng thái
+  statusAppointments = ['Đã duyệt', 'Đã khám', 'Đang điều trị', 'Đợi kết quả', 'Đã khỏi', 'Cần tái khám'];
 
   constructor(
     private route: ActivatedRoute,
@@ -61,6 +65,7 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
       time: '09:00',
       symptom: 'Sốt cao, đau họng, ho khan',
       diagnosis: 'Viêm họng cấp',
+      status: 'Đã duyệt',
       nextappointment: '2024-03-27', // Thêm ngày tái khám
       medicines: [
         {
