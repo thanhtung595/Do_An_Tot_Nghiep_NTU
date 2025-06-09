@@ -57,11 +57,32 @@
         </div>
       </div>
       <div class="add-medication">
-        <input 
-          type="text" 
-          [(ngModel)]="newMedication" 
+        <input
+          type="text"
+          [(ngModel)]="newMedication"
           name="newMedication"
           placeholder="Thêm thuốc mới..."
+        />
+        <button type="button" (click)="addMedication()">Thêm</button>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Dịch vụ sử dụng</h3>
+      <div class="medications-list">
+        <div class="medication-item" *ngFor="let med of record.services; let i = index">
+          <span>{{med}}</span>
+          <button type="button" class="remove-button" (click)="removeMedication(i)">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="add-medication">
+        <input
+          type="text"
+          [(ngModel)]="newMedication"
+          name="newMedication"
+          placeholder="Thêm dịch vụ mới..."
         />
         <button type="button" (click)="addMedication()">Thêm</button>
       </div>
@@ -84,4 +105,4 @@
       <button type="button" class="save-button" (click)="saveRecord()">Lưu thay đổi</button>
     </div>
   </form>
-</div> 
+</div>

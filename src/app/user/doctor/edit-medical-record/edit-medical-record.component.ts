@@ -12,6 +12,7 @@ interface MedicalRecord {
   diagnosis: string;
   treatment: string;
   medications: string[];
+  services: string[];
   notes: string;
   nextAppointment?: string;
 }
@@ -33,6 +34,7 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
     diagnosis: 'Viêm họng cấp',
     treatment: 'Điều trị nội khoa',
     medications: ['Paracetamol 500mg', 'Amoxicillin 500mg'],
+    services: ['Khám tổng quát', 'Chẩn đoán hình ảnh'],
     notes: 'Bệnh nhân cần nghỉ ngơi và uống nhiều nước',
     nextAppointment: '2024-03-22',
   };
