@@ -28,11 +28,6 @@ export class DoctorPatientHistoryComponent implements OnInit {
   statusList: string[] = [
     'Đợi duyệt',
     'Đã duyệt',
-    'Đã khám',
-    'Đang điều trị',
-    'Đợi kết quả',
-    'Đã khỏi',
-    'Cần tái khám'
   ];
 
   constructor(private router: Router, private doctorApiService: DoctorApiService,

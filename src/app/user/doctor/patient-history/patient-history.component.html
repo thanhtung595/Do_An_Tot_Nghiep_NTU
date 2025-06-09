@@ -33,19 +33,24 @@
           <td>{{record.symptom}}</td>
           <td>{{record.diagnosis}}</td>
           <td>
-            <select
-              class="status-select"
-              [ngClass]="getStatusClass(record.status)"
-              [(ngModel)]="record.status"
-              (change)="onStatusChange(record)">
-              <option *ngFor="let status of statusList" [value]="status">
-                {{ status }}
-              </option>
-            </select>
+            <ng-container *ngIf="record.status === 'Đợi duyệt'">
+              <select
+                class="status-select"
+                [ngClass]="getStatusClass(record.status)"
+                [(ngModel)]="record.status"
+                (change)="onStatusChange(record)">
+                <option *ngFor="let status of statusList" [value]="status">
+                  {{ status }}
+                </option>
+              </select>
+            </ng-container>
+            <ng-container *ngIf="record.status !== 'Đợi duyệt'">
+              <span [ngClass]="getStatusClass(record.status)">{{ record.status }}</span>
+            </ng-container>
           </td>
           <td>{{record.nextappointment}}</td>
           <td>
-            <button class="edit-button" (click)="editRecord(record.id)">
+            <button *ngIf="record.status !== 'Đợi duyệt'" class="edit-button" (click)="editRecord(record.id)">
               <i class="fas fa-edit"></i> Chỉnh sửa
             </button>
           </td>
