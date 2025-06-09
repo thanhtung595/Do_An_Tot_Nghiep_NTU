@@ -8,7 +8,9 @@ export interface Notification {
   content: string;
   date: Date;
   isread: boolean;
-  status: 'pending' | 'sent' | 'failed';
+  status: string;
   appointmentdate?: Date;
   appointmenttime?: string;
+  userfrom?: string;
+  userto?: string;
 }

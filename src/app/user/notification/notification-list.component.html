@@ -14,6 +14,8 @@
       <div class="filter-box">
         <select [(ngModel)]="filterType">
           <option value="all">Tất cả</option>
+          <option value="unread">Chưa đọc</option>
+          <option value="read">Đã đọc</option>
           <option value="appointment">Lịch hẹn</option>
           <option value="reminder">Nhắc nhở</option>
           <option value="result">Kết quả</option>
@@ -26,7 +28,7 @@
   <!-- Danh sách thông báo -->
   <div class="notification-list">
     <div class="notification-item"
-         *ngFor="let notification of getFilteredNotifications()"
+         *ngFor="let notification of getPaginatedNotifications()"
          [class.unread]="!notification.isread"
          (click)="viewNotificationDetail(notification)">
       <div class="notification-icon" [ngClass]="notification.type">
@@ -52,6 +54,28 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Phân trang -->
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button class="page-btn"
+            [disabled]="currentPage === 1"
+            (click)="changePage(currentPage - 1)">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+
+    <button class="page-number"
+            *ngFor="let page of getPageNumbers()"
+            [class.active]="page === currentPage"
+            (click)="changePage(page)">
+      {{page}}
+    </button>
+
+    <button class="page-btn"
+            [disabled]="currentPage === totalPages"
+            (click)="changePage(currentPage + 1)">
+      <i class="fas fa-chevron-right"></i>
+    </button>
   </div>
 </div>
 
@@ -90,18 +114,17 @@
             <p><strong>Ngày hẹn:</strong> {{selectedNotification.appointmentdate | date:'dd/MM/yyyy'}}</p>
             <p><strong>Giờ hẹn:</strong> {{selectedNotification.appointmenttime}}</p>
           </div>
+
+          <!-- <div class="appointment-status">
+            <p><strong>Loại thông báo:</strong> {{selectedNotification.status}}</p>
+          </div> -->
         </div>
 
         <div class="info-section">
           <h3>Thông tin gửi</h3>
-          <p><strong>Gửi từ:</strong> {{selectedNotification.patientname}}</p>
-          <p><strong>Gửi đến:</strong> {{selectedNotification.doctorname}}</p>
+          <p><strong>Gửi từ:</strong> {{selectedNotification.userfrom}}</p>
+          <p><strong>Gửi đến:</strong> {{selectedNotification.userto}}</p>
           <p><strong>Ngày gửi:</strong> {{selectedNotification.date | date:'dd/MM/yyyy HH:mm'}}</p>
-          <!-- <p><strong>Trạng thái:</strong>
-            <span class="status-badge" [ngClass]="selectedNotification.status">
-              {{getStatusLabel(selectedNotification.status)}}
-            </span>
-          </p> -->
         </div>
       </div>
     </div>

@@ -108,6 +108,7 @@ export class DoctorComponent {
     const data =
     {
       doctorID: this.selectedDoctor.id,
+      doctorName: this.selectedDoctor.fullname,
       diagnosis: bookingForm.value.diagnosis,
       workday: bookingForm.value.workday,
       timeOnline: bookingForm.value.timeOnline,
@@ -118,6 +119,14 @@ export class DoctorComponent {
       phonenumber: bookingForm.value.phonenumber,
       age: bookingForm.value.age,
     };
+
+    for (const [key, value] of Object.entries(data)) {
+      if (value === null || value === '') {
+        const label = fieldLabels[key] || key;
+        this.toastService.warning(`${label} chưa điền thông tin.`);
+        return;
+      }
+    }
 
     this.doctorApiService.createAppointments(data).subscribe({
       next: (data) => {
@@ -139,13 +148,6 @@ export class DoctorComponent {
       }
     });
 
-    // for (const [key, value] of Object.entries(data)) {
-    //   if (value === null || value === '') {
-    //     const label = fieldLabels[key] || key;
-    //     this.toastService.warning(`${label} chưa điền thông tin.`);
-    //     return;
-    //   }
-    // }
     // console.log("data: ",data);
     // this.closeModal(); // Đóng popup sau khi đặt lịch
     // this.confirmDialogService.show({

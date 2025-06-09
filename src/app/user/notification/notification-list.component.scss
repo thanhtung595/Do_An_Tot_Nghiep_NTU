@@ -3,6 +3,9 @@
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 
   .header {
     margin-bottom: 30px;
@@ -69,6 +72,7 @@
 
 // Notification list styles
 .notification-list {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -315,6 +319,13 @@
     }
   }
 
+  .appointment-status {
+    background-color: #afe9c0;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+  }
+
   .modal-footer {
     padding: 20px;
     border-top: 1px solid #eee;
@@ -341,6 +352,77 @@
       i {
         font-size: 16px;
       }
+    }
+  }
+}
+
+// Pagination styles
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 30px 0;
+  padding: 20px 0;
+  width: 100%;
+  background: white;
+  border-top: 1px solid #eee;
+
+  .page-btn {
+    min-width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: rgb(182, 177, 177);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 0 12px;
+    color: #666;
+
+    &:hover:not(:disabled) {
+      background: #f0f0f0;
+      border-color: #1890ff;
+      color: #1890ff;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    i {
+      font-size: 14px;
+    }
+  }
+
+  .page-number {
+    min-width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+    padding: 0 12px;
+    color: #666;
+
+    &:hover {
+      background: #f0f0f0;
+      border-color: #1890ff;
+      color: #1890ff;
+    }
+
+    &.active {
+      background: #1890ff;
+      color: white;
+      border-color: #1890ff;
     }
   }
 }

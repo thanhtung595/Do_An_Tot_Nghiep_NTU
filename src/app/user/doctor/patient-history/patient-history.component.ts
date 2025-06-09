@@ -8,6 +8,7 @@ interface PatientRecord {
   id: number;
   patientname: string;
   date: string;
+  time: string;
   symptom: string;
   diagnosis: string;
   status: string;
@@ -21,15 +22,7 @@ interface PatientRecord {
 })
 export class DoctorPatientHistoryComponent implements OnInit {
   patientRecords: PatientRecord[] = [
-    {
-      id: 1,
-      patientname: 'Nguyễn Văn A',
-      date: '2024-03-15',
-      symptom: 'Đau đầu hoa mắt',
-      diagnosis: 'Cảm cúm',
-      status: 'Đã khám',
-      nextappointment: '2024-03-22'
-    }
+
   ];
 
   statusList: string[] = [
@@ -96,6 +89,12 @@ export class DoctorPatientHistoryComponent implements OnInit {
         onConfirm: () => {
           const data = {
             id : record.id,
+            patientid : record.patientid,
+            doctorid : record.doctorid,
+            date : record.date,
+            time : record.time,
+            patientname : record.patientname,
+            doctorname : record.doctorname,
             status : record.status
           }
 
@@ -111,6 +110,7 @@ export class DoctorPatientHistoryComponent implements OnInit {
           });
         },
         onCancel: () => {
+          this.getaAllDoctor();
           this.toastService.info('Đã hủy thao tác cập nhật');
         }
   });
