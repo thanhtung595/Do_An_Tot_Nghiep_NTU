@@ -1,31 +1,31 @@
-<div class="edit-record-container">
+<div class="edit-medical-record-container">
   <div class="header">
     <h2>Chỉnh sửa hồ sơ bệnh án</h2>
-    <div class="patient-info">
-      <span class="patient-name">{{record.patientName}}</span>
-      <span class="patient-id">ID: {{record.id}}</span>
+    <div class="actions">
+      <button class="btn btn-secondary" (click)="backPatientHistory()">
+        <i class="fas fa-arrow-left"></i> Quay lại
+      </button>
+      <button class="btn btn-primary" (click)="saveMedicalRecord()">
+        <i class="fas fa-save"></i> Lưu thay đổi
+      </button>
     </div>
   </div>
 
-  <form class="medical-record-form">
+  <div class="content">
     <div class="form-section">
-      <h3>Thông tin cá nhân</h3>
+      <h3>Thông tin bệnh nhân</h3>
       <div class="form-grid">
         <div class="form-group">
-          <label>Tuổi</label>
-          <input type="number" [(ngModel)]="record.age" name="age" />
+          <label>Tên bệnh nhân</label>
+          <input type="text" [(ngModel)]="medicalRecord.patientname" readonly>
         </div>
         <div class="form-group">
-          <label>Giới tính</label>
-          <input type="text" [(ngModel)]="record.gender" name="gender" />
+          <label>Ngày khám</label>
+          <input type="date" [(ngModel)]="medicalRecord.date" readonly>
         </div>
         <div class="form-group">
-          <label>Địa chỉ</label>
-          <input type="text" [(ngModel)]="record.address" name="address" />
-        </div>
-        <div class="form-group">
-          <label>Số điện thoại</label>
-          <input type="text" [(ngModel)]="record.phone" name="phone" />
+          <label>Giờ khám</label>
+          <input type="time" [(ngModel)]="medicalRecord.time" readonly>
         </div>
       </div>
     </div>
@@ -34,75 +34,121 @@
       <h3>Thông tin khám bệnh</h3>
       <div class="form-group">
         <label>Triệu chứng</label>
-        <textarea [(ngModel)]="record.symptoms" name="symptoms" rows="3"></textarea>
+        <textarea [(ngModel)]="medicalRecord.symptom" rows="3"></textarea>
       </div>
       <div class="form-group">
         <label>Chẩn đoán</label>
-        <textarea [(ngModel)]="record.diagnosis" name="diagnosis" rows="2"></textarea>
-      </div>
-      <div class="form-group">
-        <label>Phương pháp điều trị</label>
-        <textarea [(ngModel)]="record.treatment" name="treatment" rows="2"></textarea>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <h3>Thuốc điều trị</h3>
-      <div class="medications-list">
-        <div class="medication-item" *ngFor="let med of record.medications; let i = index">
-          <span>{{med}}</span>
-          <button type="button" class="remove-button" (click)="removeMedication(i)">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-      </div>
-      <div class="add-medication">
-        <input
-          type="text"
-          [(ngModel)]="newMedication"
-          name="newMedication"
-          placeholder="Thêm thuốc mới..."
-        />
-        <button type="button" (click)="addMedication()">Thêm</button>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <h3>Dịch vụ sử dụng</h3>
-      <div class="medications-list">
-        <div class="medication-item" *ngFor="let med of record.services; let i = index">
-          <span>{{med}}</span>
-          <button type="button" class="remove-button" (click)="removeMedication(i)">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-      </div>
-      <div class="add-medication">
-        <input
-          type="text"
-          [(ngModel)]="newMedication"
-          name="newMedication"
-          placeholder="Thêm dịch vụ mới..."
-        />
-        <button type="button" (click)="addMedication()">Thêm</button>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <h3>Ghi chú và lịch tái khám</h3>
-      <div class="form-group">
-        <label>Ghi chú</label>
-        <textarea [(ngModel)]="record.notes" name="notes" rows="3"></textarea>
+        <textarea [(ngModel)]="medicalRecord.diagnosis" rows="3"></textarea>
       </div>
       <div class="form-group">
         <label>Lịch tái khám</label>
-        <input type="date" [(ngModel)]="record.nextAppointment" name="nextAppointment" />
+        <input type="date" [(ngModel)]="medicalRecord.nextappointment" min="{{today}}">
       </div>
     </div>
 
-    <div class="form-actions">
-      <button type="button" class="cancel-button" (click)="cancel()">Hủy</button>
-      <button type="button" class="save-button" (click)="saveRecord()">Lưu thay đổi</button>
+    <div class="form-section">
+      <h3>Đơn thuốc và dịch vụ</h3>
+
+      <!-- Thuốc điều trị -->
+      <div class="selection-group">
+        <div class="selection-header">
+          <h4>Thuốc điều trị</h4>
+          <button class="btn btn-outline-primary" (click)="openMedicinePopup()">
+            <i class="fas fa-plus"></i> Thêm thuốc
+          </button>
+        </div>
+        <div class="selected-items">
+          <div class="selected-item" *ngFor="let medicine of selectedMedicines">
+            <span>{{medicine.name}} - {{medicine.unit}}</span>
+            <button class="btn-remove" (click)="removeMedicine(medicine)">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dịch vụ sử dụng -->
+      <div class="selection-group">
+        <div class="selection-header">
+          <h4>Dịch vụ sử dụng</h4>
+          <button class="btn btn-outline-primary" (click)="openServicePopup()">
+            <i class="fas fa-plus"></i> Thêm dịch vụ
+          </button>
+        </div>
+        <div class="selected-items">
+          <div class="selected-item" *ngFor="let service of selectedServices">
+            <span>{{service.name}}</span>
+            <button class="btn-remove" (click)="removeService(service)">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </form>
+  </div>
+</div>
+
+<!-- Popup chọn thuốc -->
+<div class="popup-overlay" *ngIf="showMedicinePopup">
+  <div class="popup-content">
+    <div class="popup-header">
+      <h3>Chọn thuốc điều trị</h3>
+      <button class="btn-close" (click)="closeMedicinePopup()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="popup-body">
+      <div class="search-box">
+        <input type="text"
+               placeholder="Tìm kiếm thuốc..."
+               [(ngModel)]="searchMedicineText">
+        <i class="fas fa-search"></i>
+      </div>
+      <div class="items-list">
+        <div class="item"
+             *ngFor="let medicine of getFilteredMedicines()"
+             [class.selected]="isMedicineSelected(medicine)"
+             (click)="toggleMedicineSelection(medicine)">
+          <span class="item-name">{{medicine.name}}</span>
+          <span class="item-detail">{{medicine.unit}}</span>
+          <i class="fas fa-check" *ngIf="isMedicineSelected(medicine)"></i>
+        </div>
+      </div>
+    </div>
+    <div class="popup-footer">
+      <button class="btn btn-secondary" (click)="closeMedicinePopup()">Đóng</button>
+    </div>
+  </div>
+</div>
+
+<!-- Popup chọn dịch vụ -->
+<div class="popup-overlay" *ngIf="showServicePopup">
+  <div class="popup-content">
+    <div class="popup-header">
+      <h3>Chọn dịch vụ</h3>
+      <button class="btn-close" (click)="closeServicePopup()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="popup-body">
+      <div class="search-box">
+        <input type="text"
+               placeholder="Tìm kiếm dịch vụ..."
+               [(ngModel)]="searchServiceText">
+        <i class="fas fa-search"></i>
+      </div>
+      <div class="items-list">
+        <div class="item"
+             *ngFor="let service of getFilteredServices()"
+             [class.selected]="isServiceSelected(service)"
+             (click)="toggleServiceSelection(service)">
+          <span class="item-name">{{service.name}}</span>
+          <i class="fas fa-check" *ngIf="isServiceSelected(service)"></i>
+        </div>
+      </div>
+    </div>
+    <div class="popup-footer">
+      <button class="btn btn-secondary" (click)="closeServicePopup()">Đóng</button>
+    </div>
+  </div>
 </div>

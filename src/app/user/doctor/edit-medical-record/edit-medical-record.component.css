@@ -1,169 +1,285 @@
-.edit-record-container {
+.edit-medical-record-container {
   padding: 20px;
   background-color: #f8f9fa;
   min-height: 100vh;
 }
 
 .header {
-  margin-bottom: 30px;
-}
-
-h2 {
-  color: #2c3e50;
-  margin: 0 0 10px 0;
-}
-
-.patient-info {
   display: flex;
-  gap: 20px;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.patient-name {
-  font-size: 1.2em;
-  font-weight: 500;
+.header h2 {
+  margin: 0;
   color: #2c3e50;
+  font-size: 24px;
 }
 
-.patient-id {
-  color: #666;
+.actions {
+  display: flex;
+  gap: 10px;
 }
 
-.medical-record-form {
+.content {
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   padding: 20px;
 }
 
 .form-section {
   margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #eee;
 }
 
-.form-section:last-child {
-  border-bottom: none;
-}
-
-h3 {
+.form-section h3 {
   color: #2c3e50;
-  margin: 0 0 20px 0;
-  font-size: 1.1em;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e9ecef;
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
 }
 
 .form-group {
   margin-bottom: 20px;
 }
 
-label {
+.form-group label {
   display: block;
   margin-bottom: 8px;
-  color: #2c3e50;
+  color: #495057;
   font-weight: 500;
 }
 
-input, textarea {
+.form-group input,
+.form-group textarea {
   width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
+  padding: 10px;
+  border: 1px solid #ced4da;
   border-radius: 4px;
-  font-size: 1em;
-  transition: border-color 0.3s;
+  font-size: 14px;
 }
 
-input:focus, textarea:focus {
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+.form-group input:read-only {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
 }
 
-.medications-list {
-  margin-bottom: 15px;
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
 }
 
-.medication-item {
+.selection-group {
+  margin-bottom: 30px;
+}
+
+.selection-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  background-color: #f8f9fa;
-  border-radius: 4px;
-  margin-bottom: 8px;
+  margin-bottom: 15px;
 }
 
-.remove-button {
-  background: none;
-  border: none;
-  color: #e74c3c;
-  cursor: pointer;
-  padding: 4px 8px;
+.selection-header h4 {
+  margin: 0;
+  color: #495057;
 }
 
-.remove-button:hover {
-  color: #c0392b;
-}
-
-.add-medication {
+.selected-items {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
-.add-medication input {
-  flex: 1;
-}
-
-.add-medication button {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 15px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.add-medication button:hover {
-  background-color: #2980b9;
-}
-
-.form-actions {
+.selected-item {
   display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-  margin-top: 30px;
+  align-items: center;
+  gap: 8px;
+  background-color: #e9ecef;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
-.cancel-button, .save-button {
-  padding: 10px 20px;
+.btn-remove {
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-remove:hover {
+  color: #c82333;
+}
+
+/* Popup styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-header {
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup-header h3 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.popup-body {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.search-box {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 35px 10px 15px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-box i {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid #ced4da;
   border-radius: 4px;
   cursor: pointer;
-  font-weight: 500;
   transition: all 0.3s;
 }
 
-.cancel-button {
+.item:hover {
   background-color: #f8f9fa;
-  color: #2c3e50;
-  border: 1px solid #ddd;
 }
 
-.cancel-button:hover {
-  background-color: #e9ecef;
+.item.selected {
+  background-color: #e3f2fd;
+  border-color: #90caf9;
 }
 
-.save-button {
-  background-color: #2ecc71;
+.item-name {
+  font-weight: 500;
+}
+
+.item-detail {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.popup-footer {
+  padding: 20px;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Button styles */
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background-color: #007bff;
   color: white;
   border: none;
 }
 
-.save-button:hover {
-  background-color: #27ae60;
-} 
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.btn-outline-primary {
+  background-color: white;
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: white;
+}
