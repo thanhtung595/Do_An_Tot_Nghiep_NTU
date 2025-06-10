@@ -36,6 +36,14 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
   // Danh sách trạng thái
   statusAppointments = ['Đã duyệt', 'Đã khám', 'Đang điều trị', 'Đợi kết quả', 'Đã khỏi', 'Cần tái khám'];
 
+  showAddMedicineForm = false;
+  newMedicine: any = {
+    name: '',
+    unit: '',
+    description: '',
+    price: 0
+  };
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -57,44 +65,18 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
   }
 
   loadMedicalRecord() {
-    // Dữ liệu giả lập cho hồ sơ bệnh án
-    this.medicalRecord = {
-      id: this.recordId,
-      patientname: 'Nguyễn Văn A',
-      date: '2024-03-20',
-      time: '09:00',
-      symptom: 'Sốt cao, đau họng, ho khan',
-      diagnosis: 'Viêm họng cấp',
-      status: 'Đã duyệt',
-      nextappointment: '2024-03-27', // Thêm ngày tái khám
-      medicines: [
-        {
-          id: 1,
-          name: 'Paracetamol 500mg',
-          description: 'Thuốc hạ sốt, giảm đau',
-          price: 5000,
-          unit: 'Viên'
-        },
-        {
-          id: 2,
-          name: 'Amoxicillin 500mg',
-          description: 'Kháng sinh',
-          price: 15000,
-          unit: 'Viên'
-        }
-      ],
-      services: [
-        {
-          id: 1,
-          name: 'Khám tổng quát',
-          description: 'Khám sức khỏe tổng quát',
-          price: 200000
-        }
-      ]
-    };
 
-    this.selectedMedicines = this.medicalRecord.medicines || [];
-    this.selectedServices = this.medicalRecord.services || [];
+    this.doctorApiService.getAppointmentRecordById(this.recordId).subscribe({
+      next: (data) => {
+        console.log(data.data)
+        this.medicalRecord = data.data.appointment ?? [];
+        this.selectedMedicines = this.medicalRecord.medicines || [];
+        this.selectedServices = this.medicalRecord.services || [];
+      },
+      error: (error) => {
+        console.error('Error fetching medicines:', error);
+      }
+    });
   }
 
   loadMedicines() {
@@ -199,6 +181,19 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
       services: this.selectedServices
     };
 
+    console.log('updatedRecord: ', updatedRecord)
+
+    this.doctorApiService.saveMedicalRecord(updatedRecord).subscribe({
+      next: (data) => {
+        this.toastService.success('Cập nhật hồ sơ thành công.');
+        this.router.navigate(['/doctor/patient-history']);
+      },
+      error: (error) => {
+        this.toastService.error(error.message);
+        console.error('Error fetching saveMedicalRecord:', error);
+      }
+    });
+
     // this.doctorApiService.updateMedicalRecord(this.recordId, updatedRecord).subscribe({
     //   next: (response) => {
     //     this.toastService.success('Cập nhật hồ sơ thành công');
@@ -213,5 +208,41 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
 
   backPatientHistory() {
     this.router.navigate(['/doctor/patient-history']);
+  }
+
+  openAddMedicineForm() {
+    this.showAddMedicineForm = true;
+  }
+
+  closeAddMedicineForm() {
+    this.showAddMedicineForm = false;
+    this.resetNewMedicineForm();
+  }
+
+  resetNewMedicineForm() {
+    this.newMedicine = {
+      name: '',
+      unit: '',
+      description: '',
+      price: 0
+    };
+  }
+
+  submitNewMedicine() {
+    if (this.newMedicine.name && this.newMedicine.unit) {
+      // Thêm thuốc mới vào danh sách
+      const medicine: Medicine = {
+        id: this.medicines.length + 1, // Tạm thời tạo ID mới
+        name: this.newMedicine.name,
+        unit: this.newMedicine.unit,
+      };
+
+      this.medicines.push(medicine);
+      this.selectedMedicines.push(medicine);
+
+      // Đóng form và reset
+      this.closeAddMedicineForm();
+      this.toastService.success('Thêm thuốc mới thành công');
+    }
   }
 }

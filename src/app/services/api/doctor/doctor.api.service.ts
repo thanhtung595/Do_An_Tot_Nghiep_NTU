@@ -11,6 +11,7 @@ export class DoctorApiService {
   private apiUrl = `${API_BASE_URL}api/appointment`;
   private apiUrlServices = `${API_BASE_URL}api/services`;
   private apiUrlMedicines = `${API_BASE_URL}api/medicines`;
+  private apiUrlAppointmentRecord = `${API_BASE_URL}api/appointment/medical-record`;
 
   constructor(private http: HttpClient) { }
 
@@ -23,13 +24,25 @@ export class DoctorApiService {
     return this.http.put<any>(this.apiUrl +"/update-status-appointment", data);
   }
 
+  saveMedicalRecord(data: any): Observable<any> {
+    return this.http.put<any>(this.apiUrl +"/save-medical-record", data);
+  }
+
   // Hàm lấy danh sách service
   getService(): Observable<any> {
     return this.http.get<any>(this.apiUrlServices);
   }
 
-  // Hàm lấy danh sách service
+  // Hàm lấy danh sách Medicines
   getMedicines(): Observable<any> {
     return this.http.get<any>(this.apiUrlMedicines);
+  }
+
+  // Hàm lấy danh sách AppointmentRecord
+  getAppointmentRecordById(id: number): Observable<any> {
+    const url = `${this.apiUrlAppointmentRecord}/${id}`;
+    console.log('id', id);
+    console.log('url', url);
+    return this.http.get<any>(url);
   }
 }
