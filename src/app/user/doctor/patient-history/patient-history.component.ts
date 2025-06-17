@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { DoctorApiService } from '@app/services/api/doctor/doctor.api.service'
 import { ToastService } from '@app/services/toast/toast.service';
 import { ConfirmDialogService } from '@app/services/dialog/confirm-dialog.service';
+import { AuthApiService } from '@app/services/api/auth/auth.api.service';
+import { clearAccessToken } from '@app/services/token/TokenService';
 
 interface PatientRecord {
   id: number;
@@ -53,10 +55,12 @@ export class DoctorPatientHistoryComponent implements OnInit {
     private router: Router,
     private doctorApiService: DoctorApiService,
     private toastService: ToastService,
-    private confirmDialogService: ConfirmDialogService
+    private confirmDialogService: ConfirmDialogService,
+    private authService: AuthApiService,
   ) {}
 
   ngOnInit(): void {
+    this.requiredRole();
     this.getaAllDoctor();
   }
 
@@ -169,6 +173,18 @@ export class DoctorPatientHistoryComponent implements OnInit {
       onCancel: () => {
         this.getaAllDoctor();
         this.toastService.info('Đã hủy thao tác cập nhật');
+      }
+    });
+  }
+
+  requiredRole(){
+    this.authService.requiredRoleDoctor().subscribe({
+      next: (response) => {
+        return;
+      },
+      error: (error) => {
+        clearAccessToken();
+        window.location.href = '/login';
       }
     });
   }

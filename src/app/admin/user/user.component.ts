@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserApiService } from '@app/services/api_admin/user/user.api.service';
+import { AuthApiService } from '@app/services/api/auth/auth.api.service';
+import { clearAccessToken } from '@app/services/token/TokenService';
 
 @Component({
   selector: 'app-user',
@@ -9,9 +11,12 @@ import { UserApiService } from '@app/services/api_admin/user/user.api.service';
 })
 export class AdminUserComponent {
 
-  constructor(private userApiService: UserApiService, private router: Router) {}
+  constructor(private userApiService: UserApiService, private router: Router,
+    private authService: AuthApiService,
+  ) {}
 
   ngOnInit(): void {
+    this.requiredRole();
     this.userApiService.getAllUser().subscribe({
       next: (data) => {
         this.users = data.data.users;
@@ -103,5 +108,17 @@ export class AdminUserComponent {
 
   toLinkDoctors(){
     this.router.navigate(['/admin/doctors']);
+  }
+
+  requiredRole(){
+    this.authService.requiredRoleAdmin().subscribe({
+      next: (response) => {
+        return;
+      },
+      error: (error) => {
+        clearAccessToken();
+        window.location.href = '/login';
+      }
+    });
   }
 }

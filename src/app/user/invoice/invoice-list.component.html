@@ -18,11 +18,11 @@
         <tr *ngFor="let invoice of invoices">
           <td>#{{invoice.id}}</td>
           <td>{{invoice.date | date:'dd/MM/yyyy'}}</td>
-          <td>{{invoice.patientName}}</td>
-          <td>{{invoice.totalMoney | currency:'VND'}}</td>
+          <td>{{invoice.patientname}}</td>
+          <td>{{invoice.totalmoney | number}} VNĐ</td>
           <td>
-            <span class="status-badge" [ngClass]="{'paid': invoice.isPaid, 'unpaid': !invoice.isPaid}">
-              {{invoice.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}}
+            <span class="status-badge" [ngClass]="{'paid': invoice.ispaid, 'unpaid': !invoice.ispaid}">
+              {{invoice.ispaid ? 'Đã thanh toán' : 'Chưa thanh toán'}}
             </span>
           </td>
           <td>
@@ -46,7 +46,7 @@
       <div class="invoice-info">
         <div class="info-section">
           <h3>Thông tin bệnh nhân</h3>
-          <p><strong>Họ tên:</strong> {{selectedInvoice.patientName}}</p>
+          <p><strong>Họ tên:</strong> {{selectedInvoice.patientname}}</p>
           <p><strong>Tuổi:</strong> {{selectedInvoice.age}}</p>
           <p><strong>Giới tính:</strong> {{selectedInvoice.gender}}</p>
           <p><strong>Địa chỉ:</strong> {{selectedInvoice.address}}</p>
@@ -62,6 +62,10 @@
           <ul>
             <li *ngFor="let med of selectedInvoice.medications">{{med}}</li>
           </ul>
+          <p><strong>Dịch vụ:</strong></p>
+          <ul>
+            <li *ngFor="let med of selectedInvoice.services">{{med}}</li>
+          </ul>
           <p><strong>Ghi chú:</strong> {{selectedInvoice.notes}}</p>
           <p *ngIf="selectedInvoice.nextAppointment">
             <strong>Lịch tái khám:</strong> {{selectedInvoice.nextAppointment | date:'dd/MM/yyyy'}}
@@ -70,10 +74,10 @@
 
         <div class="info-section">
           <h3>Thông tin thanh toán</h3>
-          <p><strong>Tổng tiền:</strong> {{selectedInvoice.totalMoney | currency:'VND'}}</p>
+          <p><strong>Tổng tiền:</strong> {{selectedInvoice.totalmoney | number}} VNĐ</p>
           <p><strong>Trạng thái:</strong>
-            <span class="status-badge" [ngClass]="{'paid': selectedInvoice.isPaid, 'unpaid': !selectedInvoice.isPaid}">
-              {{selectedInvoice.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}}
+            <span class="status-badge" [ngClass]="{'paid': selectedInvoice.ispaid, 'unpaid': !selectedInvoice.ispaid}">
+              {{selectedInvoice.ispaid ? 'Đã thanh toán' : 'Chưa thanh toán'}}
             </span>
           </p>
         </div>
@@ -84,7 +88,7 @@
       <button class="btn-print" (click)="printInvoice(selectedInvoice)">
         <i class="fas fa-print"></i> In hóa đơn
       </button>
-      <button *ngIf="!selectedInvoice.isPaid" class="btn-pay" (click)="payInvoice(selectedInvoice)">
+      <button *ngIf="!selectedInvoice.ispaid" class="btn-pay" (click)="payInvoice(selectedInvoice)">
         <i class="fas fa-money-bill"></i> Thanh toán
       </button>
     </div>

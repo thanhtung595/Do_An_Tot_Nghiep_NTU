@@ -153,8 +153,7 @@ export class ProfileComponent implements OnInit {
 
   navigateToPayment(recordId: any): void {
     if (recordId) {
-      console.log('Navigating to payment with ID:', recordId); // Debug log
-      this.router.navigate(['/payment', recordId]).then(
+      this.router.navigate(['/invoice']).then(
         (success) => {
           if (!success) {
             console.error('Navigation failed');

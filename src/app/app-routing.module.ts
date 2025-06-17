@@ -20,6 +20,8 @@ import { DoctorAdminComponent } from '@app/admin/doctor/doctor.component';
 import { MedicinesComponent } from '@app/admin/medicines/medicines.component';
 import { AdminMedicalrecordsComponent } from './admin/medicalrecords/medicalrecords.component';
 
+import { ErrorComponent } from '@app/error/error.component';
+
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
@@ -34,6 +36,7 @@ const routes: Routes = [
   { path: 'invoice', component: InvoiceListComponent },
   { path: 'notification', component: NotificationListComponent },
   { path: 'feedback', component: ReviewComponent },
+  { path: 'error/:code', component: ErrorComponent },
 
   { path: 'admin/home', component: AdminHomeComponent },
   { path: 'admin/users', component: AdminUserComponent },

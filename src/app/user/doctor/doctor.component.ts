@@ -4,6 +4,8 @@ import { API_BASE_URL } from '@app/constants'
 import { ToastService } from '@app/services/toast/toast.service';
 import { ConfirmDialogService } from '@app/services/dialog/confirm-dialog.service';
 import { NotificationService } from '@app/services/notification/notification.service';
+import { AuthApiService } from '@app/services/api/auth/auth.api.service';
+import { clearAccessToken } from '@app/services/token/TokenService';
 
 @Component({
   selector: 'app-doctor',
@@ -13,13 +15,15 @@ import { NotificationService } from '@app/services/notification/notification.ser
 export class DoctorComponent {
   constructor(private doctorApiService: DoctorApiService,
     private toastService: ToastService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private authService: AuthApiService,
   ) { }
 
   // Data ws
   latestNotification: any = null;
 
   ngOnInit(): void {
+    this.requiredRole();
     this.getaAllDoctor();
   }
 
@@ -147,23 +151,18 @@ export class DoctorComponent {
         }
       }
     });
-
-    // console.log("data: ",data);
-    // this.closeModal(); // Đóng popup sau khi đặt lịch
-    // this.confirmDialogService.show({
-    //     title: 'Xác nhận đặt lịch khám',
-    //     message: 'Bạn có chắc chắn muốn đặt lịch khám không?',
-    //     confirmText: 'Xác nhận',
-    //     cancelText: 'Hủy',
-    //     onConfirm: () => {
-    //       // Object.entries(data).forEach(([key, value]) => {
-    //       //   console.log(`${key}:`, value, '| type:', typeof value);
-    //       // });
-
-    //     },
-    //     onCancel: () => {
-    //       this.toastService.info('Đã hủy đặt lịch khám');
-    //     }
-    // });
   }
+
+  requiredRole(){
+    this.authService.requiredRolePatient().subscribe({
+      next: (response) => {
+        return;
+      },
+      error: (error) => {
+        clearAccessToken();
+        window.location.href = '/login';
+      }
+    });
+  }
+
 }

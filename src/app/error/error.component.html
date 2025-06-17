@@ -1,0 +1,18 @@
+<div class="error-container">
+  <div class="error-content">
+    <div class="error-icon">
+      <i class="fas fa-exclamation-circle"></i>
+    </div>
+    <div class="error-code">{{statusCode}}</div>
+    <h1 class="error-title">{{errorMessage}}</h1>
+    <p class="error-description">{{errorDescription}}</p>
+    <div class="error-actions">
+      <button class="btn btn-secondary" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Quay lại
+      </button>
+      <button class="btn btn-primary" (click)="goHome()">
+        <i class="fas fa-home"></i> Về trang chủ
+      </button>
+    </div>
+  </div>
+</div>

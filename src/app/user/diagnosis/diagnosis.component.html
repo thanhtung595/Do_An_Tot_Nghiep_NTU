@@ -13,7 +13,7 @@
           <br><div>🧑‍ Bác sỹ phù hợp với bạn.</div>
           <div *ngIf="msg.doctors.length > 0; else noDoctor">
             <div class="doctor-card" *ngFor="let doctor of msg.doctors">
-              <img [src]="getImageUrl(doctor.hinhanh)" alt="Ảnh bác sĩ" class="doctor-avatar" />
+              <img src="{{ doctor.hinhanh }}" alt="Ảnh bác sĩ" class="doctor-avatar" />
               <div class="doctor-info">
                 <div>⚕️ Họ tên: {{ doctor.ten }}</div>
                 <div>📧 Email: {{ doctor.email }}</div>

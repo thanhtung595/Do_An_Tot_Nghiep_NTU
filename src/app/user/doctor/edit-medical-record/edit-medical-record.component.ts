@@ -4,6 +4,8 @@ import { DoctorApiService } from '@app/services/api/doctor/doctor.api.service';
 import { ToastService } from '@app/services/toast/toast.service';
 import { Medicine } from '@app/interfaces/medicine.interface';
 import { Service } from '@app/interfaces/service.interface';
+import { AuthApiService } from '@app/services/api/auth/auth.api.service';
+import { clearAccessToken } from '@app/services/token/TokenService';
 
 @Component({
   selector: 'app-edit-medical-record',
@@ -48,10 +50,12 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private doctorApiService: DoctorApiService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private authService: AuthApiService,
   ) {}
 
   ngOnInit(): void {
+    this.requiredRole();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.recordId = +id;
@@ -244,5 +248,17 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
       this.closeAddMedicineForm();
       this.toastService.success('Thêm thuốc mới thành công');
     }
+  }
+
+  requiredRole(){
+    this.authService.requiredRoleDoctor().subscribe({
+      next: (response) => {
+        return;
+      },
+      error: (error) => {
+        clearAccessToken();
+        window.location.href = '/login';
+      }
+    });
   }
 }

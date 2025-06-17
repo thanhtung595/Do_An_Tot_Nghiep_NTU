@@ -3,6 +3,8 @@ import { DoctorApiService } from '@app/services/api_admin/doctor/doctor.api.serv
 import { ToastService } from '@app/services/toast/toast.service';
 import { ConfirmDialogService } from '@app/services/dialog/confirm-dialog.service';
 import { Router } from '@angular/router';
+import { AuthApiService } from '@app/services/api/auth/auth.api.service';
+import { clearAccessToken } from '@app/services/token/TokenService';
 
 @Component({
   selector: 'app-doctor',
@@ -14,7 +16,8 @@ export class DoctorAdminComponent {
   constructor(private doctorApiService: DoctorApiService,
     private confirmDialogService: ConfirmDialogService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
+    private authService: AuthApiService,
   ) { }
   selecteddepartmentid: number | null = null;
   departments : any[] = [];
@@ -22,6 +25,7 @@ export class DoctorAdminComponent {
   doctors : any[] = [];
 
   ngOnInit(): void {
+    this.requiredRole();
     this.doctorApiService.getAllDepartments().subscribe({
       next: (data) => {
         this.departments = data.data.departments;
@@ -170,5 +174,17 @@ export class DoctorAdminComponent {
 
   toLinkDoctors(){
     this.router.navigate(['/admin/users']);
+  }
+
+  requiredRole(){
+    this.authService.requiredRoleAdmin().subscribe({
+      next: (response) => {
+        return;
+      },
+      error: (error) => {
+        clearAccessToken();
+        window.location.href = '/login';
+      }
+    });
   }
 }

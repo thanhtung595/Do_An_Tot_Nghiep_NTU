@@ -1,19 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { InvoiceAPIService } from '@app/services/api/invoice/invoice.api.service'
+import { ToastService } from '@app/services/toast/toast.service';
+import { AuthApiService } from '@app/services/api/auth/auth.api.service';
+import { clearAccessToken } from '@app/services/token/TokenService';
 
 interface PaymentItem {
   name: string;
-  quantity: number;
+  date: string,
   price: number;
 }
 
 interface PaymentInfo {
   id: number;
-  patientName: string;
+  patientname: string;
   date: string;
   diagnosis: string;
   amount: number;
   items: PaymentItem[];
+  paymentmethod: string;
 }
 
 @Component({
@@ -24,10 +29,11 @@ interface PaymentInfo {
 export class PaymentComponent implements OnInit {
   paymentInfo: PaymentInfo = {
     id: 0,
-    patientName: '',
+    patientname: '',
     date: '',
     diagnosis: '',
     amount: 0,
+    paymentmethod : '',
     items: []
   };
 
@@ -58,10 +64,14 @@ export class PaymentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private invoiceAPIService: InvoiceAPIService,
+    private toastService: ToastService,
+    private authService: AuthApiService,
   ) {}
 
   ngOnInit(): void {
+    this.requiredRole();
     // Lấy ID từ route params
     this.route.params.subscribe(params => {
       const recordId = params['id'];
@@ -72,59 +82,62 @@ export class PaymentComponent implements OnInit {
 
   // Hàm tạo dữ liệu mẫu
   private loadMockData(recordId: number): void {
-    this.paymentInfo = {
-      id: recordId,
-      patientName: 'Nguyễn Văn A',
-      date: '2024-03-20',
-      diagnosis: 'Viêm họng cấp',
-      amount: 1500000,
-      items: [
-        {
-          name: 'Khám bệnh',
-          quantity: 1,
-          price: 500000
-        },
-        {
-          name: 'Thuốc kháng sinh',
-          quantity: 2,
-          price: 300000
-        },
-        {
-          name: 'Xét nghiệm máu',
-          quantity: 1,
-          price: 400000
-        }
-      ]
-    };
+    this.invoiceAPIService.getInvoiceByIdUserAndInvoice(recordId).subscribe({
+      next: (data) => {
+        this.paymentInfo = data?.data.invoices ?? [];
+        this.paymentInfo.items = data?.data.service ?? [];
+      },
+      error: (error) => {
+        console.error('Error fetching invoices:', error);
+      }
+    });
   }
 
   // Tính tổng tiền
   getTotal(): number {
     return this.paymentInfo.items.reduce((total, item) => {
-      return total + (item.price * item.quantity);
+      return total + (item.price);
     }, 0);
   }
 
   // Xử lý thanh toán
-  processPayment(): void {
+  processPayment(record : PaymentInfo): void {
     if (!this.selectedPaymentMethod) {
-      alert('Vui lòng chọn phương thức thanh toán');
+      this.toastService.warning('Vui lòng chọn phương thức thanh toán');
       return;
     }
 
-    this.isProcessing = true;
+    record.paymentmethod = this.selectedPaymentMethod;
 
-    // Giả lập quá trình thanh toán
-    setTimeout(() => {
-      this.isProcessing = false;
-      // TODO: Gọi API thanh toán thực tế
-      alert('Thanh toán thành công!');
-      this.router.navigate(['/payment-success']);
-    }, 2000);
+    console.log(record);
+
+    this.invoiceAPIService.createPayment(record).subscribe({
+      next: (data) => {
+        this.isProcessing = true;
+        this.toastService.success('Thanh toán thành công.');
+        this.router.navigate(['/invoice']);
+      },
+      error: (error) => {
+        console.error('Error fetching createPayment:', error);
+        this.toastService.warning(error.data.message);
+      }
+    });
   }
 
   // Hủy thanh toán
   cancel(): void {
-    this.router.navigate(['/profile']);
+    this.router.navigate(['/invoice']);
   }
-} 
+
+  requiredRole(){
+    this.authService.requiredRolePatient().subscribe({
+      next: (response) => {
+        return;
+      },
+      error: (error) => {
+        clearAccessToken();
+        window.location.href = '/login';
+      }
+    });
+  }
+}

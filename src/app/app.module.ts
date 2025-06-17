@@ -35,6 +35,7 @@ import { NotificationListComponent } from '@app/user/notification/notification-l
 import { ToastComponent } from '@app/toast/toast.component';
 import { ConfirmDialogComponent } from '@app/dialog/confirm-dialog.component';
 import { ReviewComponent } from '@app/user/rating/review.component';
+import { ErrorComponent } from '@app/error/error.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { ReviewComponent } from '@app/user/rating/review.component';
     NotificationListComponent,
     ToastComponent,
     ConfirmDialogComponent,
-    ReviewComponent
+    ReviewComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,

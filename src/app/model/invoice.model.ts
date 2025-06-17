@@ -1,6 +1,7 @@
 export interface Invoice {
   id: number;
-  patientName: string;
+  patientid: number;
+  patientname: string;
   age: number;
   gender: string;
   address: string;
@@ -9,9 +10,10 @@ export interface Invoice {
   diagnosis: string;
   treatment: string;
   medications: string[];
+  services: string[];
   notes: string;
   nextAppointment?: string;
-  totalMoney: number;
-  isPaid: boolean;
+  totalmoney: number;
+  ispaid: boolean;
   date: Date;
 }
