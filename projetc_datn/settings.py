@@ -40,7 +40,7 @@ print("PATH IMG PUBLIC tồn tại:", os.path.exists(full_path))
 # Cấu hình bảo mật
 SECRET_KEY = '6qs0iilasstr+55s/avzaQ8/D/RBJcQKGxMFuBdfwX+Aw='
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['do-an-tot-nghiep-ntu-api-gemini.onrender.com']
 
 # Cấu hình các ứng dụng được cài đặt
 INSTALLED_APPS = [
