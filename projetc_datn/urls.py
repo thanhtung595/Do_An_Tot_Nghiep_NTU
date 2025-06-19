@@ -12,14 +12,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     
     # Các API endpoints cho các ứng dụng
-    path('api/', include('apps.users.urls')),           # API cho quản lý người dùng
-    path('api/', include('apps.appointment.urls')),     # API cho quản lý lịch hẹn
-    path('api/', include('apps.authentication.urls')),  # API cho xác thực
-    path('api/', include('apps.departments.urls')),     # API cho quản lý khoa/phòng
-    path('api/', include('apps.doctor.urls')),          # API cho quản lý bác sĩ
     path('api/', include('apps.gemini_ai.urls')),       # API cho tích hợp AI
-    path('api/', include('apps.header.urls')),          # API cho header
-    path('api/', include('apps.services.urls')),        # API cho dịch vụ
 
     # URL cho truy cập hình ảnh
     re_path(r'^img/(?P<path>.*)$', serve, {'document_root': settings.IMG_ROOT}),

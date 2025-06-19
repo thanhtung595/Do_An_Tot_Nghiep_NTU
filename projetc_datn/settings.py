@@ -38,7 +38,7 @@ print("********* FULL PATH IMG:", full_path +" *********")
 print("PATH IMG PUBLIC tồn tại:", os.path.exists(full_path))
 
 # Cấu hình bảo mật
-SECRET_KEY = 'django-insecure-9j&xd%idbgk87#%)4%p_izp5+ltem+-6u2%^#4s881e+h&i*3@'
+SECRET_KEY = '6qs0iilasstr+55s/avzaQ8/D/RBJcQKGxMFuBdfwX+Aw='
 DEBUG = True
 ALLOWED_HOSTS = []
 
@@ -58,14 +58,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     # Các ứng dụng của dự án
-    'apps.appointment',      # Quản lý lịch hẹn
-    'apps.authentication',   # Xác thực người dùng
-    'apps.departments',      # Quản lý khoa/phòng
-    'apps.doctor',          # Quản lý bác sĩ
     'apps.gemini_ai',       # Tích hợp AI
-    'apps.header',          # Header của ứng dụng
-    'apps.services',        # Dịch vụ
-    'apps.users',           # Quản lý người dùng
 ]
 
 # Cấu hình middleware
@@ -80,12 +73,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Cấu hình REST Framework
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-}
+# # Cấu hình REST Framework
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ),
+# }
 
 # Cấu hình URL và template
 ROOT_URLCONF = 'projetc_datn.urls'
@@ -114,8 +107,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'clinic_management',
         'USER': 'postgres',
-        'PASSWORD': 'Tung77778503',
-        'HOST': 'localhost',
+        'PASSWORD': 'ThanhTung2003',
+        'HOST': 'database.cvomge6kc9c1.ap-southeast-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
@@ -149,7 +142,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Cấu hình CORS
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Cho phép truy cập từ frontend React
-]
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True

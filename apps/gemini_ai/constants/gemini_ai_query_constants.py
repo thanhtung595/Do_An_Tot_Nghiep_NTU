@@ -1,13 +1,13 @@
 SELECT_DOCTOR_ALL_VI = """
     SELECT  
-         d.id as id
+        d.id as id
         ,u.username as taikhoan
-        ,d.fullname as ten
-        ,d.email as email
-        ,d.phonenumber as phone
+        ,u.fullname as ten
+        ,u.email as email
+        ,u.phonenumber as phone
         ,d.experience as namkinhnghiem
-        ,d.image as hinhAnh
-        ,d.address as diachi
+        ,'https://ntt-datn-clinic-management.s3.ap-southeast-1.amazonaws.com/avatar/doctor/' || u.image as hinhAnh
+        ,u.address as diachi
         ,detm.name as khoa
         ,d.departmentid as khoaid
         ,CASE 
@@ -34,6 +34,11 @@ SELECT_DOCTOR_ALL_VI = """
     GROUP BY 
         d.id
         ,u.username
+        ,u.fullname
+        ,u.email
+        ,u.phonenumber
+        ,u.image
+        ,u.address
         ,detm.name
         ,detm.id
 """
