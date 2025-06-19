@@ -47,6 +47,7 @@ export class DoctorComponent {
   selectedDoctor: any = null; // Bác sĩ được chọn để xem chi tiết
   isBooking: boolean = false; // Trạng thái đặt lịch khám
   showModal: boolean = false; // Hiển thị popup
+  availableWorkdays: { value: string, label: string }[] = [];
 
   // Biến cho tìm kiếm và lọc
   searchText: string = '';
@@ -76,6 +77,8 @@ export class DoctorComponent {
   // Mở popup xem chi tiết bác sĩ
   viewDetail(doctor: any) {
     this.selectedDoctor = doctor;
+    this.availableTimes = this.generateAvailableTimes(doctor.timeonline);
+    this.availableWorkdays = this.generateAvailableWorkdays(doctor.workdays);
     this.isBooking = false; // Đảm bảo không hiển thị form đặt lịch
     this.showModal = true; // Hiển thị popup
   }
@@ -84,6 +87,7 @@ export class DoctorComponent {
   openBookingForm(doctor: any) {
     this.selectedDoctor = doctor;
     this.availableTimes = this.generateAvailableTimes(doctor.timeonline);
+    this.availableWorkdays = this.generateAvailableWorkdays(doctor.workdays);
     this.isBooking = true; // Hiển thị form đặt lịch
     this.showModal = true; // Hiển thị popup
   }
@@ -193,4 +197,30 @@ export class DoctorComponent {
     return result;
   }
 
+  generateAvailableWorkdays(workdays: string): { value: string, label: string }[] {
+    if (!workdays) return [];
+    const weekdayMap: { [key: string]: number } = {
+      'Chủ nhật': 0,
+      'Thứ 2': 1,
+      'Thứ 3': 2,
+      'Thứ 4': 3,
+      'Thứ 5': 4,
+      'Thứ 6': 5,
+      'Thứ 7': 6
+    };
+    // Lấy các số thứ trong tuần từ chuỗi workdays
+    const allowedWeekdays = workdays.split(' - ').map(w => w.trim()).map(w => weekdayMap[w]).filter(x => x !== undefined);
+    const today = new Date();
+    const result: { value: string, label: string }[] = [];
+    for (let i = 0; i < 31; i++) {
+      const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() + i);
+      if (allowedWeekdays.includes(d.getDay())) {
+        const value = `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+        const weekdayLabel = Object.keys(weekdayMap).find(k => weekdayMap[k] === d.getDay()) || '';
+        const label = `${weekdayLabel} ${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+        result.push({ value, label });
+      }
+    }
+    return result;
+  }
 }
