@@ -21,4 +21,18 @@ export class ProfleApiServiceService {
   getAppointment(): Observable<any> {
     return this.http.get<any>(API_BASE_URL+"api/appointment");
   }
+
+  updateUser(data: any): Observable<any> {
+    return this.http.put<any>(this.apiUrl +"/update-id", data);
+  }
+
+  editPassword(data: any): Observable<any> {
+    return this.http.put<any>(this.apiUrl +"/edit-password", data);
+  }
+
+  uploadImage(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<any>(this.apiUrl +"/upload", formData);
+  }
 }

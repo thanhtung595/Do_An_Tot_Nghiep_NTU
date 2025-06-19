@@ -1,187 +1,407 @@
-/* Header */
-.home {
-  background-color: #cfdae6;
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
+
+.home {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #f8f9fa;
+}
+
 /* Banner */
 .banner {
+  position: relative;
   background-image: url('https://drbao-clinic.com/wp-content/uploads/2023/01/gioi-thieu-8-scaled.jpg');
   background-size: cover;
   background-position: center;
-  padding: 4rem 1rem;
+  padding: 8rem 1rem;
   text-align: center;
-  color: rgb(252, 252, 252);
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.banner-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .banner-content h2 {
-  font-size: 2.5rem;
-  margin: 0;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .banner-content p {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .cta-button {
+  display: inline-block;
   text-decoration: none;
   background-color: #ff5722;
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 2rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 50px;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  background-color: #ff6b3d;
 }
 
 /* Giới thiệu */
 .intro {
-  padding: 2rem;
+  padding: 4rem 2rem;
   text-align: center;
+  background: white;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.intro h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  position: relative;
+  display: inline-block;
+}
+
+.intro h2::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: #ff5722;
+  margin: 1rem auto;
+}
+
+.intro p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.8;
 }
 
 /* Dịch vụ nổi bật */
 .services {
-  padding: 2rem;
+  padding: 4rem 2rem;
   text-align: center;
+  background: #f8f9fa;
+  margin-bottom: 2rem;
+}
+
+.services h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #333;
+  position: relative;
+  display: inline-block;
+}
+
+.services h2::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: #ff5722;
+  margin: 1rem auto;
 }
 
 .service-list {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .service-card {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden; /* Đảm bảo hình ảnh không tràn ra ngoài */
-  width: 300px;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng hover */
+  background-color: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .service-card:hover {
-  transform: translateY(-5px); /* Hiệu ứng nổi lên khi hover */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
+  transform: translateY(-10px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
 
 .service-image {
   width: 100%;
   height: 200px;
-  object-fit: cover; /* Đảm bảo hình ảnh không bị méo */
+  object-fit: cover;
 }
 
 .service-content {
-  padding: 1rem;
+  padding: 1.5rem;
 }
 
 .service-content i {
-  font-size: 2rem;
-  color: #007bff;
+  font-size: 2.5rem;
+  color: #ff5722;
   margin-bottom: 1rem;
 }
 
 .service-content h3 {
-  margin: 0.5rem 0;
-  font-size: 1.25rem;
+  margin: 1rem 0;
+  font-size: 1.4rem;
   color: #333;
 }
 
 .service-content p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #555;
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 /* Đội ngũ bác sĩ */
 .doctors {
-  padding: 2rem;
+  padding: 4rem 2rem;
   text-align: center;
+  background: white;
+  margin-bottom: 2rem;
+}
+
+.doctors h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #333;
+  position: relative;
+  display: inline-block;
+}
+
+.doctors h2::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: #ff5722;
+  margin: 1rem auto;
 }
 
 .doctor-list {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .doctor-card {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  width: 200px;
-  text-align: center;
+  background-color: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.doctor-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
 
 .doctor-card img {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1.5rem;
+  border: 5px solid #f8f9fa;
+}
+
+.doctor-card h3 {
+  font-size: 1.3rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.doctor-card p {
+  color: #666;
+  font-size: 1rem;
 }
 
 /* Đặt lịch khám nhanh */
 .quick-booking {
-  padding: 2rem;
+  padding: 4rem 2rem;
   text-align: center;
-  background-color: #e9f5ff;
-}
-
-.quick-booking form {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.quick-booking input {
-  padding: 0.5rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.quick-booking a {
-  text-decoration: none;
-  background-color: #007bff;
+  background: linear-gradient(135deg, #ff5722, #ff6b3d);
   color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  margin-bottom: 2rem;
+}
+
+.quick-booking h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.quick-booking .button {
+  display: inline-block;
+  text-decoration: none;
+  background-color: white;
+  color: #ff5722;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.quick-booking .button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 /* Đánh giá từ khách hàng */
 .testimonials {
-  padding: 2rem;
+  padding: 4rem 2rem;
   text-align: center;
+  background: #f8f9fa;
+}
+
+.testimonials h2 {
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: #333;
+  position: relative;
+  display: inline-block;
+}
+
+.testimonials h2::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: #ff5722;
+  margin: 1rem auto;
 }
 
 .testimonial-list {
-  max-height: 200px; /* Giới hạn chiều cao để tạo thanh cuộn */
-  overflow-y: auto; /* Thêm thanh cuộn dọc */
-  border: 1px solid #ddd; /* Viền cho phần danh sách */
-  border-radius: 8px; /* Bo góc */
-  padding: 1rem;
-  background-color: #f9f9f9; /* Màu nền */
-  margin: 0 auto; /* Căn giữa */
-  width: 80%; /* Độ rộng của danh sách */
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .testimonial-item {
-  padding: 0.5rem 0; /* Khoảng cách giữa các mục */
-  border-bottom: 1px solid #eee; /* Đường kẻ ngăn cách giữa các đánh giá */
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #eee;
 }
 
 .testimonial-item:last-child {
-  border-bottom: none; /* Loại bỏ đường kẻ ở mục cuối cùng */
+  border-bottom: none;
 }
 
 .testimonial-item p {
-  margin: 0; /* Loại bỏ margin mặc định */
-  font-size: 1rem;
-  color: #333;
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.8;
+  font-style: italic;
 }
 
 .testimonial-item strong {
-  color: #007bff; /* Màu cho tên khách hàng */
+  color: #ff5722;
+  font-weight: 600;
+  display: block;
+  margin-top: 1rem;
+}
+
+/* Media Queries */
+@media screen and (max-width: 1024px) {
+  .banner-content h2 {
+    font-size: 2.5rem;
+  }
+
+  .service-list,
+  .doctor-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .banner {
+    padding: 6rem 1rem;
+  }
+
+  .banner-content h2 {
+    font-size: 2rem;
+  }
+
+  .banner-content p {
+    font-size: 1.1rem;
+  }
+
+  .service-list,
+  .doctor-list {
+    grid-template-columns: 1fr;
+  }
+
+  .intro h2,
+  .services h2,
+  .doctors h2,
+  .testimonials h2 {
+    font-size: 2rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .banner-content h2 {
+    font-size: 1.8rem;
+  }
+
+  .banner-content p {
+    font-size: 1rem;
+  }
+
+  .cta-button,
+  .quick-booking .button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .intro,
+  .services,
+  .doctors,
+  .quick-booking,
+  .testimonials {
+    padding: 3rem 1rem;
+  }
+
+  .testimonial-item p {
+    font-size: 1rem;
+  }
 }

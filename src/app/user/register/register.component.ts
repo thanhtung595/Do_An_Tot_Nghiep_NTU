@@ -15,6 +15,8 @@ export class RegisterComponent {
   // password: string = '';
   // password_2: string = '';
   msgError = '';
+  showPassword = false;
+  showPassword2 = false;
 
   user = {
     username: '',
@@ -26,6 +28,14 @@ export class RegisterComponent {
   };
 
   constructor(private router: Router, private authApiService: AuthApiService) {}
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  togglePassword2Visibility() {
+    this.showPassword2 = !this.showPassword2;
+  }
 
   onSubmit() {
     // Xử lý đăng nhập ở đây

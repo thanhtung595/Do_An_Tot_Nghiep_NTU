@@ -1,79 +1,83 @@
-// Container styles
+/* Container styles */
 .invoice-list-container {
-  padding: 20px;
+  padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-
-  h1 {
-    color: #2c3e50;
-    margin-bottom: 30px;
-    font-size: 28px;
-  }
 }
 
-// Table styles
+.invoice-list-container h1 {
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+/* Table styles */
 .invoice-table {
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th, td {
-      padding: 15px;
-      text-align: left;
-      border-bottom: 1px solid #eee;
-    }
-
-    th {
-      background-color: #f8f9fa;
-      font-weight: 600;
-      color: #2c3e50;
-    }
-
-    tr:hover {
-      background-color: #f8f9fa;
-    }
-  }
+  margin-bottom: 2rem;
 }
 
-// Status badge styles
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #edf2f7;
+}
+
+th {
+  background-color: #f8fafc;
+  color: #4a5568;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+}
+
+tr:hover {
+  background-color: #f8fafc;
+}
+
+/* Status badge styles */
 .status-badge {
-  padding: 6px 12px;
+  padding: 0.5rem 1rem;
   border-radius: 20px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
-
-  &.paid {
-    background-color: #e3fcef;
-    color: #00a854;
-  }
-
-  &.unpaid {
-    background-color: #fff1f0;
-    color: #f5222d;
-  }
 }
 
-// Button styles
+.status-badge.paid {
+  background-color: #c6f6d5;
+  color: #2f855a;
+}
+
+.status-badge.unpaid {
+  background-color: #fed7d7;
+  color: #c53030;
+}
+
+/* Button styles */
 .btn-view {
-  padding: 8px 16px;
-  background-color: #1890ff;
+  padding: 0.5rem 1rem;
+  background-color: #4299e1;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #40a9ff;
-  }
+  transition: background-color 0.2s;
 }
 
-// Modal styles
+.btn-view:hover {
+  background-color: #3182ce;
+}
+
+/* Modal styles */
 .invoice-detail-modal {
   position: fixed;
   top: 0;
@@ -85,143 +89,161 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #edf2f7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h2 {
+  color: #2d3748;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #718096;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.invoice-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.info-section {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.info-section h3 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+}
+
+.info-section p {
+  margin: 0.5rem 0;
+  color: #4a5568;
+}
+
+.info-section ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0.5rem 0;
+}
+
+.info-section li {
+  padding: 0.25rem 0;
+  color: #4a5568;
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #edf2f7;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn-print, .btn-pay {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.btn-print {
+  background-color: #718096;
+  color: white;
+}
+
+.btn-pay {
+  background-color: #48bb78;
+  color: white;
+}
+
+.btn-print:hover {
+  background-color: #4a5568;
+}
+
+.btn-pay:hover {
+  background-color: #38a169;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .invoice-list-container {
+    padding: 1rem;
+  }
+
+  .invoice-table {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 600px;
+  }
 
   .modal-content {
-    background: white;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 800px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-
-  .modal-header {
-    padding: 20px;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    h2 {
-      margin: 0;
-      color: #2c3e50;
-    }
-
-    .btn-close {
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      color: #999;
-
-      &:hover {
-        color: #666;
-      }
-    }
-  }
-
-  .modal-body {
-    padding: 20px;
+    width: 95%;
+    margin: 1rem;
   }
 
   .invoice-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-
-    .info-section {
-      h3 {
-        color: #2c3e50;
-        margin-bottom: 15px;
-        padding-bottom: 10px;
-        border-bottom: 2px solid #f0f0f0;
-      }
-
-      p {
-        margin: 10px 0;
-        color: #666;
-        line-height: 1.6;
-
-        strong {
-          color: #2c3e50;
-          margin-right: 8px;
-        }
-      }
-
-      ul {
-        list-style: none;
-        padding-left: 0;
-
-        li {
-          padding: 4px 0;
-          color: #666;
-        }
-      }
-    }
+    grid-template-columns: 1fr;
   }
 
   .modal-footer {
-    padding: 20px;
-    border-top: 1px solid #eee;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+    flex-direction: column;
+  }
 
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.3s;
-
-      i {
-        font-size: 16px;
-      }
-
-      &.btn-print {
-        background-color: #f0f0f0;
-        color: #666;
-
-        &:hover {
-          background-color: #e0e0e0;
-        }
-      }
-
-      &.btn-pay {
-        background-color: #52c41a;
-        color: white;
-
-        &:hover {
-          background-color: #73d13d;
-        }
-      }
-    }
+  .btn-print, .btn-pay {
+    width: 100%;
+    justify-content: center;
   }
 }
 
-// Print styles
-@media print {
-  .invoice-list-container {
-    display: none;
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-
-  .invoice-detail-modal {
-    position: static;
-    background: none;
-
-    .modal-content {
-      box-shadow: none;
-      max-height: none;
-    }
-
-    .modal-header .btn-close,
-    .modal-footer {
-      display: none;
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+.modal-content {
+  animation: fadeIn 0.3s ease-out;
 }

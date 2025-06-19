@@ -72,7 +72,6 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
 
     this.doctorApiService.getAppointmentRecordById(this.recordId).subscribe({
       next: (data) => {
-        console.log(data.data)
         this.medicalRecord = data.data.appointment ?? [];
         this.selectedMedicines = this.medicalRecord.medicines || [];
         this.selectedServices = this.medicalRecord.services || [];
@@ -87,7 +86,6 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
     this.doctorApiService.getMedicines().subscribe({
       next: (data) => {
         this.medicines = data?.data.medicines ?? [];
-        console.log("medicines",this.medicines);
       },
       error: (error) => {
         console.error('Error fetching medicines:', error);
@@ -100,7 +98,6 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
     this.doctorApiService.getService().subscribe({
       next: (data) => {
         this.services = data?.data.service ?? [];
-        console.log("services",this.services);
       },
       error: (error) => {
         console.error('Error fetching services:', error);
@@ -197,17 +194,6 @@ export class DoctorEditMedicalRecordComponent implements OnInit {
         console.error('Error fetching saveMedicalRecord:', error);
       }
     });
-
-    // this.doctorApiService.updateMedicalRecord(this.recordId, updatedRecord).subscribe({
-    //   next: (response) => {
-    //     this.toastService.success('Cập nhật hồ sơ thành công');
-    //     this.router.navigate(['/doctor/patient-history']);
-    //   },
-    //   error: (error) => {
-    //     this.toastService.error('Không thể cập nhật hồ sơ');
-    //     console.error('Error updating medical record:', error);
-    //   }
-    // });
   }
 
   backPatientHistory() {

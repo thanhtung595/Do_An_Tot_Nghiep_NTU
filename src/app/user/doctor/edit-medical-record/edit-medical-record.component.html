@@ -125,7 +125,7 @@
       <div class="items-list">
         <div class="item"
              *ngFor="let medicine of getFilteredMedicines()"
-             [class.selected]="isMedicineSelected(medicine)"
+             [ngClass]="{'selected': isMedicineSelected(medicine)}"
              (click)="toggleMedicineSelection(medicine)">
           <span class="item-name">{{medicine.name}}</span>
           <span class="item-detail">{{medicine.unit}}</span>
@@ -158,7 +158,7 @@
       <div class="items-list">
         <div class="item"
              *ngFor="let service of getFilteredServices()"
-             [class.selected]="isServiceSelected(service)"
+             [ngClass]="{'selected': isServiceSelected(service)}"
              (click)="toggleServiceSelection(service)">
           <span class="item-name">{{service.name}}</span>
           <i class="fas fa-check" *ngIf="isServiceSelected(service)"></i>

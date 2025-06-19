@@ -1,148 +1,170 @@
-<div class="user-management">
-  <h2>Quản lý Người dùng</h2>
-
-  <!-- Thanh tìm kiếm -->
-  <div class="search-container">
-    <input class="search-input" type="text" [(ngModel)]="searchName" placeholder="Tìm theo tài khoản..." />
-    <input class="search-input"
-      type="text"
-      [(ngModel)]="searchEmail"
-      placeholder="Tìm theo email..."
-    />
-    <select class="search-input" [(ngModel)]="searchRole">
-      <option value="">Tất cả quyền</option>
-      <option value="admin">Admin</option>
-      <option value="doctor">Doctor</option>
-      <option value="patient">Patient</option>
-    </select>
-  </div>
-
-  <!-- <button class="add-user-btn" (click)="openModal('add')">Thêm User</button> -->
-  <button style="text-decoration: none; font-size: 14px;" (click)="toLinkDoctors()" class="add-user-btn">Quản lý bác sỹ</button>
-
-  <!-- Bảng danh sách User -->
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Tài khoản</th>
-        <th>Tên</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Quyền</th>
-        <th>Hành động</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let user of paginatedUsers()">
-        <td class="td-list-fromat">{{ user.id }}</td>
-        <td>{{ user.name }}</td>
-        <td>{{ user.fullname }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.phonenumber }}</td>
-        <td class="td-list-fromat">{{ user.role }}</td>
-        <td class="td-list-fromat">
-          <button (click)="openModal('edit', user)">Sửa</button>
-          <button (click)="openModal('delete', user)">Xóa</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- Phân trang -->
-  <div class="pagination">
-    <button (click)="prevPage()" [disabled]="currentPage === 1">❮</button>
-    <span>Trang {{ currentPage }} / {{ totalPages }}</span>
-    <button (click)="nextPage()" [disabled]="currentPage === totalPages">
-      ❯
+<div class="user-management-container">
+  <div class="header-section">
+    <h2><i class="fas fa-users-cog"></i> Quản lý Người dùng</h2>
+    <button class="btn-primary" (click)="toLinkDoctors()">
+      <i class="fas fa-user-md"></i> Quản lý bác sỹ
     </button>
   </div>
 
-  <!-- Chọn số user / trang -->
-  <div class="page-size-selector">
-    <label>Hiển thị: {{ totalUser }} / </label>
-    <select (change)="setPageSize($event)">
-      <option value="10">10 user</option>
-      <option value="20">20 user</option>
-      <option value="30">30 user</option>
-    </select>
+  <!-- Thanh tìm kiếm và bộ lọc -->
+  <div class="filter-section">
+    <div class="input-group">
+      <i class="fas fa-search"></i>
+      <input type="text" class="form-control" [(ngModel)]="searchName" placeholder="Tìm theo tài khoản..." />
+    </div>
+    <div class="input-group">
+      <i class="fas fa-envelope"></i>
+      <input type="text" class="form-control" [(ngModel)]="searchEmail" placeholder="Tìm theo email..." />
+    </div>
+    <div class="input-group">
+      <i class="fas fa-user-tag"></i>
+      <select class="form-control" [(ngModel)]="searchRole">
+        <option value="">Tất cả quyền</option>
+        <option value="admin">Admin</option>
+        <option value="doctor">Doctor</option>
+        <option value="patient">Patient</option>
+      </select>
+    </div>
+    <button class="btn-secondary" (click)="openModal('add')">
+      <i class="fas fa-plus"></i> Thêm User
+    </button>
+  </div>
+
+  <!-- Bảng danh sách User -->
+  <div class="table-responsive">
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tài khoản</th>
+          <th>Tên</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Quyền</th>
+          <th class="text-center">Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of paginatedUsers()">
+          <td>{{ user.id }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.fullname }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.phonenumber }}</td>
+          <td>{{ user.role }}</td>
+          <td class="actions">
+            <button class="btn-icon btn-edit" (click)="openModal('edit', user)" title="Sửa">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-icon btn-delete" (click)="openModal('delete', user)" title="Xóa">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phân trang và chọn số user / trang -->
+  <div class="pagination-controls">
+    <div class="page-size-selector">
+      Hiển thị:
+      <select (change)="setPageSize($event)">
+        <option value="10">10 users</option>
+        <option value="20">20 users</option>
+        <option value="30">30 users</option>
+      </select>
+      / {{ totalUser }}
+    </div>
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="currentPage === 1" class="btn-pagination">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <span class="page-info">Trang {{ currentPage }} / {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="btn-pagination">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
   </div>
 
   <!-- Popup (Modal) -->
-  <div class="modal" *ngIf="isModalOpen">
-    <div class="modal-content">
-      <h3 *ngIf="modalType === 'add'">Thêm User</h3>
-      <h3 *ngIf="modalType === 'edit'">Sửa User</h3>
-      <h3 *ngIf="modalType === 'delete'">Xóa User</h3>
-
-      <form
-        class="form-popup bg-white p-6 rounded-lg shadow-lg w-96 space-y-4"
-        *ngIf="modalType !== 'delete'"
-      >
-        <!-- Tên -->
-        <div class="form-group">
-          <label class="form-label">Tên:</label>
-          <input
-            type="text"
-            name="name"
-            [(ngModel)]="selectedUser.name"
-            required
-            class="form-input"
-          />
+  <div class="modal-overlay" *ngIf="isModalOpen">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 *ngIf="modalType === 'add'"><i class="fas fa-user-plus"></i> Thêm User</h3>
+          <h3 *ngIf="modalType === 'edit'"><i class="fas fa-user-edit"></i> Sửa User</h3>
+          <h3 *ngIf="modalType === 'delete'"><i class="fas fa-exclamation-triangle"></i> Xóa User</h3>
+          <button class="close-button" (click)="closeModal()"><i class="fas fa-times"></i></button>
         </div>
 
-        <!-- Email -->
-        <div class="form-group">
-          <label class="form-label">Email:</label>
-          <input
-            type="email"
-            name="email"
-            [(ngModel)]="selectedUser.email"
-            required
-            class="form-input"
-          />
+        <div class="modal-body">
+          <form class="form-container" *ngIf="modalType !== 'delete'">
+            <div class="form-group">
+              <label for="name">Tài khoản:</label>
+              <div class="input-with-icon">
+                <i class="fas fa-user"></i>
+                <input type="text" id="name" name="name" [(ngModel)]="selectedUser.name" required class="form-control" placeholder="Nhập tài khoản" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="fullname">Tên đầy đủ:</label>
+              <div class="input-with-icon">
+                <i class="fas fa-signature"></i>
+                <input type="text" id="fullname" name="fullname" [(ngModel)]="selectedUser.fullname" required class="form-control" placeholder="Nhập tên đầy đủ" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <div class="input-with-icon">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" name="email" [(ngModel)]="selectedUser.email" required class="form-control" placeholder="Nhập email" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="phonenumber">Số điện thoại:</label>
+              <div class="input-with-icon">
+                <i class="fas fa-phone"></i>
+                <input type="text" id="phonenumber" name="phonenumber" [(ngModel)]="selectedUser.phonenumber" required class="form-control" placeholder="Nhập số điện thoại" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="role">Quyền:</label>
+              <div class="input-with-icon">
+                <i class="fas fa-user-tag"></i>
+                <select id="role" name="role" [(ngModel)]="selectedUser.role" class="form-control">
+                  <option value="admin">Admin</option>
+                  <option value="doctor">Doctor</option>
+                  <option value="patient">Patient</option>
+                </select>
+              </div>
+            </div>
+          </form>
+
+          <p *ngIf="modalType === 'delete'" class="delete-confirmation">
+            Bạn có chắc chắn muốn xóa người dùng <strong>{{ selectedUser.name }}</strong
+            >? Hành động này không thể hoàn tác.
+          </p>
         </div>
 
-        <!-- Quyền -->
-        <div class="form-group">
-          <label class="form-label">Quyền:</label>
-          <select name="role" [(ngModel)]="selectedUser.role">
-            <option value="admin">Admin</option>
-            <option value="doctor">Doctor</option>
-            <option value="patient">Patient</option>
-          </select>
+        <div class="modal-footer">
+          <button class="btn-action btn-confirm" *ngIf="modalType === 'add'" (click)="addUser()">
+            <i class="fas fa-plus"></i> Thêm
+          </button>
+          <button class="btn-action btn-confirm" *ngIf="modalType === 'edit'" (click)="updateUser()">
+            <i class="fas fa-save"></i> Lưu
+          </button>
+          <button class="btn-action btn-danger" *ngIf="modalType === 'delete'" (click)="deleteUser()">
+            <i class="fas fa-trash-alt"></i> Xóa
+          </button>
+          <button class="btn-action btn-cancel" (click)="closeModal()">
+            <i class="fas fa-times"></i> Hủy
+          </button>
         </div>
-      </form>
-
-      <p *ngIf="modalType === 'delete'">
-        Bạn có chắc chắn muốn xóa <strong>{{ selectedUser.name }}</strong
-        >?
-      </p>
-
-      <!-- Nút hành động -->
-      <div class="modal-actions">
-        <button
-          class="btn-submit"
-          *ngIf="modalType === 'add'"
-          (click)="addUser()"
-        >
-          Thêm
-        </button>
-        <button
-          class="btn-submit"
-          *ngIf="modalType === 'edit'"
-          (click)="updateUser()"
-        >
-          Lưu
-        </button>
-        <button
-          class="btn-delete"
-          *ngIf="modalType === 'delete'"
-          (click)="deleteUser()"
-        >
-          Xóa
-        </button>
-        <button class="close-btn" (click)="closeModal()">Hủy</button>
       </div>
     </div>
   </div>

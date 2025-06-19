@@ -1,19 +1,61 @@
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 /* Bố cục tổng thể */
 .layout {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
+  background-color: #f8f9fa;
 }
 
-/* Sidebar (Chiều rộng cố định) */
+/* Sidebar */
 app-sidebar {
   width: 250px;
   flex-shrink: 0;
+  background-color: #ffffff;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-/* Nội dung chính (Chiếm phần còn lại) */
+/* Nội dung chính */
 .main-content {
   flex-grow: 1;
   padding: 2rem;
-  background-color: #f4f7f6;
+  background-color: #f8f9fa;
   overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  app-sidebar {
+    width: 100%;
+    height: auto;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+}
+
+/* Animation */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

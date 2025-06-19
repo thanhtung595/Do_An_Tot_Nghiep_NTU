@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { HeaderApiServiceService } from '@app/services/api/header/header.api.service.service';
@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   headers: any[] = [];
   currentPath: string = '';
   notificationBadge = 0;
+  isMenuOpen = false;
 
   constructor(
     private headerApiService: HeaderApiServiceService,
@@ -27,7 +28,8 @@ export class HeaderComponent implements OnInit {
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
       this.currentPath = event.url;
-      // console.log('Current path:', this.currentPath);
+      // Đóng menu mobile khi chuyển trang
+      this.isMenuOpen = false;
     });
   }
 
@@ -105,6 +107,18 @@ export class HeaderComponent implements OnInit {
       event.preventDefault();
       clearAccessToken();
       window.location.href = '/home';
+    }
+  }
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    // Đóng menu mobile khi resize màn hình lớn hơn 768px
+    if (window.innerWidth > 768) {
+      this.isMenuOpen = false;
     }
   }
 }

@@ -21,7 +21,7 @@ export class DoctorComponent {
 
   // Data ws
   latestNotification: any = null;
-
+  availableTimes: string[] = [];
   ngOnInit(): void {
     this.requiredRole();
     this.getaAllDoctor();
@@ -83,6 +83,7 @@ export class DoctorComponent {
   // Mở popup đặt lịch khám
   openBookingForm(doctor: any) {
     this.selectedDoctor = doctor;
+    this.availableTimes = this.generateAvailableTimes(doctor.timeonline);
     this.isBooking = true; // Hiển thị form đặt lịch
     this.showModal = true; // Hiển thị popup
   }
@@ -163,6 +164,33 @@ export class DoctorComponent {
         window.location.href = '/login';
       }
     });
+  }
+
+  // Hàm chuyển đổi chuỗi giờ thành mảng các khung giờ 30 phút
+  generateAvailableTimes(timeRange: string): string[] {
+    if (!timeRange) return [];
+    // timeRange ví dụ: '08:00 AM - 18:00 PM'
+    const [start, end] = timeRange.split(' - ');
+    if (!start || !end) return [];
+    const parseTime = (t: string) => {
+      const [time, meridian] = t.split(' ');
+      let [hour, minute] = time.split(':').map(Number);
+      if (meridian === 'PM' && hour < 12) hour += 12;
+      if (meridian === 'AM' && hour === 12) hour = 0;
+      return { hour, minute };
+    };
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const startTime = parseTime(start);
+    const endTime = parseTime(end);
+    const result: string[] = [];
+    let h = startTime.hour, m = startTime.minute;
+    while (h < endTime.hour || (h === endTime.hour && m <= endTime.minute)) {
+      // Hiển thị dạng 08:00, 08:30, ... (24h)
+      result.push(`${pad(h)}:${pad(m)}`);
+      m += 60;
+      if (m >= 60) { h++; m = 0; }
+    }
+    return result;
   }
 
 }

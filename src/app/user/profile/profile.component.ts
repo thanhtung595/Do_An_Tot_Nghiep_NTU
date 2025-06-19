@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ProfleApiServiceService } from '@app/services/api/profile/profle.api.service.service';
 import { API_BASE_URL } from '@app/constants';
 import { Router } from '@angular/router';
+import { ToastService } from '@app/services/toast/toast.service';
+import { clearAccessToken } from '@app/services/token/TokenService';
 
 @Component({
   selector: 'app-profile',
@@ -15,9 +17,12 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private profleApiServiceService: ProfleApiServiceService,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
+  private id_user = 0
+  private localFile = '';
   // Thông tin người dùng
   user = {
     fullname: 'Nguyễn Thanh Tùng',
@@ -43,6 +48,8 @@ export class ProfileComponent implements OnInit {
     this.profleApiServiceService.getUser().subscribe({
       next: (data) => {
         this.user = data.data.user;
+        this.id_user = data.data.user.id;
+        this.localFile = data.data.user.image;
         console.log('user', this.user);
         this.getAppointment();
       },
@@ -99,8 +106,21 @@ export class ProfileComponent implements OnInit {
   }
 
   saveChanges() {
-    alert('Thông tin đã được cập nhật!');
-    this.isEditing = false;
+    // Kiểm tra thông tin trước khi gửi đi
+    if (!this.user.fullname || !this.user.gender) {
+      this.toastService.warning('Vui lòng điền đầy đủ tên!');
+      return;
+    }
+    console.log('Dữ liệu cập nhật:', this.user);
+    this.profleApiServiceService.updateUser(this.user).subscribe({
+      next: (data) => {
+        this.isEditing = false;
+        this.toastService.success('Cập nhật thông tin thành công.');
+      },
+      error: (error) => {
+        this.toastService.error(error.message);
+      },
+    });
   }
 
   onFileSelected(event: Event): void {
@@ -108,26 +128,17 @@ export class ProfileComponent implements OnInit {
     if (input.files && input.files[0]) {
       this.selectedFile = input.files[0];
 
-      // Tạo preview URL
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.previewUrl = e.target.result as string;
-        // Cập nhật avatar preview
-        if (this.user) {
-          this.user.image = this.previewUrl;
-          console.log('File to upload:', this.selectedFile);
-        }
-      };
-      reader.readAsDataURL(this.selectedFile);
-    }
-  }
-
-  // Hàm này sẽ được gọi khi bạn có API để upload ảnh
-  uploadAvatar(): void {
-    if (this.selectedFile) {
-      // TODO: Implement API call to upload avatar
-      console.log('File to upload:', this.selectedFile);
-      // Sau khi upload thành công, cập nhật user.avatar với URL mới từ server
+      this.profleApiServiceService.uploadImage(this.selectedFile).subscribe({
+        next: (data) => {
+          console.log(data.data.image);
+          this.user.image = data.data.image;
+          this.toastService.success('Cập nhật thông tin thành công.');
+        },
+        error: (error) => {
+          this.user.image = this.localFile;
+          this.toastService.error(error.message);
+        },
+      });
     }
   }
 
@@ -181,13 +192,27 @@ export class ProfileComponent implements OnInit {
   }
 
   changePassword(): void {
+    const data = {
+      id : this.id_user,
+      currentPassword : this.passwordData.currentPassword,
+      newPassword : this.passwordData.newPassword
+    }
+
     if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
-      alert('Mật khẩu mới không khớp!');
+      this.toastService.warning('Cần nhập lại mật khẩu mới giống nhau');
       return;
     }
 
-    // TODO: Implement API call to change password
-    console.log('Changing password:', this.passwordData);
-    this.closePasswordModal();
+    this.profleApiServiceService.editPassword(data).subscribe({
+      next: (data) => {
+        this.isEditing = false;
+        this.toastService.success('Cập nhật thông tin thành công.');
+        clearAccessToken();
+        window.location.href = '/login';
+      },
+      error: (error) => {
+        this.toastService.error(error.error.message);
+      },
+    });
   }
 }

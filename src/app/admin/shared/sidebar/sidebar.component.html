@@ -1,18 +1,28 @@
 <div class="admin-container">
   <!-- Sidebar (Header bên trái) -->
   <div class="sidebar">
-    <div class="logo">
-      <img src="https://cache.clinic.co/assets/img/logo.png" alt="Logo-Admin">
+    <div class="sidebar-header">
+      <div class="logo">
+        <img src="https://cache.clinic.co/assets/img/logo.png" alt="Logo-Admin">
+      </div>
     </div>
     <nav class="menu">
       <ul>
         <li *ngFor="let header of headers">
-        <a [href]="header.url"  (click)="onClickLogout(header, $event)" >{{ header.name }}</a>
-      </li>
+          <a [href]="header.url" (click)="onClickLogout(header, $event)">
+            <i class="fas fa-circle"></i> <!-- Placeholder icon, you might want to replace these with actual icons based on header.name or header.icon property if available -->
+            <span>{{ header.name }}</span>
+          </a>
+        </li>
       </ul>
     </nav>
-    <div class="back-to-home">
-      <a href="/home">Back to home</a>
+    <div class="sidebar-footer">
+      <div class="back-to-home">
+        <a href="/home">
+          <i class="fas fa-home"></i>
+          <span>Quay về trang chủ</span>
+        </a>
+      </div>
     </div>
   </div>
 </div>

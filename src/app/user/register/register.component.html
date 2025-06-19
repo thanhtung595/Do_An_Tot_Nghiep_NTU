@@ -1,83 +1,159 @@
-<div class="login-container">
-  <h2>Đăng ký</h2>
-  <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
-    <div class="form-group">
-      <label for="username">Tài khoản</label>
-      <input
-        type="text"
-        id="username"
-        name="username"
-        [(ngModel)]="user.username"
-        required
-        #usernameInput="ngModel"
-      />
-      <div *ngIf="usernameInput.invalid && (usernameInput.dirty || usernameInput.touched)" class="error-message">
-        Tên tài khoản là bắt buộc.
+
+<div class="register-container">
+  <a routerLink="/login" class="back-to-login">
+    <i class="fas fa-arrow-left"></i>
+    <span>Quay lại đăng nhập</span>
+  </a>
+
+  <div class="register-box">
+    <div class="register-header">
+      <div class="logo">
+        <img src="https://ps.w.org/login-customizer/assets/icon-256x256.png?rev=2455454" alt="Logo">
       </div>
+      <h1>Tạo tài khoản mới</h1>
+      <p>Vui lòng điền đầy đủ thông tin bên dưới</p>
     </div>
 
-    <div class="form-group">
-      <label for="password">Họ và tên</label>
-      <input
-        type="text"
-        id="fullname"
-        name="fullname"
-        [(ngModel)]="user.fullname"
-        required
-        #passwordInput="ngModel"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="password">Số điện thoại</label>
-      <input
-        type="text"
-        id="phone"
-        name="phone"
-        [(ngModel)]="user.phone"
-        required
-        #passwordInput="ngModel"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="password">Email</label>
-      <input
-        type="text"
-        id="email"
-        name="email"
-        [(ngModel)]="user.email"
-        required
-        #passwordInput="ngModel"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="password">Mật khẩu</label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        [(ngModel)]="user.password"
-        required
-        #passwordInput="ngModel"
-      />
-    </div>
-
-    <div class="form-group">
-      <label for="password">Nhập lại mật khẩu</label>
-      <input
-        type="password"
-        id="password_2"
-        name="password_2"
-        [(ngModel)]="user.password_2"
-        required
-        #passwordInput="ngModel"
-      />
-      <div *ngIf="msgError" class="error-message">
-        Thông báo: {{ msgError }}
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+      <div class="form-group">
+        <label for="username">Tài khoản</label>
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            [(ngModel)]="user.username"
+            required
+            #usernameInput="ngModel"
+            placeholder="Nhập tên tài khoản"
+          />
+        </div>
+        <div *ngIf="usernameInput.invalid && (usernameInput.dirty || usernameInput.touched)" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          Tên tài khoản là bắt buộc
+        </div>
       </div>
+
+      <div class="form-group">
+        <label for="fullname">Họ và tên</label>
+        <div class="input-group">
+          <i class="fas fa-id-card"></i>
+          <input
+            type="text"
+            id="fullname"
+            name="fullname"
+            [(ngModel)]="user.fullname"
+            required
+            #fullnameInput="ngModel"
+            placeholder="Nhập họ và tên"
+          />
+        </div>
+        <div *ngIf="fullnameInput.invalid && (fullnameInput.dirty || fullnameInput.touched)" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          Họ và tên là bắt buộc
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Số điện thoại</label>
+        <div class="input-group">
+          <i class="fas fa-phone"></i>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            [(ngModel)]="user.phone"
+            required
+            #phoneInput="ngModel"
+            placeholder="Nhập số điện thoại"
+          />
+        </div>
+        <div *ngIf="phoneInput.invalid && (phoneInput.dirty || phoneInput.touched)" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          Số điện thoại là bắt buộc
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="user.email"
+            required
+            #emailInput="ngModel"
+            placeholder="Nhập địa chỉ email"
+          />
+        </div>
+        <div *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          Email là bắt buộc
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mật khẩu</label>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            name="password"
+            [(ngModel)]="user.password"
+            required
+            #passwordInput="ngModel"
+            placeholder="Nhập mật khẩu"
+          />
+          <i
+            class="fas"
+            [class.fa-eye]="!showPassword"
+            [class.fa-eye-slash]="showPassword"
+            (click)="togglePasswordVisibility()"
+          ></i>
+        </div>
+        <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          Mật khẩu là bắt buộc
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password_2">Nhập lại mật khẩu</label>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input
+            [type]="showPassword2 ? 'text' : 'password'"
+            id="password_2"
+            name="password_2"
+            [(ngModel)]="user.password_2"
+            required
+            #password2Input="ngModel"
+            placeholder="Nhập lại mật khẩu"
+          />
+          <i
+            class="fas"
+            [class.fa-eye]="!showPassword2"
+            [class.fa-eye-slash]="showPassword2"
+            (click)="togglePassword2Visibility()"
+          ></i>
+        </div>
+        <div *ngIf="msgError" class="error-message">
+          <i class="fas fa-exclamation-circle"></i>
+          {{ msgError }}
+        </div>
+      </div>
+
+      <button type="submit" class="register-button" [disabled]="!loginForm.form.valid">
+        <span>Đăng ký</span>
+      </button>
+    </form>
+
+    <div class="login-link">
+      Đã có tài khoản? <a routerLink="/login">Đăng nhập ngay</a>
     </div>
-    <button type="submit" [disabled]="!loginForm.form.valid">Xác nhận</button>
-  </form>
+  </div>
 </div>

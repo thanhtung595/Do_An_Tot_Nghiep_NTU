@@ -122,7 +122,10 @@
 
           <div class="form-group">
             <label class="form-label">Giờ khám</label>
-            <input type="time" ngModel class="form-input" name="timeOnline" step="1" />
+            <select ngModel class="form-input" name="timeOnline">
+              <option value="">-- Chọn giờ khám --</option>
+              <option *ngFor="let time of availableTimes" [value]="time">{{ time }}</option>
+            </select>
           </div>
 
           <div class="booking-actions">

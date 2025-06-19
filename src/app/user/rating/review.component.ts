@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { ToastService } from '@app/services/toast/toast.service';
+import { AuthApiService } from '@app/services/api/auth/auth.api.service';
+import { FeedbackApiService } from '@app/services/api/feedback/feedback.api.service';
 
 @Component({
   selector: 'app-review',
@@ -6,31 +9,24 @@ import { Component } from '@angular/core';
   styleUrls: ['./review.component.css']
 })
 export class ReviewComponent {
-  reviews = [
-    {
-      title: 'Bác sĩ rất tận tâm',
-      doctor: 'Nguyễn Văn A',
-      comment: 'Khám chữa bệnh cẩn thận, tư vấn rõ ràng.',
-      rating: 5,
-      date: '2024-11-15'
-    },
-    {
-      title: 'Thời gian chờ lâu',
-      doctor: 'Trần Thị B',
-      comment: 'Chờ khám hơn 1 tiếng mới tới lượt.',
-      rating: 2,
-      date: '2025-03-02'
-    },
-    {
-      title: 'Dịch vụ tốt',
-      doctor: 'Lê Văn C',
-      comment: 'Nhanh chóng, sạch sẽ, chuyên nghiệp.',
-      rating: 4,
-      date: '2025-05-20'
-    }
-  ];
 
-  filteredReviews = [...this.reviews];
+  private isLogin = false;
+
+  constructor(
+      private toastService: ToastService,
+      private authService: AuthApiService,
+      private feedbackApiService: FeedbackApiService,
+    ) {}
+
+
+
+
+  ngOnInit(): void {
+    this.getAllLimit();
+
+  }
+  filteredReviews: any[] = [];
+
 
   searchTitle = '';
   searchDoctor = '';
@@ -56,13 +52,30 @@ export class ReviewComponent {
 
   submitReview() {
     this.newReview.date = new Date().toISOString().split('T')[0];
-    this.reviews.unshift({ ...this.newReview });
-    this.applyFilters();
-    this.closeReviewForm();
+    console.log(this.newReview)
+    this.checkIsLogin();
+    if(this.isLogin){
+      if(this.newReview.rating > 5){
+        this.toastService.warning('Số sao đánh giá từ 1 - 5.');
+        return;
+      }
+
+      this.feedbackApiService.createFeedback(this.newReview).subscribe({
+        next: (data) => {
+          this.toastService.success('Thêm đánh giá thành công.');
+          this.isLogin = false;
+          this.getAllLimit();
+          this.closeReviewForm();
+        },
+        error: (error) => {
+          this.toastService.error(error.error.message);
+        },
+      });
+    }
   }
 
   applyFilters() {
-    this.filteredReviews = this.reviews.filter(r =>
+    this.filteredReviews = this.filteredReviews.filter(r =>
       r.title.toLowerCase().includes(this.searchTitle.toLowerCase()) &&
       r.doctor.toLowerCase().includes(this.searchDoctor.toLowerCase())
     );
@@ -84,5 +97,30 @@ export class ReviewComponent {
         this.filteredReviews.sort((a, b) => a.rating - b.rating);
         break;
     }
+  }
+
+  checkIsLogin(){
+    this.authService.requiredRolePatient().subscribe({
+      next: (response) => {
+        this.isLogin = true;
+      },
+      error: (error) => {
+        this.toastService.warning('Bạn chưa đăng nhập.');
+        this.isLogin = false;
+      }
+    });
+  }
+
+  getAllLimit(){
+    this.feedbackApiService.getAllLimit(1000).subscribe({
+      next: (data) => {
+        this.filteredReviews = data.data.feedback;
+        this.applyFilters();
+        console.log(data.data.feedback)
+      },
+      error: (error) => {
+        console.log(error)
+      },
+    });
   }
 }
