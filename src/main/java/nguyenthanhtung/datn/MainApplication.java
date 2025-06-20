@@ -57,29 +57,6 @@ public class MainApplication {
 //	}
 
 	private static void loadConfigServer() {
-		log.info("***Start LoadConfigServer***");
-
-		List<Config> configs = List.of(
-				new Config("AWS_S3_BUCKET_NAME", "ntt-datn-clinic-management"),
-				new Config("AWS_REGION", "ap-southeast-1"),
-				new Config("AWS_ACCESS_KEY", ""),
-				new Config("AWS_SECRET_KEY", ""),
-
-				new Config("SECRET_KEY", ""),
-				new Config("VALIDITY_INMILLI_SECONDS_ACCESS", "1"),
-				new Config("VALIDITY_INMILLI_SECONDS_REFESH", "7"),
-
-				new Config("URL_AWS_STORAGE", "https://ntt-datn-clinic-management.s3.ap-southeast-1.amazonaws.com/"),
-				new Config("PATH_AVATAR_DOCTOR", "avatar/doctor/"),
-				new Config("PATH_AVATAR_PATIENTS", "avatar/patients/"),
-				new Config("PATH_IMG_SERVICE", "img/service/")
-		);
-
-		for (Config config : configs) {
-			System.setProperty(config.getKey(), config.getValue());
-		}
-
-		log.info("***End LoadConfigServer***");
 	}
 
 
