@@ -1,0 +1,13 @@
+AWS_S3_BUCKET_NAME=ntt-datn-clinic-management
+AWS_REGION=ap-southeast-1
+AWS_ACCESS_KEY=AKIAT36VJWQRFZ3Z77JG
+AWS_SECRET_KEY=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
+
+SECRET_KEY=6qs0iilasstr+55s/avzaQ8/D/RBJcQKGxMFuBdfwX+Aw=
+VALIDITY_INMILLI_SECONDS_ACCESS=1
+VALIDITY_INMILLI_SECONDS_REFESH=7
+
+URL_AWS_STORAGE=https://ntt-datn-clinic-management.s3.ap-southeast-1.amazonaws.com/
+PATH_AVATAR_DOCTOR=avatar/doctor/
+PATH_AVATAR_PATIENTS=avatar/patients/
+PATH_IMG_SERVICE=img/service/
