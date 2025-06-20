@@ -6,9 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.util.List;
 
 @SpringBootApplication
@@ -65,10 +62,10 @@ public class MainApplication {
 		List<Config> configs = List.of(
 				new Config("AWS_S3_BUCKET_NAME", "ntt-datn-clinic-management"),
 				new Config("AWS_REGION", "ap-southeast-1"),
-				new Config("AWS_ACCESS_KEY", "AKIAT36VJWQRO7GF2IB4"),
-				new Config("AWS_SECRET_KEY", "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"),
+				new Config("AWS_ACCESS_KEY", ""),
+				new Config("AWS_SECRET_KEY", ""),
 
-				new Config("SECRET_KEY", "6qs0iilasstr+55s/avzaQ8/D/RBJcQKGxMFuBdfwX+Aw="),
+				new Config("SECRET_KEY", ""),
 				new Config("VALIDITY_INMILLI_SECONDS_ACCESS", "1"),
 				new Config("VALIDITY_INMILLI_SECONDS_REFESH", "7"),
 
