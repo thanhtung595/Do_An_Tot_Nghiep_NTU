@@ -17,6 +17,7 @@ import { ReviewComponent } from '@app/user/rating/review.component';
 
 import { AdminUserComponent } from '@app/admin/user/user.component'
 import { DoctorAdminComponent } from '@app/admin/doctor/doctor.component';
+import { ServiceComponent } from '@app/admin/service/service.component';
 import { MedicinesComponent } from '@app/admin/medicines/medicines.component';
 import { AdminMedicalrecordsComponent } from './admin/medicalrecords/medicalrecords.component';
 
@@ -41,6 +42,7 @@ const routes: Routes = [
   { path: 'admin/home', component: AdminHomeComponent },
   { path: 'admin/users', component: AdminUserComponent },
   { path: 'admin/doctors', component: DoctorAdminComponent },
+  { path: 'admin/services', component: ServiceComponent },
   { path: 'admin/medicines', component: MedicinesComponent },
   { path: 'admin/medicalrecords', component: AdminMedicalrecordsComponent },
 

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { UserApiService } from '@app/services/api_admin/user/user.api.service';
 import { AuthApiService } from '@app/services/api/auth/auth.api.service';
 import { clearAccessToken } from '@app/services/token/TokenService';
+import { ToastService } from '@app/services/toast/toast.service';
+import { ConfirmDialogService } from '@app/services/dialog/confirm-dialog.service';
 
 @Component({
   selector: 'app-user',
@@ -13,6 +15,8 @@ export class AdminUserComponent {
 
   constructor(private userApiService: UserApiService, private router: Router,
     private authService: AuthApiService,
+    private confirmDialogService: ConfirmDialogService,
+    private toastService: ToastService,
   ) {}
 
   ngOnInit(): void {
@@ -104,6 +108,7 @@ export class AdminUserComponent {
   deleteUser() {
     this.users = this.users.filter(u => u.id !== this.selectedUser.id);
     this.closeModal();
+    this.toastService.success('Đã xóa thành công');
   }
 
   toLinkDoctors(){

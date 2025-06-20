@@ -45,13 +45,13 @@ export class PaymentComponent implements OnInit {
     {
       id: 'momo',
       name: 'Ví MoMo',
-      icon: 'assets/images/momo.png',
+      icon: 'https://ntt-datn-clinic-management.s3.ap-southeast-1.amazonaws.com/img/payment/momo.png',
       description: 'Thanh toán qua ví MoMo'
     },
     {
       id: 'vnpay',
       name: 'VNPay',
-      icon: 'assets/images/vnpay.png',
+      icon: 'https://ntt-datn-clinic-management.s3.ap-southeast-1.amazonaws.com/img/payment/vnpay.png',
       description: 'Thanh toán qua VNPay'
     },
     {

@@ -15,6 +15,38 @@ interface PatientRecord {
   diagnosis: string;
   status: string;
   nextappointment?: string;
+  patientid: number;
+  doctorname: string;
+}
+
+// Thêm interface cho thông báo
+interface NotificationForm {
+  title: string;
+  content: string;
+  idType: string;
+  patientName: string;
+  patientID: number;
+  userfrom: string;
+  userto: string;
+}
+
+// Interface cho hóa đơn
+interface Invoice {
+  id: number;
+  patientid: number;
+  patientname: string;
+  age: number;
+  gender: string;
+  address: string;
+  phone: string;
+  symptoms: string;
+  diagnosis: string;
+  notes: string;
+  treatment: string;
+  nextappointment: string;
+  date: string;
+  totalmoney: number;
+  ispaid: boolean;
 }
 
 @Component({
@@ -50,6 +82,25 @@ export class DoctorPatientHistoryComponent implements OnInit {
     'Đã khỏi',
     'Cần tái khám'
   ];
+
+  // Thông báo
+  isNotificationModalOpen: boolean = false;
+  notificationForm: NotificationForm = {
+    title: '',
+    content: '',
+    idType: '1',
+    patientName: '',
+    patientID: 0,
+    userfrom: '',
+    userto: '',
+  };
+  selectedRecord: PatientRecord | null = null;
+
+  // Popup hóa đơn
+  isInvoiceModalOpen: boolean = false;
+  invoiceList: Invoice[] = [];
+  isLoadingInvoice: boolean = false;
+  selectedInvoiceRecordId: number|null = null;
 
   constructor(
     private router: Router,
@@ -187,5 +238,73 @@ export class DoctorPatientHistoryComponent implements OnInit {
         window.location.href = '/login';
       }
     });
+  }
+
+  // Mở popup thông báo
+  openNotificationModal(record: PatientRecord) {
+    this.selectedRecord = record;
+    this.notificationForm = {
+      title: '',
+      content: '',
+      idType: '1',
+      patientID: record.patientid,
+      patientName: record.patientname,
+      userto: record. patientname,
+      userfrom: record.doctorname
+    };
+    this.isNotificationModalOpen = true;
+  }
+
+  // Đóng popup thông báo
+  closeNotificationModal() {
+    this.isNotificationModalOpen = false;
+    this.selectedRecord = null;
+  }
+
+  // Gửi thông báo
+  sendNotification() {
+    // Ở đây bạn có thể gọi API gửi thông báo
+    // Ví dụ: this.notificationApiService.send(this.notificationForm)
+    this.doctorApiService.createNotification(this.notificationForm).subscribe({
+      next: (data) => {
+        this.toastService.success('Đã gửi thông báo cho bệnh nhân: ' + this.notificationForm.patientName);
+        this.closeNotificationModal();
+      },
+      error: (error) => {
+        console.error('Error fetching createNotification:', error);
+        this.toastService.error(error.error.message);
+      }
+    });
+
+  }
+
+  // Mở popup hóa đơn khi click vào tr
+  async openInvoiceModal(record: PatientRecord) {
+    this.isInvoiceModalOpen = true;
+    this.isLoadingInvoice = true;
+    this.selectedInvoiceRecordId = record.id;
+
+
+    this.doctorApiService.getInvoiceByIdHistory(this.selectedInvoiceRecordId).subscribe({
+      next: (data) => {
+        console.log(data.data.invoices)
+        this.invoiceList = data.data.invoices;
+        if(this.invoiceList === null){
+          setTimeout(() => {
+          }, 500);
+        }
+        this.isLoadingInvoice = false;
+      },
+      error: (error) => {
+        console.error('Error fetching departments:', error);
+      }
+    });
+  }
+
+  // Đóng popup hóa đơn
+  closeInvoiceModal() {
+    this.isInvoiceModalOpen = false;
+    this.invoiceList = [];
+    this.selectedInvoiceRecordId = null;
   }
 }

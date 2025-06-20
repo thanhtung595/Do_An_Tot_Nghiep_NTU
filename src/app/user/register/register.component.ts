@@ -50,9 +50,9 @@ export class RegisterComponent {
       console.log(this.user)
       this.authApiService.register(this.user).subscribe({
         next: (data) => {
-          this.router.navigate(['/login']).then(() => {
-            window.location.href = '/login';
-          });
+          // this.router.navigate(['/login']).then(() => {
+          //   window.location.href = '/login';
+          // });
         },
         error: (error) => {
           this.msgError = error.error.msg;

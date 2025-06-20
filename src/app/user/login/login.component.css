@@ -197,6 +197,7 @@
 }
 
 .login-button {
+  margin-top: 10px;
   width: 100%;
   padding: 14px;
   background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
@@ -352,6 +353,7 @@
 }
 
 .error-message {
+  text-align: center;
   color: #e74c3c;
   font-size: 13px;
   margin-top: 8px;

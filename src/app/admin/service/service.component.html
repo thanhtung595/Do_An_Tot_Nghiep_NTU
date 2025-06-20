@@ -1,1 +1,143 @@
-<p>Developing!</p>
+<div class="user-management-container">
+  <div class="header-section">
+    <h2>Quản lý dịch vụ</h2>
+    <!-- <button class="btn-primary" (click)="toLinkDoctors()">
+      <i class="fas fa-user-md"></i> Quản lý người dùng
+    </button> -->
+  </div>
+
+  <!-- Thanh tìm kiếm và bộ lọc -->
+  <div class="filter-section">
+    <div class="input-group">
+      <i class="fas fa-search"></i>
+      <input class="form-control" type="text" [(ngModel)]="searchName" placeholder="Tìm theo tên dịch vụ..." />
+    </div>
+    <button class="btn-secondary" (click)="openModal('add')">
+      <i class="fas fa-plus"></i> Thêm dịch vụ
+    </button>
+  </div>
+
+  <!-- Bảng danh sách dịch vụ -->
+  <div class="table-responsive">
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tên dịch vụ</th>
+          <th>Mô tả</th>
+          <th>Hình ảnh</th>
+          <th>Giá (VND)</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let service of paginatedservices()">
+          <td>{{ service.id }}</td>
+          <td>{{ service.name }}</td>
+          <td>{{ service.description }}</td>
+          <td><img [src]="service.image" alt="{{service.name}}" width="100"></td>
+          <td>{{ service.price | number }}</td>
+          <td class="actions">
+            <button class="btn-icon btn-edit" (click)="openModal('edit', service)" title="Sửa">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-icon btn-delete" (click)="openModal('delete', service)" title="Xóa">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Phân trang và chọn số dịch vụ / trang -->
+  <div class="pagination-controls">
+    <div class="page-size-selector">
+      Hiển thị:
+      <select (change)="setPageSize($event)">
+        <option value="10">10 dịch vụ</option>
+        <option value="20">20 dịch vụ</option>
+        <option value="30">30 dịch vụ</option>
+      </select>
+      / {{ totalservice }}
+    </div>
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="currentPage === 1" class="btn-pagination">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <span class="page-info">Trang {{ currentPage }} / {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="btn-pagination">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Popup (Modal) -->
+  <div class="modal-overlay" *ngIf="isModalOpen">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 *ngIf="modalType === 'add'"><i class="fas fa-plus"></i> Thêm dịch vụ</h3>
+          <h3 *ngIf="modalType === 'edit'"><i class="fas fa-edit"></i> Sửa dịch vụ</h3>
+          <h3 *ngIf="modalType === 'delete'"><i class="fas fa-exclamation-triangle"></i> Xóa dịch vụ</h3>
+          <button class="close-button" (click)="closeModal()"><i class="fas fa-times"></i></button>
+        </div>
+
+        <div class="modal-body">
+          <form class="form-container" *ngIf="modalType !== 'delete'">
+            <div class="form-group">
+              <label for="name">Tên dịch vụ:</label>
+              <div class="input-with-icon">
+                <i class="fas fa-concierge-bell"></i>
+                <input type="text" id="name" name="name" [(ngModel)]="selectedService.name" required class="form-control" placeholder="Nhập tên dịch vụ" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="description">Mô tả:</label>
+              <div class="input-with-icon">
+                <i class="fas fa-align-left"></i>
+                <textarea id="description" name="description" [(ngModel)]="selectedService.description" required class="form-control" placeholder="Nhập mô tả cho dịch vụ"></textarea>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="price">Giá:</label>
+              <div class="input-with-icon">
+                <i class="fas fa-dollar-sign"></i>
+                <input type="number" id="price" name="price" [(ngModel)]="selectedService.price" required class="form-control" placeholder="Nhập giá dịch vụ" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="image">URL Hình ảnh:</label>
+              <div class="input-with-icon">
+                <i class="fas fa-image"></i>
+                <input type="text" id="image" name="image" [(ngModel)]="selectedService.image" required class="form-control" placeholder="Nhập URL hình ảnh" />
+              </div>
+            </div>
+          </form>
+
+          <p *ngIf="modalType === 'delete'" class="delete-confirmation">
+            Bạn có chắc chắn muốn xóa <strong>{{ selectedService.name }}</strong>? Hành động này không thể hoàn tác.
+          </p>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn-action btn-confirm" *ngIf="modalType === 'add'" (click)="addService()">
+            <i class="fas fa-plus"></i> Thêm
+          </button>
+          <button class="btn-action btn-confirm" *ngIf="modalType === 'edit'" (click)="updateService()">
+            <i class="fas fa-save"></i> Lưu
+          </button>
+          <button class="btn-action btn-danger" *ngIf="modalType === 'delete'" (click)="deleteService()">
+            <i class="fas fa-trash-alt"></i> Xóa
+          </button>
+          <button class="btn-action btn-cancel" (click)="closeModal()">
+            <i class="fas fa-times"></i> Hủy
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

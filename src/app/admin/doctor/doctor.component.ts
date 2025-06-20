@@ -158,6 +158,7 @@ export class DoctorAdminComponent {
   deletedoctor() {
     this.doctors = this.doctors.filter(u => u.id !== this.selectedDoctor.id);
     this.closeModal();
+    this.toastService.success('Đã xóa thành công');
   }
 
   getaAllDoctor(){

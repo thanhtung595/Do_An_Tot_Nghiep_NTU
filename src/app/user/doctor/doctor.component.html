@@ -40,7 +40,7 @@
       <!-- Chi tiết bác sĩ -->
       <div *ngIf="!isBooking" class="doctor-detail">
         <h2>Chi tiết bác sĩ</h2>
-        <h3>{{ selectedDoctor.fullname }}</h3>
+        <h3>{{ selectedDoctor.fullname }} - {{ selectedDoctor.username }}</h3>
 
         <div class="info-grid">
           <div class="info-item">
@@ -73,7 +73,7 @@
       <!-- Form đặt lịch khám -->
       <div *ngIf="isBooking" class="booking-modal">
         <h2>Đặt lịch khám</h2>
-        <h3>{{ selectedDoctor.fullname }}</h3>
+        <h3>{{ selectedDoctor.fullname }} - {{ selectedDoctor.username }}</h3>
         <form #bookingForm="ngForm" (ngSubmit)="bookAppointment(bookingForm)" class="booking-form">
           <div class="form-group">
             <label class="form-label">Họ tên bệnh nhân</label>

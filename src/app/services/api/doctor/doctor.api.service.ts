@@ -12,8 +12,19 @@ export class DoctorApiService {
   private apiUrlServices = `${API_BASE_URL}api/services`;
   private apiUrlMedicines = `${API_BASE_URL}api/medicines`;
   private apiUrlAppointmentRecord = `${API_BASE_URL}api/appointment/medical-record`;
+  private apiUrlInvoice = `${API_BASE_URL}api/invoice`;
+  private apiUrlNotification = `${API_BASE_URL}api/notification`;
 
   constructor(private http: HttpClient) { }
+
+  createNotification(data: any): Observable<any> {
+    return this.http.post<any>(this.apiUrlNotification, data);
+  }
+
+  getInvoiceByIdHistory(id: number): Observable<any> {
+    const url = `${this.apiUrlInvoice}/history/by-id/${id}`;
+    return this.http.get<any>(url);
+  }
 
   // Hàm lấy danh sách header
   getPatientHistory(): Observable<any> {

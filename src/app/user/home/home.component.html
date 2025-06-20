@@ -41,7 +41,7 @@
     <h2>Đội ngũ bác sĩ</h2>
     <div class="doctor-list">
       <div *ngFor="let doctor of doctors" class="doctor-card">
-        <img [src]="doctor.image" alt="{{ doctor.name }}" />
+        <img src="{{ doctor.image }}" alt="{{ doctor.name }}" />
         <h3>{{ doctor.name }}</h3>
         <p>{{ doctor.specialty }}</p>
       </div>

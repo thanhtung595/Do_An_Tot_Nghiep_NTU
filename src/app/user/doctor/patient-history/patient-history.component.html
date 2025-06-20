@@ -32,10 +32,11 @@
           <th>Trạng thái</th>
           <th>Lịch tái khám</th>
           <th>Thao tác</th>
+          <th>Thông báo</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let record of paginatedRecords">
+        <tr *ngFor="let record of paginatedRecords" (click)="openInvoiceModal(record)" style="cursor:pointer;">
           <td>{{record.id}}</td>
           <td>{{record.patientname}}</td>
           <td>{{record.date}}</td>
@@ -60,8 +61,13 @@
           </td>
           <td>{{record.nextappointment}}</td>
           <td>
-            <button *ngIf="record.status !== 'Đợi duyệt'" class="edit-button" (click)="editRecord(record.id)">
+            <button *ngIf="record.status !== 'Đợi duyệt'" class="edit-button" (click)="editRecord(record.id); $event.stopPropagation();">
               <i class="fas fa-edit"></i> Chỉnh sửa
+            </button>
+          </td>
+          <td>
+            <button class="notify-button" (click)="openNotificationModal(record); $event.stopPropagation();">
+              <i class="fas fa-bell"></i> Thông báo
             </button>
           </td>
         </tr>
@@ -84,5 +90,98 @@
     <span class="page-info">
       Trang {{currentPage}} / {{totalPages}}
     </span>
+  </div>
+</div>
+
+<!-- Popup Thông báo -->
+<div class="notification-modal-overlay" *ngIf="isNotificationModalOpen">
+  <div class="notification-modal">
+    <div class="notification-modal-header">
+      <h3><i class="fas fa-bell"></i> Gửi thông báo cho bệnh nhân</h3>
+      <button class="close-btn" (click)="closeNotificationModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="notification-modal-body">
+      <form (ngSubmit)="sendNotification()">
+        <div class="form-group">
+          <label>Tiêu đề</label>
+          <input type="text" class="form-control" [(ngModel)]="notificationForm.title" name="title" required placeholder="Nhập tiêu đề thông báo">
+        </div>
+        <div class="form-group">
+          <label>Nội dung</label>
+          <textarea class="form-control" [(ngModel)]="notificationForm.content" name="content" required placeholder="Nhập nội dung thông báo"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Loại thông báo</label>
+          <select class="form-control" [(ngModel)]="notificationForm.idType" name="idType" required>
+            <option value="1">Lịch hẹn (appointment)</option>
+            <option value="2">Nhắc nhở (reminder)</option>
+            <option value="3">Kết quả (result)</option>
+            <option value="4">Thanh toán (payment)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tên bệnh nhân</label>
+          <input type="text" class="form-control" [(ngModel)]="notificationForm.patientName" name="patientName" readonly>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Gửi</button>
+          <button type="button" class="btn btn-secondary" (click)="closeNotificationModal()">Hủy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Popup hóa đơn chuyên nghiệp, mỗi 3 hóa đơn 1 hàng, có scroll -->
+<div class="invoice-modal-overlay" *ngIf="isInvoiceModalOpen">
+  <div class="invoice-modal-pro">
+    <div class="invoice-modal-header-pro">
+      <div class="icon-invoice">
+        <i class="fas fa-file-invoice-dollar"></i>
+      </div>
+      <div>
+        <div class="invoice-title">Chi tiết hóa đơn khám bệnh</div>
+        <div class="invoice-subtitle" *ngIf="invoiceList.length > 0">
+          Tổng số hóa đơn: <b>{{invoiceList.length}}</b>
+        </div>
+      </div>
+      <button class="close-btn-pro" (click)="closeInvoiceModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="invoice-modal-body-pro">
+      <div *ngIf="isLoadingInvoice" class="loading-invoice">Đang tải hóa đơn...</div>
+      <div *ngIf="!isLoadingInvoice && invoiceList.length === 0" class="no-invoice">Không có hóa đơn cho lịch sử này.</div>
+      <div *ngIf="!isLoadingInvoice && invoiceList.length > 0">
+        <div class="invoice-list-flex">
+          <div class="invoice-detail-pro" *ngFor="let invoice of invoiceList">
+            <div class="invoice-info-columns">
+              <div class="invoice-info-col">
+                <div><span>Họ tên:</span> {{invoice.patientname}}</div>
+                <div><span>Tuổi:</span> {{invoice.age}}</div>
+                <div><span>Giới tính:</span> {{invoice.gender}}</div>
+                <div><span>Địa chỉ:</span> {{invoice.address}}</div>
+                <div><span>Điện thoại:</span> {{invoice.phone}}</div>
+                <div><span>Khoa điều trị:</span> {{invoice.treatment}}</div>
+              </div>
+              <div class="invoice-info-col">
+                <div><span>Ngày khám:</span> {{invoice.date}}</div>
+                <div><span>Triệu chứng:</span> {{invoice.symptoms}}</div>
+                <div><span>Chẩn đoán:</span> {{invoice.diagnosis}}</div>
+                <div><span>Ghi chú:</span> {{invoice.notes}}</div>
+                <div><span>Lịch tái khám:</span> {{invoice.nextappointment}}</div>
+              </div>
+            </div>
+            <div class="invoice-total-row">
+              <div class="invoice-total-label">Tổng tiền:</div>
+              <div class="invoice-total-value">{{invoice.totalmoney | number}} VNĐ</div>
+            </div>
+            <div class="invoice-status-row">
+              <span [ngClass]="invoice.ispaid ? 'paid-pro' : 'unpaid-pro'">
+                {{invoice.ispaid ? 'Đã thanh toán' : 'Chưa thanh toán'}}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
